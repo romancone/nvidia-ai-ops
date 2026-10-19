@@ -1,0 +1,8 @@
+---
+- name: Configure NVIDIA AI hosts
+  hosts: nvidia_hosts
+  gather_facts: true
+  roles:
+    - role: nvidia_driver
+    - role: cuda_toolkit
+    - role: nvidia_container_toolkit

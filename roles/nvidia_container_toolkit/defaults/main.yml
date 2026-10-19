@@ -1,0 +1,7 @@
+---
+nvidia_container_toolkit_keyring: /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+nvidia_container_toolkit_source: /etc/apt/sources.list.d/nvidia-container-toolkit.list
+nvidia_container_toolkit_packages:
+  - nvidia-container-toolkit
+nvidia_container_toolkit_configure_docker: true
+nvidia_container_toolkit_docker_set_as_default: false

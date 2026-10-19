@@ -1,0 +1,152 @@
+---
+- name: nvidia.container.os.require | Require Ubuntu for NVIDIA container toolkit role
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == "Ubuntu"
+      - ansible_facts.distribution_major_version | int >= 20
+    fail_msg: "NVIDIA container toolkit role requires Ubuntu 20.04 or newer."
+
+- name: nvidia.container.apt_dependencies | Install NVIDIA container toolkit apt dependencies
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg2
+    state: present
+    update_cache: true
+  become: true
+
+- name: nvidia.container.apt_key | Install NVIDIA container toolkit apt key
+  ansible.builtin.shell: |
+    set -euo pipefail
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
+      | gpg --dearmor -o {{ nvidia_container_toolkit_keyring | quote }}
+  args:
+    executable: /bin/bash
+    creates: "{{ nvidia_container_toolkit_keyring }}"
+  become: true
+
+- name: nvidia.container.apt_repository | Configure NVIDIA container toolkit apt repository
+  ansible.builtin.shell: |
+    set -euo pipefail
+    curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+      | sed 's#deb https://#deb [signed-by={{ nvidia_container_toolkit_keyring }}] https://#g' \
+      > {{ nvidia_container_toolkit_source | quote }}
+  args:
+    executable: /bin/bash
+    creates: "{{ nvidia_container_toolkit_source }}"
+  become: true
+
+- name: nvidia.container.toolkit | Install NVIDIA container toolkit
+  ansible.builtin.apt:
+    name: "{{ nvidia_container_toolkit_packages }}"
+    state: present
+    update_cache: true
+  become: true
+
+- name: nvidia.docker.command_check | Check Docker command
+  ansible.builtin.command:
+    argv:
+      - /bin/sh
+      - -c
+      - command -v docker
+  register: nvidia_container_toolkit_docker_command
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: nvidia_container_toolkit_configure_docker | bool
+
+- name: nvidia.docker.command_require | Require Docker when Docker integration is enabled
+  ansible.builtin.assert:
+    that:
+      - nvidia_container_toolkit_docker_command.rc == 0
+    fail_msg: "Docker command is required when nvidia_container_toolkit_configure_docker is true."
+  when: nvidia_container_toolkit_configure_docker | bool
+
+- name: nvidia.docker.runtime_read | Read Docker runtime state
+  ansible.builtin.command:
+    argv:
+      - docker
+      - info
+      - --format
+      - "{% raw %}default={{.DefaultRuntime}} runtimes={{json .Runtimes}}{% endraw %}"
+  register: nvidia_container_toolkit_docker_runtime
+  changed_when: false
+  check_mode: false
+  when: nvidia_container_toolkit_configure_docker | bool
+
+- name: nvidia.docker.runtime_configure | Configure Docker NVIDIA runtime
+  ansible.builtin.command: >-
+    nvidia-ctk runtime configure --runtime=docker
+    {{ '--set-as-default' if nvidia_container_toolkit_docker_set_as_default | bool else '' }}
+  become: true
+  when:
+    - nvidia_container_toolkit_configure_docker | bool
+    - nvidia_container_toolkit_docker_runtime.stdout is not search('nvidia')
+      or (
+        nvidia_container_toolkit_docker_set_as_default | bool
+        and nvidia_container_toolkit_docker_runtime.stdout is not search('default=nvidia')
+      )
+  notify: Restart docker
+
+- name: nvidia.docker.runtime_check_mode_report | Report Docker runtime change in check mode
+  ansible.builtin.debug:
+    msg: "Docker NVIDIA runtime would be configured. Set-as-default: {{ nvidia_container_toolkit_docker_set_as_default | bool }}."
+  changed_when: true
+  when:
+    - ansible_check_mode
+    - nvidia_container_toolkit_configure_docker | bool
+    - nvidia_container_toolkit_docker_runtime.stdout is not search('nvidia')
+      or (
+        nvidia_container_toolkit_docker_set_as_default | bool
+        and nvidia_container_toolkit_docker_runtime.stdout is not search('default=nvidia')
+      )
+
+- name: nvidia.docker.runtime_apply | Apply Docker runtime configuration
+  ansible.builtin.meta: flush_handlers
+  when:
+    - not ansible_check_mode
+    - nvidia_container_toolkit_configure_docker | bool
+
+- name: nvidia.docker.runtime_read_after | Read Docker runtime state after configuration
+  ansible.builtin.command:
+    argv:
+      - docker
+      - info
+      - --format
+      - "{% raw %}default={{.DefaultRuntime}} runtimes={{json .Runtimes}}{% endraw %}"
+  register: nvidia_container_toolkit_docker_runtime_after
+  changed_when: false
+  check_mode: false
+  when:
+    - nvidia_container_toolkit_configure_docker | bool
+    - not (
+        ansible_check_mode
+        and (
+          nvidia_container_toolkit_docker_runtime.stdout is not search('nvidia')
+          or (
+            nvidia_container_toolkit_docker_set_as_default | bool
+            and nvidia_container_toolkit_docker_runtime.stdout is not search('default=nvidia')
+          )
+        )
+      )
+
+- name: nvidia.docker.runtime_require | Require NVIDIA Docker runtime
+  ansible.builtin.assert:
+    that:
+      - nvidia_container_toolkit_docker_runtime_after.stdout is search('nvidia')
+      - not nvidia_container_toolkit_docker_set_as_default | bool
+        or nvidia_container_toolkit_docker_runtime_after.stdout is search('default=nvidia')
+    fail_msg: "Docker NVIDIA runtime is not configured as requested. Current: {{ nvidia_container_toolkit_docker_runtime_after.stdout }}"
+  when:
+    - nvidia_container_toolkit_configure_docker | bool
+    - not (
+        ansible_check_mode
+        and (
+          nvidia_container_toolkit_docker_runtime.stdout is not search('nvidia')
+          or (
+            nvidia_container_toolkit_docker_set_as_default | bool
+            and nvidia_container_toolkit_docker_runtime.stdout is not search('default=nvidia')
+          )
+        )
+      )

@@ -1,0 +1,63 @@
+---
+- name: nvidia.driver.settings.require | Require NVIDIA driver settings
+  ansible.builtin.assert:
+    that:
+      - nvidia_driver_ubuntu_version | length > 0
+      - nvidia_driver_package | length > 0
+      - nvidia_driver_branch | length > 0
+      - nvidia_driver_keyring_url | length > 0
+    fail_msg: "Set Ubuntu version, NVIDIA driver package, branch, and keyring URL for {{ inventory_hostname }}"
+
+- name: nvidia.driver.os.require | Require Ubuntu for NVIDIA driver role
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == "Ubuntu"
+      - nvidia_driver_ubuntu_version in ['2204', '2404', '2604']
+      - (ansible_facts.distribution_version | replace('.', '')) == nvidia_driver_ubuntu_version
+      - ansible_facts.architecture == "x86_64"
+    fail_msg: >-
+      Select Ubuntu repository version 2204, 2404, or 2604 to match the target host.
+      The NVIDIA repository requires x86_64.
+
+- name: nvidia.driver.prerequisites | Install NVIDIA driver prerequisites
+  ansible.builtin.apt:
+    name: "{{ nvidia_driver_prereq_packages }}"
+    state: present
+    update_cache: true
+  become: true
+
+- name: nvidia.driver.keyring | Install NVIDIA driver repository keyring package
+  ansible.builtin.apt:
+    deb: "{{ nvidia_driver_keyring_url }}"
+    state: present
+  become: true
+
+- name: nvidia.driver.branch_pin | Pin NVIDIA driver branch
+  ansible.builtin.apt:
+    name: "nvidia-driver-pinning-{{ nvidia_driver_branch }}"
+    state: present
+    update_cache: true
+  become: true
+
+- name: nvidia.driver.install | Install NVIDIA driver package
+  ansible.builtin.apt:
+    name: "{{ nvidia_driver_package }}"
+    state: latest
+  register: nvidia_driver_install
+  become: true
+
+- name: nvidia.driver.reboot_notice | Report required driver reboot
+  ansible.builtin.debug:
+    msg: "Reboot the host manually after installation completes, then rerun this playbook to verify the loaded driver."
+  when: nvidia_driver_install.changed
+
+- name: nvidia.driver.verify_smi | Verify NVIDIA SMI visibility
+  ansible.builtin.command:
+    argv:
+      - nvidia-smi
+  register: nvidia_driver_smi
+  changed_when: false
+  check_mode: false
+  when:
+    - not ansible_check_mode
+    - not nvidia_driver_install.changed

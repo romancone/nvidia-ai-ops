@@ -1,0 +1,57 @@
+---
+- name: nvidia.cuda.settings.require | Require CUDA toolkit settings
+  ansible.builtin.assert:
+    that:
+      - cuda_toolkit_home | length > 0
+      - cuda_toolkit_display_version | length > 0
+      - cuda_toolkit_keyring_url | length > 0
+      - cuda_toolkit_packages | length > 0
+    fail_msg: "Set CUDA toolkit variables for {{ inventory_hostname }}"
+
+- name: nvidia.cuda.os.require | Require Ubuntu for CUDA toolkit role
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == "Ubuntu"
+      - ansible_facts.distribution_major_version | int >= 20
+    fail_msg: "CUDA toolkit role requires Ubuntu 20.04 or newer."
+
+- name: nvidia.cuda.keyring | Install CUDA repository keyring package
+  ansible.builtin.apt:
+    deb: "{{ cuda_toolkit_keyring_url }}"
+    state: present
+  become: true
+
+- name: nvidia.cuda.toolkit | Install CUDA toolkit packages
+  ansible.builtin.apt:
+    name: "{{ cuda_toolkit_packages }}"
+    state: latest
+    update_cache: true
+  become: true
+
+- name: nvidia.cuda.environment | Configure CUDA shell environment
+  ansible.builtin.copy:
+    dest: "{{ cuda_toolkit_profile }}"
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      export PATH={{ cuda_toolkit_home }}/bin:$PATH
+      export LD_LIBRARY_PATH={{ cuda_toolkit_home }}/lib64:$LD_LIBRARY_PATH
+  become: true
+
+- name: nvidia.cuda.nvcc_link | Expose nvcc in non-login PATH
+  ansible.builtin.file:
+    src: "{{ cuda_toolkit_home }}/bin/nvcc"
+    dest: /usr/local/bin/nvcc
+    state: link
+    force: true
+  become: true
+
+- name: nvidia.cuda.verify_nvcc | Verify CUDA compiler visibility
+  ansible.builtin.command:
+    argv:
+      - nvcc
+      - --version
+  register: cuda_toolkit_nvcc_version
+  changed_when: false
+  check_mode: false

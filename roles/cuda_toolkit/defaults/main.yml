@@ -1,0 +1,6 @@
+---
+cuda_toolkit_home: ""
+cuda_toolkit_display_version: ""
+cuda_toolkit_profile: /etc/profile.d/cuda.sh
+cuda_toolkit_keyring_url: ""
+cuda_toolkit_packages: []
