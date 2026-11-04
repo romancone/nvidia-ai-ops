@@ -28,6 +28,9 @@ If an existing driver package is held with `apt-mark hold`, remove that specific
 hold before changing its branch. Do not combine the recipe with another driver
 branch pin.
 
+Before changing driver sources or repairing leftover driver packages, use the
+separate [cleanup recipe](cleanup.md).
+
 References: [NVIDIA driver branch selection](https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/ubuntu.html#selecting-a-branch-or-a-specific-driver-version)
 and [CUDA package upgrades](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/#package-upgrades).
 

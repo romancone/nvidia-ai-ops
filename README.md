@@ -14,6 +14,7 @@ terminal copy/paste remains valid.
 
 | Recipe | Human doc | Automation |
 |---|---|---|
+| NVIDIA driver cleanup (optional) | [`cleanup.md`](cleanup.md) | [`cleanup.yml`](cleanup.yml) |
 | NVIDIA driver, CUDA toolkit, NVIDIA container toolkit | [`nvidia.md`](nvidia.md) | [`site.yml`](site.yml) |
 | vLLM native service | [`vllm.md`](vllm.md) | not automated yet |
 
@@ -54,6 +55,21 @@ Toolkit **13.4**. The driver uses `nvidia-open` plus
 `nvidia-driver-pinning-615`; CUDA uses `cuda-toolkit-13-4`. Updates within these
 branches remain available, while a new branch requires an explicit configuration
 change. The NVIDIA repository is configured before the driver branch pin.
+
+Before switching driver sources or repairing leftover driver packages, stop GPU
+workloads and run the separate [`nvidia_driver_cleanup`](roles/nvidia_driver_cleanup/)
+role. Select an inventory host with `--limit` and preview the plan first:
+
+```bash
+ansible-playbook cleanup.yml --limit gpu1.example.com --check --diff
+ansible-playbook cleanup.yml --limit gpu1.example.com --diff
+```
+
+It purges driver packages from both sources, libraries, kernel modules, branch
+pins and their package configuration. APT changes outside the selected driver
+packages are rejected. CUDA Toolkit, Container Toolkit, repository keyrings and
+source lists are preserved; `autoremove` is disabled. See [`cleanup.md`](cleanup.md)
+for manual steps. Cleanup is optional and is not included in `site.yml`.
 
 Run the NVIDIA deployment:
 

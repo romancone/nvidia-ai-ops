@@ -26,6 +26,9 @@ The Ansible project lives at the repository root:
 
 The current recipe set is intentionally small:
 
+- `cleanup.md` pairs with `cleanup.yml` and the `nvidia_driver_cleanup` role for
+  optional driver package cleanup before changing sources. It previews APT,
+  rejects unrelated changes and preserves CUDA and container tooling.
 - `nvidia.md` is the human-readable pair for `site.yml` and covers NVIDIA driver,
   CUDA toolkit, and NVIDIA container toolkit.
 - `vllm.md` covers a native systemd vLLM service example without Docker.

@@ -1,0 +1,6 @@
+---
+- name: Remove NVIDIA driver packages before changing driver sources
+  hosts: nvidia_hosts
+  gather_facts: true
+  roles:
+    - role: nvidia_driver_cleanup

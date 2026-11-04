@@ -1,0 +1,27 @@
+---
+nvidia_driver_cleanup_package_patterns:
+  - cuda-drivers*
+  - cuda-compat*
+  - nvidia-open*
+  - nvidia-driver*
+  - nvidia-dkms*
+  - nvidia-kernel*
+  - nvidia-headless*
+  - nvidia-utils*
+  - nvidia-compute-utils*
+  - nvidia-firmware*
+  - nvidia-modprobe
+  - nvidia-persistenced
+  - nvidia-prime*
+  - nvidia-powerd
+  - nvidia-settings
+  - nvidia-xconfig
+  - nvidia-fabricmanager*
+  - nvidia-imex*
+  - libnvidia-*
+  - libxnvctrl*
+  - libnvsdm*
+  - xserver-xorg-video-nvidia*
+  - linux-modules-nvidia*
+  - linux-objects-nvidia*
+  - linux-signatures-nvidia*

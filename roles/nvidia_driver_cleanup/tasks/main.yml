@@ -1,0 +1,100 @@
+---
+- name: nvidia.cleanup.settings.require | Validate driver cleanup settings
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == 'Ubuntu'
+      - ansible_facts.distribution_version in ['22.04', '24.04', '26.04']
+      - ansible_facts.architecture == 'x86_64'
+      - nvidia_driver_cleanup_package_patterns is sequence and nvidia_driver_cleanup_package_patterns is not string
+      - nvidia_driver_cleanup_package_patterns is not mapping
+      - nvidia_driver_cleanup_package_patterns | length > 0
+      - nvidia_driver_cleanup_package_patterns | select('string') | list | length == nvidia_driver_cleanup_package_patterns | length
+
+- name: nvidia.cleanup.packages.inspect | Discover driver packages and leftover configuration
+  ansible.builtin.command:
+    argv: >-
+      {{ ['dpkg-query', '-W', '-f=${binary:Package}=${db:Status-Status}\n', '--']
+         + nvidia_driver_cleanup_package_patterns }}
+  register: nvidia_driver_cleanup_inventory
+  changed_when: false
+  failed_when: nvidia_driver_cleanup_inventory.rc not in [0, 1]
+  check_mode: false
+
+- name: nvidia.cleanup.packages.select | Select driver packages and preserve container libraries
+  ansible.builtin.set_fact:
+    nvidia_driver_cleanup_packages: >-
+      {{ nvidia_driver_cleanup_inventory.stdout
+         | regex_findall('(?m)^([^=\n]+)=(?:installed|config-files|unpacked|half-configured|half-installed|triggers-awaited|triggers-pending)$')
+         | reject('match', '^libnvidia-container') | unique | sort }}
+
+- name: nvidia.cleanup.transaction.inspect | Preview the driver package purge
+  ansible.builtin.command:
+    argv: "{{ ['apt-get', '--simulate', 'purge'] + nvidia_driver_cleanup_packages }}"
+  environment:
+    LC_ALL: C
+  register: nvidia_driver_cleanup_transaction
+  changed_when: false
+  check_mode: false
+  become: true
+  when: nvidia_driver_cleanup_packages | length > 0
+
+- name: nvidia.cleanup.transaction.require | Reject unrelated package changes
+  ansible.builtin.assert:
+    that:
+      - nvidia_driver_cleanup_transaction.stdout is not search('(?m)^(?:Inst|Conf) ')
+      - >-
+        nvidia_driver_cleanup_transaction.stdout | regex_findall('(?m)^(?:Remv|Purg) ([^\s:]+)')
+        | difference(nvidia_driver_cleanup_packages | map('regex_replace', ':.*$', '') | list) | length == 0
+    fail_msg: APT proposes changes outside the selected driver packages. Resolve dependent packages separately; nothing was removed.
+  when: nvidia_driver_cleanup_packages | length > 0
+
+- name: nvidia.cleanup.packages.report | Show driver packages selected for removal
+  ansible.builtin.debug:
+    var: nvidia_driver_cleanup_packages
+
+- name: nvidia.cleanup.packages.remove | Purge driver packages and their configuration
+  ansible.builtin.apt:
+    name: "{{ nvidia_driver_cleanup_packages }}"
+    state: absent
+    purge: true
+    autoremove: false
+    force_apt_get: true
+    auto_install_module_deps: false
+  register: nvidia_driver_cleanup_result
+  become: true
+  when: nvidia_driver_cleanup_packages | length > 0
+
+- name: nvidia.cleanup.packages.verify | Read package state after cleanup
+  ansible.builtin.command:
+    argv: >-
+      {{ ['dpkg-query', '-W', '-f=${binary:Package}=${db:Status-Status}\n', '--']
+         + nvidia_driver_cleanup_package_patterns }}
+  register: nvidia_driver_cleanup_remaining
+  changed_when: false
+  failed_when: nvidia_driver_cleanup_remaining.rc not in [0, 1]
+  when: not ansible_check_mode
+
+- name: nvidia.cleanup.absent.require | Require driver packages and configuration to be absent
+  ansible.builtin.assert:
+    that:
+      - >-
+        nvidia_driver_cleanup_remaining.stdout
+        | regex_findall('(?m)^([^=\n]+)=(?:installed|config-files|unpacked|half-configured|half-installed|triggers-awaited|triggers-pending)$')
+        | reject('match', '^libnvidia-container') | list | length == 0
+  when: not ansible_check_mode
+
+- name: nvidia.cleanup.packages.audit | Require consistent package state
+  ansible.builtin.command:
+    argv: [dpkg, --audit]
+  register: nvidia_driver_cleanup_audit
+  changed_when: false
+  failed_when: nvidia_driver_cleanup_audit.rc != 0 or nvidia_driver_cleanup_audit.stdout | trim | length > 0
+  become: true
+  when: not ansible_check_mode
+
+- name: nvidia.cleanup.report | Report driver cleanup result
+  ansible.builtin.debug:
+    msg: >-
+      {{ 'Driver cleanup preview complete; no packages were removed.' if ansible_check_mode
+         else 'Driver packages and configuration are absent. Reboot manually after installing the replacement driver.'
+         if nvidia_driver_cleanup_result.changed else 'No driver packages or configuration remain.' }}
