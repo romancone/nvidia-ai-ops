@@ -2,11 +2,15 @@
 - name: nvidia.driver.settings.require | Require NVIDIA driver settings
   ansible.builtin.assert:
     that:
+      - nvidia_driver_source in ['nvidia', 'ubuntu']
       - nvidia_driver_ubuntu_version | length > 0
       - nvidia_driver_package | length > 0
       - nvidia_driver_branch | length > 0
-      - nvidia_driver_keyring_url | length > 0
-    fail_msg: "Set Ubuntu version, NVIDIA driver package, branch, and keyring URL for {{ inventory_hostname }}"
+      - nvidia_driver_branch is match('^[0-9]+$')
+      - nvidia_driver_module_package is string
+      - nvidia_driver_source != 'nvidia' or nvidia_driver_keyring_url | length > 0
+    fail_msg: "Set a valid driver source (nvidia or ubuntu), Ubuntu version, numeric branch, and NVIDIA repository URL when required."
+  tags: nvidia_driver_validate
 
 - name: nvidia.driver.os.require | Require Ubuntu for NVIDIA driver role
   ansible.builtin.assert:
@@ -18,6 +22,33 @@
     fail_msg: >-
       Select Ubuntu repository version 2204, 2404, or 2604 to match the target host.
       The NVIDIA repository requires x86_64.
+  tags: nvidia_driver_validate
+
+- name: nvidia.driver.source.read | Read packages from the other driver source
+  ansible.builtin.command:
+    argv: >-
+      {{ ['dpkg-query', '-W', '-f=${binary:Package}=${db:Status-Status}\n']
+         + (['nvidia-open', 'nvidia-driver-open', 'nvidia-dkms-open'] if nvidia_driver_source == 'ubuntu'
+            else ['nvidia-driver-[0-9]*', 'nvidia-dkms-[0-9]*']) }}
+  register: nvidia_driver_source_packages
+  changed_when: false
+  failed_when: nvidia_driver_source_packages.rc not in [0, 1]
+  check_mode: false
+  tags: nvidia_driver_source_validate
+
+- name: nvidia.driver.source.require | Reject driver packages from the other source
+  ansible.builtin.assert:
+    that:
+      - >-
+        nvidia_driver_source_packages.stdout_lines
+        | select('search', '=(installed|unpacked|half-configured|half-installed|triggers-awaited|triggers-pending)$')
+        | list | length == 0
+    fail_msg: >-
+      Remove conflicting packages before selecting {{ nvidia_driver_source }}:
+      {{ nvidia_driver_source_packages.stdout_lines
+         | select('search', '=(installed|unpacked|half-configured|half-installed|triggers-awaited|triggers-pending)$') | list }}.
+      Run cleanup.yml separately before switching driver sources; do not force file overwrites.
+  tags: nvidia_driver_source_validate
 
 - name: nvidia.driver.prerequisites | Install NVIDIA driver prerequisites
   ansible.builtin.apt:
@@ -30,7 +61,9 @@
   ansible.builtin.apt:
     deb: "{{ nvidia_driver_keyring_url }}"
     state: present
+  register: nvidia_driver_keyring_result
   become: true
+  when: nvidia_driver_source == 'nvidia'
 
 - name: nvidia.driver.branch_pin | Pin NVIDIA driver branch
   ansible.builtin.apt:
@@ -38,13 +71,36 @@
     state: present
     update_cache: true
   become: true
+  when:
+    - nvidia_driver_source == 'nvidia'
+    - not (ansible_check_mode and (nvidia_driver_keyring_result.changed | default(false)))
 
 - name: nvidia.driver.install | Install NVIDIA driver package
   ansible.builtin.apt:
-    name: "{{ nvidia_driver_package }}"
+    name: "{{ _nvidia_driver_packages }}"
     state: latest
   register: nvidia_driver_install
   become: true
+  when: not (ansible_check_mode and nvidia_driver_source == 'nvidia' and (nvidia_driver_keyring_result.changed | default(false)))
+
+- name: nvidia.driver.repository.check_mode | Report repository bootstrap in check mode
+  ansible.builtin.debug:
+    msg: "The NVIDIA repository would be installed. Package resolution is deferred until the repository is present."
+  when:
+    - ansible_check_mode
+    - nvidia_driver_source == 'nvidia'
+    - nvidia_driver_keyring_result.changed | default(false)
+
+- name: nvidia.driver.packages.verify | Require fully configured packages
+  ansible.builtin.command:
+    argv:
+      - dpkg
+      - --audit
+  become: true
+  register: nvidia_driver_package_audit
+  changed_when: false
+  failed_when: nvidia_driver_package_audit.rc != 0 or nvidia_driver_package_audit.stdout | trim | length > 0
+  when: not ansible_check_mode
 
 - name: nvidia.driver.reboot_notice | Report required driver reboot
   ansible.builtin.debug:
@@ -55,9 +111,23 @@
   ansible.builtin.command:
     argv:
       - nvidia-smi
+      - --query-gpu=driver_version,name
+      - --format=csv,noheader
   register: nvidia_driver_smi
   changed_when: false
   check_mode: false
+  when:
+    - not ansible_check_mode
+    - not nvidia_driver_install.changed
+
+- name: nvidia.driver.verify_branch | Require the selected running driver branch
+  ansible.builtin.assert:
+    that:
+      - nvidia_driver_smi.stdout_lines | length > 0
+      - >-
+        nvidia_driver_smi.stdout_lines | select('match', '^' ~ nvidia_driver_branch ~ '[.]')
+        | list | length == (nvidia_driver_smi.stdout_lines | length)
+    fail_msg: "The running GPU driver does not match branch {{ nvidia_driver_branch }}. Reboot after installation and verify again."
   when:
     - not ansible_check_mode
     - not nvidia_driver_install.changed

@@ -50,11 +50,14 @@ Set `nvidia_driver_ubuntu_version` to `2204`, `2404` (default), or `2604` for
 Ubuntu 22.04, 24.04, or 26.04. Ansible checks that it matches the target host's
 Ubuntu version and requires x86_64. Verified links are in [`nvidia.md`](nvidia.md).
 
-The example targets Ubuntu 24.04 x86_64 with driver branch **615** and CUDA
-Toolkit **13.4**. The driver uses `nvidia-open` plus
-`nvidia-driver-pinning-615`; CUDA uses `cuda-toolkit-13-4`. Updates within these
-branches remain available, while a new branch requires an explicit configuration
-change. The NVIDIA repository is configured before the driver branch pin.
+Select `nvidia_driver_source` in local host variables:
+
+- `nvidia` (default): NVIDIA repository, `nvidia-open`, and branch pinning.
+- `ubuntu`: Ubuntu repositories.
+
+Package names follow `nvidia_driver_branch`. Set `nvidia_driver_module_package`
+for prebuilt modules matching the host kernel, or leave it empty for DKMS.
+CUDA Toolkit uses NVIDIA's repository with either driver source.
 
 Before switching driver sources or repairing leftover driver packages, stop GPU
 workloads and run the separate [`nvidia_driver_cleanup`](roles/nvidia_driver_cleanup/)

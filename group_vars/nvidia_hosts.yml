@@ -1,6 +1,6 @@
 ---
 nvidia_driver_ubuntu_version: "2404"
-nvidia_driver_package: nvidia-open
+nvidia_driver_source: nvidia
 nvidia_driver_branch: "615"
 nvidia_driver_keyring_url: "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu{{ nvidia_driver_ubuntu_version }}/x86_64/cuda-keyring_1.1-1_all.deb"
 

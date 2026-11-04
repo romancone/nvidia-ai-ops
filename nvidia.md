@@ -18,8 +18,16 @@ ansible-playbook site.yml --diff
 Use this file for manual installation, review, repair, or learning.
 
 The example variables target Ubuntu 24.04 x86_64, NVIDIA driver **615.x**, and
-CUDA Toolkit **13.4.x**. Driver branch selection uses NVIDIA's
-`nvidia-driver-pinning-615` package; `nvidia-open` is the driver metapackage.
+CUDA Toolkit **13.4.x**. Select the driver source with `NVIDIA_DRIVER_SOURCE`
+below, or `nvidia_driver_source` in Ansible:
+
+- `nvidia` (default): NVIDIA's repository, `nvidia-open`, and branch pinning.
+- `ubuntu`: Ubuntu's repositories.
+
+For prebuilt modules, set Ansible's `nvidia_driver_module_package` to match the
+host kernel; otherwise the driver uses DKMS. Adjust the manual package list
+accordingly.
+
 `cuda-toolkit-13-4` includes `nvcc` and stays on CUDA 13.4. Patch updates within
 both branches remain available through APT and when rerunning Ansible.
 
@@ -55,12 +63,12 @@ Ansible role: [`nvidia_driver`](roles/nvidia_driver/).
 ```bash
 # Configure role settings
 export NVIDIA_UBUNTU_VERSION="2404"
-export NVIDIA_DRIVER_PACKAGE="nvidia-open"
+export NVIDIA_DRIVER_SOURCE="nvidia" # nvidia or ubuntu
 export NVIDIA_DRIVER_BRANCH="615"
 export NVIDIA_DRIVER_KEYRING_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu${NVIDIA_UBUNTU_VERSION}/x86_64/cuda-keyring_1.1-1_all.deb"
 ```
 
-### 1.2 Install prerequisites and the NVIDIA repository
+### 1.2 Install prerequisites and configure the repository
 
 <!-- ops-step
 id: nvidia.driver.prerequisites
@@ -79,15 +87,19 @@ kind: package
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl linux-headers-generic build-essential dkms ubuntu-drivers-common
 
-# Install NVIDIA Driver Repository Keyring
-curl -fsSLO "$NVIDIA_DRIVER_KEYRING_URL" &&
-  sudo apt-get install -y ./cuda-keyring_1.1-1_all.deb &&
-  rm -f cuda-keyring_1.1-1_all.deb
+# Install the NVIDIA repository only for the NVIDIA driver source
+if [ "$NVIDIA_DRIVER_SOURCE" = "nvidia" ]; then
+  curl -fsSLO "$NVIDIA_DRIVER_KEYRING_URL" &&
+    sudo apt-get install -y ./cuda-keyring_1.1-1_all.deb &&
+    rm -f cuda-keyring_1.1-1_all.deb
+fi
 ```
 
-### 1.3 Pin the driver branch and install the driver
+### 1.3 Install the selected driver branch
 
-Install the pin before the driver so APT selects only the configured branch.
+For the NVIDIA source, install the pin before the driver. Ubuntu's package
+names select the branch directly; its repositories must include `multiverse`.
+If packages are unavailable, stop and review the repository configuration.
 
 <!-- ops-step
 id: nvidia.driver.branch_pin
@@ -102,12 +114,17 @@ kind: package
 -->
 
 ```bash
-# Pin NVIDIA Driver Branch
+# Install from the selected source
 sudo apt-get update
-sudo apt-get install -y "nvidia-driver-pinning-$NVIDIA_DRIVER_BRANCH"
-
-# Install NVIDIA Driver
-sudo apt-get install -y "$NVIDIA_DRIVER_PACKAGE"
+case "$NVIDIA_DRIVER_SOURCE" in
+  nvidia)
+    sudo apt-get install -y "nvidia-driver-pinning-$NVIDIA_DRIVER_BRANCH" &&
+      sudo apt-get install -y nvidia-open
+    ;;
+  ubuntu)
+    sudo apt-get install -y "nvidia-driver-$NVIDIA_DRIVER_BRANCH-open"
+    ;;
+esac
 ```
 
 ### 1.4 Reboot manually and verify the driver
