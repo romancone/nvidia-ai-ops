@@ -1,37 +1,59 @@
 # Maintainer Notes
 
-This repository is the public home for reusable NVIDIA AI host operations.
+## Contributors
 
-Future work should keep two operator paths with the same installation result:
+Read [AGENTS.md](AGENTS.md) for contribution rules, writing style and command
+formatting. This file owns the repository layout, role behavior and recipe mappings.
 
-- Ansible roles for repeatable deployment.
-- Runme-friendly Markdown recipes for human review and manual execution.
+## Layout and Ownership
 
-Manual recipes keep essential safeguards and final verification. Ansible roles
-also include complete validation, runtime checks, and check-mode handling.
+| File | Purpose |
+|---|---|
+| [AGENTS.md](AGENTS.md) | Contribution rules and review guidance |
+| [README.md](README.md) | Recipe index, Ansible quick start and shared configuration guidance |
+| [nvidia.md](nvidia.md) / [site.yml](site.yml) | Manual and Ansible paths for NVIDIA Driver, CUDA Toolkit and Container Toolkit |
+| [cleanup.md](cleanup.md) / [cleanup.yml](cleanup.yml) | Optional NVIDIA driver package cleanup |
+| [vllm.md](vllm.md) | Manual-only native systemd vLLM service recipe |
+| [roles/](roles/) | Source of truth for task order, supported settings and verification |
+| [ansible.cfg](ansible.cfg) / [hosts.example.ini](hosts.example.ini) | Select ignored `./hosts` inventory / provide its public template |
+| [group_vars/all.yml](group_vars/all.yml) | Default SSH user |
+| [group_vars/nvidia_hosts.yml](group_vars/nvidia_hosts.yml) | Shared NVIDIA/CUDA settings mirrored by the paired manual recipe |
+| `hosts` / `host_vars/` | Ignored inventory and per-host connection or package overrides |
+| [.agents/skills/benchmark-report-review/](.agents/skills/benchmark-report-review/SKILL.md) | Review workflow for benchmark imports, coverage and report migrations |
 
-Keep roles generic and host-agnostic. Put hostnames, users, ports, local paths,
-and lab-specific choices in ignored inventory files or example variables, not in
-role logic.
+Both playbooks target `nvidia_hosts`. `site.yml` applies `nvidia_driver`,
+`cuda_toolkit` and `nvidia_container_toolkit` in that order. Container Toolkit is
+optional in the manual but included in `site.yml` by default. Cleanup runs only
+through the separate `cleanup.yml` playbook.
 
-The Ansible project lives at the repository root:
+## Role Behavior
 
-- `ansible.cfg` selects `./hosts`; run Ansible commands from the repository root.
-- `hosts.example.ini` is the public inventory template; `hosts` is the ignored
-  single-file inventory for real hosts.
-- `group_vars/all.yml` sets the default connection user to `ubuntu`.
-- `group_vars/nvidia_hosts.yml` defines the shared NVIDIA/CUDA settings.
-- `host_vars/` holds ignored per-host overrides, including non-default SSH users.
-- `site.yml` targets `nvidia_hosts` and applies the reusable roles from `roles/`.
+- `nvidia_driver` validates settings, the target OS and conflicting driver sources.
+  It installs the selected source's packages, pins the branch for NVIDIA's
+  repository and verifies package state. After a manual reboot, an unchanged
+  rerun checks GPU visibility and the running driver branch
+- `cuda_toolkit` installs the configured toolkit, sets the shell environment,
+  exposes `nvcc` and checks compiler visibility
+- `nvidia_container_toolkit` installs the toolkit and optionally configures the
+  Docker runtime, restarts Docker on configuration changes and verifies the runtime
+- `nvidia_driver_cleanup` discovers driver packages and leftover package
+  configuration, previews APT and rejects unrelated changes. It preserves CUDA,
+  container tooling, repository keyrings and source lists; autoremove is disabled.
+  Missing packages do not block discovery or cleanup of the remaining packages
 
-The current recipe set is intentionally small:
+## Recipe Mappings
 
-- `cleanup.md` pairs with `cleanup.yml` and the `nvidia_driver_cleanup` role for
-  optional driver package cleanup before changing sources. It previews APT,
-  rejects unrelated changes and preserves CUDA and container tooling.
-- `nvidia.md` is the human-readable pair for `site.yml` and covers NVIDIA driver,
-  CUDA toolkit, and NVIDIA container toolkit.
-- `vllm.md` covers a native systemd vLLM service example without Docker.
+Manual recipes and roles share settings, installation order and the final result.
+Each included manual operation maps to its task through stable `ops-step` IDs and
+`ansible_task` names; grouped cells may map to several tasks. Validation and
+check-mode helpers may remain Ansible-only.
 
-Before adding automation for vLLM, preserve the existing Markdown recipe as the
-operator contract and create the Ansible role against the same step structure.
+`vllm.md` has no paired role. Preserve it as the operator contract if automation
+is requested, using the same logical steps.
+
+## Verification
+
+Manual recipes retain essential safeguards and final verification; roles also
+handle prerequisite validation, idempotence and check mode. A check-mode preview
+does not establish a working installation. Report a deployment as validated only
+after the relevant runtime checks and an unchanged rerun.
