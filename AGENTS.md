@@ -111,6 +111,9 @@
 
 Apply these rules when benchmark data is in scope:
 
+- Follow [benchmark.md](benchmark.md): Short/Long at powers-of-two client counts
+  up to verified parallel capacity, with no queued requests. Max requires an
+  explicitly agreed context and output budget
 - Identify the canonical dataset; pages and generated summaries must not maintain
   independent measurement values
 - Keep microbenchmarks, server workloads and capacity measurements distinct.

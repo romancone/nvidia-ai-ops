@@ -14,6 +14,7 @@ formatting. This file owns the repository layout, role behavior and recipe mappi
 | [nvidia.md](nvidia.md) / [site.yml](site.yml) | Manual and Ansible paths for NVIDIA Driver, CUDA Toolkit and Container Toolkit |
 | [cleanup.md](cleanup.md) / [cleanup.yml](cleanup.yml) | Optional NVIDIA driver package cleanup |
 | [vllm.md](vllm.md) | Manual-only native systemd vLLM service recipe |
+| [benchmark.md](benchmark.md) / [benchmark.yml](benchmark.yml) | API benchmark protocol and isolated llama-benchy installation |
 | [roles/](roles/) | Source of truth for task order, supported settings and verification |
 | [ansible.cfg](ansible.cfg) / [hosts.example.ini](hosts.example.ini) | Select ignored `./hosts` inventory / provide its public template |
 | [group_vars/all.yml](group_vars/all.yml) | Default SSH user |
@@ -21,10 +22,11 @@ formatting. This file owns the repository layout, role behavior and recipe mappi
 | `hosts` / `host_vars/` | Ignored inventory and per-host connection or package overrides |
 | [.agents/skills/benchmark-report-review/](.agents/skills/benchmark-report-review/SKILL.md) | Review workflow for benchmark imports, coverage and report migrations |
 
-Both playbooks target `nvidia_hosts`. `site.yml` applies `nvidia_driver`,
+All playbooks target `nvidia_hosts`. `site.yml` applies `nvidia_driver`,
 `cuda_toolkit` and `nvidia_container_toolkit` in that order. Container Toolkit is
 optional in the manual but included in `site.yml` by default. Cleanup runs only
 through the separate `cleanup.yml` playbook.
+`benchmark.yml` installs the API client and runner; benchmarks require an explicit run.
 
 ## Role Behavior
 
@@ -40,6 +42,13 @@ through the separate `cleanup.yml` playbook.
   configuration, previews APT and rejects unrelated changes. It preserves CUDA,
   container tooling, repository keyrings and source lists; autoremove is disabled.
   Missing packages do not block discovery or cleanup of the remaining packages
+- `llama_benchy` installs a pinned API client and the reusable
+  [runner](roles/llama_benchy/files/llama-benchy-run.py). The runner saves native
+  results, excludes cases with observed waiting or preemption, and requires
+  a common decode interval in every measured batch. The
+  [plotter](roles/llama_benchy/files/llama-benchy-plot.py) reads those results and
+  counts observed SSE tokens in that common window and plots aggregate decode,
+  decode per request and TTFT separately after each run
 
 ## Recipe Mappings
 

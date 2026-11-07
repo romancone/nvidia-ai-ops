@@ -1,0 +1,33 @@
+---
+- name: llama_benchy.prerequisites | Install Python environment support
+  ansible.builtin.apt:
+    name:
+      - python3-venv
+      - ca-certificates
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: llama_benchy.install | Install llama-benchy in an isolated environment
+  ansible.builtin.pip:
+    name:
+      - "llama-benchy=={{ llama_benchy_version }}"
+      - matplotlib
+    virtualenv: "{{ llama_benchy_venv }}"
+    virtualenv_command: python3 -m venv
+
+- name: llama_benchy.command | Expose the benchmark command
+  ansible.builtin.file:
+    src: "{{ llama_benchy_venv }}/bin/llama-benchy"
+    dest: /usr/local/bin/llama-benchy
+    state: link
+    force: true
+
+- name: llama_benchy.runner | Install the queue-monitored benchmark runner
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/usr/local/bin/{{ item.dest }}"
+    mode: "0755"
+  loop:
+    - {src: llama-benchy-run.py, dest: llama-benchy-run}
+    - {src: llama-benchy-plot.py, dest: llama-benchy-plot.py}

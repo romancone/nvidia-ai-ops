@@ -17,6 +17,7 @@ terminal copy/paste remains valid.
 | NVIDIA driver cleanup (optional) | [`cleanup.md`](cleanup.md) | [`cleanup.yml`](cleanup.yml) |
 | NVIDIA driver, CUDA toolkit, NVIDIA container toolkit | [`nvidia.md`](nvidia.md) | [`site.yml`](site.yml) |
 | vLLM native service | [`vllm.md`](vllm.md) | not automated yet |
+| API benchmark client and protocol | [`benchmark.md`](benchmark.md) | [`benchmark.yml`](benchmark.yml) |
 
 ## Ansible Quick Start
 
