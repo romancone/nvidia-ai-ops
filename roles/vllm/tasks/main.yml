@@ -1,0 +1,85 @@
+---
+- name: vllm.settings.require | Validate vLLM settings and platform
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == 'Ubuntu'
+      - ansible_facts.architecture == 'x86_64'
+      - vllm_model_id | length > 0
+      - vllm_model_name | length > 0
+      - vllm_model_dir.startswith('/')
+      - vllm_venv.startswith('/')
+      - vllm_options is mapping
+      - vllm_environment is mapping
+      - vllm_options.keys() | intersect(['model', 'served-model-name', 'host', 'port', 'api-key']) | length == 0
+      - vllm_port | int > 0 and vllm_port | int < 65536
+      - vllm_host in ['127.0.0.1', '::1', 'localhost'] or vllm_api_key | length > 0
+      - vllm_ready_timeout | int >= 10
+    fail_msg: Set the model, paths, server options and an API key for a non-loopback listener.
+
+- name: vllm.gpu.require | Require a working NVIDIA driver
+  ansible.builtin.command:
+    argv:
+      - nvidia-smi
+      - --query-gpu=name,driver_version
+      - --format=csv,noheader
+  changed_when: false
+  check_mode: false
+
+- name: vllm.cuda.require | Require the CUDA compiler used by the service
+  ansible.builtin.command:
+    argv:
+      - "{{ vllm_environment.get('CUDA_HOME', '/usr/local/cuda') }}/bin/nvcc"
+      - --version
+  changed_when: false
+  check_mode: false
+
+- name: vllm.environment.inspect | Inspect the existing Python environment
+  ansible.builtin.stat:
+    path: "{{ vllm_venv }}/bin/python"
+    get_checksum: false
+  register: vllm_existing_environment
+
+- name: vllm.model.inspect | Inspect the completed model download
+  ansible.builtin.stat:
+    path: "{{ vllm_model_dir }}/.ansible-vllm-model"
+    checksum_algorithm: sha256
+  register: vllm_existing_model
+
+- name: vllm.token.inspect | Inspect the optional token file without reading it
+  ansible.builtin.stat:
+    path: "{{ vllm_hf_token_file }}"
+    get_checksum: false
+    get_mime: false
+  register: vllm_token
+  become: false
+  when:
+    - vllm_hf_token_file | length > 0
+    - vllm_existing_model.stat.checksum | default('') != (_vllm_model_identity | hash('sha256'))
+
+- name: vllm.token.require | Require a readable token file when configured
+  ansible.builtin.assert:
+    that:
+      - vllm_token.stat.isreg | default(false)
+      - vllm_token.stat.readable | default(false)
+    fail_msg: The SSH login user must be able to read vllm_hf_token_file.
+  when:
+    - vllm_hf_token_file | length > 0
+    - vllm_existing_model.stat.checksum | default('') != (_vllm_model_identity | hash('sha256'))
+
+- name: Install vLLM and configure its service
+  ansible.builtin.include_tasks: install.yml
+  when: not ansible_check_mode or (vllm_existing_environment.stat.exists and vllm_existing_model.stat.exists)
+
+- name: vllm.bootstrap.preview | Report installation prerequisites in check mode
+  ansible.builtin.debug:
+    msg: >-
+      Would install {{ vllm_prereq_packages }}, create the Python environment,
+      install vLLM and hf, download {{ vllm_model_id }} and configure the service.
+      Downloads and runtime verification require a real run.
+  when:
+    - ansible_check_mode
+    - not (vllm_existing_environment.stat.exists and vllm_existing_model.stat.exists)
+
+- name: Verify the running vLLM service
+  ansible.builtin.include_tasks: verify.yml
+  when: not ansible_check_mode

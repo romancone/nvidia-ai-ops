@@ -1,23 +1,26 @@
 # vLLM Native Service
 
-This is a Runme-friendly recipe for a native, systemd-managed vLLM service on a
-single GPU host. It is based on a working Qwen3.6 NVFP4 single-GPU setup.
+Native systemd service paired with [vllm.yml](vllm.yml) and the
+[vllm role](roles/vllm/). Install a working NVIDIA driver and CUDA Toolkit first with
+[nvidia.md](nvidia.md). Container Toolkit is needed only for Docker workloads.
 
-This recipe does not use Docker. Install and verify the NVIDIA driver and CUDA
-toolkit first with [`nvidia.md`](nvidia.md). The NVIDIA container toolkit is only
-needed for Docker workloads.
+For Ansible, shared values are in `group_vars/nvidia_hosts.yml`. Put local
+credentials and overrides in ignored `host_vars/<host>.yml`, for example:
 
-Requires `uv`, `hf`, and `jq` on the target host.
+```yaml
+# vllm_hf_token_file: /path/to/hf-token.txt
+# vllm_model_revision: commit-or-tag
+# vllm_environment:
+#   CUDA_HOME: /path/to/cuda
+```
+
+Run the separate playbook from the repository root:
+
+```bash { name=vllm-ansible }
+ansible-playbook vllm.yml --limit gpu1.example.com --diff
+```
 
 ## 1. vLLM Native Service
-
-- systemd-managed, no Docker
-- full 262,144 native context, single GPU
-- NVFP4 / SM120 kernel path via FlashInfer and CUTLASS DSL
-- fp8 KV cache
-- MTP speculative decoding with `num_speculative_tokens: 2`
-- Qwen reasoning parser
-- Qwen structured tool-call parser
 
 ### 1.1 Configure service settings
 
@@ -26,239 +29,267 @@ id: vllm.settings
 kind: variables
 -->
 
-```bash
-# Variables
-export VLLM_PYTHON_VERSION="3.13"
-export VLLM_UV_PYTHON_DIR="/opt/uv-python"
+```bash { name=vllm-settings }
+# Python environment and service paths
+export VLLM_VERSION="0.33.0"
 export VLLM_ENV_DIR="/opt/vllm-env"
 export VLLM_SERVICE_USER="vllm"
 export VLLM_STATE_DIR="/var/lib/vllm"
 export VLLM_CONFIG_DIR="/etc/vllm"
-export VLLM_ENV_FILE="/etc/vllm/vllm.env"
 export VLLM_SERVICE_FILE="/etc/systemd/system/vllm.service"
 
-export VLLM_MODEL_ID="unsloth/Qwen3.6-27B-NVFP4"
-export VLLM_MODEL_NAME="Qwen3.6-27B-NVFP4"
-export VLLM_MODEL_DIR="/opt/models/Qwen3.6-27B-NVFP4"
+# Model and download cache
+export VLLM_MODEL_ID="nvidia/Qwen3.8-27B-NVFP4"
+export VLLM_MODEL_NAME="Qwen3.8-27B-NVFP4"
+export VLLM_MODEL_DIR="/opt/models/nvidia--Qwen3.8-27B-NVFP4"
 export VLLM_HF_CACHE="/opt/models/hf-cache"
-export VLLM_WORKDIR="/opt/models"
+# export HF_TOKEN_PATH="$HOME/hf-token.txt" # Optional file containing only the token
+export VLLM_MODEL_REVISION="482ca0f3832238542f8f5295dde86b5f22711d80"
 
-export VLLM_CUDA_HOME="/usr/local/cuda-13.4"
 export VLLM_HOST="127.0.0.1"
 export VLLM_PORT="8000"
-export VLLM_API_KEY_VALUE="changeme"
 ```
 
-### 1.2 Install Python and vLLM
-
-The NVFP4 check should print the GPU capability and `True True`.
-
-<!-- ops-step
-id: vllm.python.install_dir
-kind: file
--->
+### 1.2 Install Python, vLLM and Hugging Face CLI
 
 <!-- ops-step
 id: vllm.python.install
-kind: command
+ansible_task: vllm.python.install | Install Python and build prerequisites
 -->
-
+<!-- ops-step
+id: vllm.service_user.create
+ansible_task: vllm.user.create | Create the service user
+-->
+<!-- ops-step
+id: vllm.user.group
+ansible_task: vllm.user.group | Create the service group
+-->
+<!-- ops-step
+id: vllm.models.prepare
+ansible_task: vllm.directories.prepare | Prepare model, state and configuration directories
+-->
 <!-- ops-step
 id: vllm.venv.create
-kind: command
+ansible_task: vllm.packages.install | Install vLLM and Hugging Face CLI in a virtual environment
 -->
-
 <!-- ops-step
 id: vllm.packages.install
-kind: package
+ansible_task: vllm.packages.install | Install vLLM and Hugging Face CLI in a virtual environment
 -->
-
 <!-- ops-step
-id: vllm.nvfp4.verify
-kind: verify
+id: vllm.kernels.cubin
+ansible_task: vllm.kernels.download | Install precompiled kernels with vLLM
+-->
+<!-- ops-step
+id: vllm.kernels.cache
+ansible_task: vllm.kernels.download | Install precompiled kernels with vLLM
 -->
 
-```bash
-# Create Python Install Directory
-sudo mkdir -p "$VLLM_UV_PYTHON_DIR"
-sudo chown "$USER":"$USER" "$VLLM_UV_PYTHON_DIR"
+```bash { name=vllm-bootstrap }
+# Install prerequisites and create the service account
+sudo apt-get update
+sudo apt-get install -y ca-certificates python3-venv python3-dev build-essential ninja-build
+sudo adduser --system --group --home "$VLLM_STATE_DIR" \
+  --shell /usr/sbin/nologin "$VLLM_SERVICE_USER"
+sudo install -d -o "$VLLM_SERVICE_USER" -g "$VLLM_SERVICE_USER" "$VLLM_STATE_DIR"
+sudo install -d -g "$VLLM_SERVICE_USER" "$VLLM_CONFIG_DIR"
+sudo install -d -o "$(id -un)" -g "$VLLM_SERVICE_USER" "$VLLM_MODEL_DIR" "$VLLM_HF_CACHE"
 
-# Install Python with uv
-export UV_PYTHON_INSTALL_DIR="$VLLM_UV_PYTHON_DIR"
-uv python install "$VLLM_PYTHON_VERSION"
-
-# Create vLLM Virtual Environment
-sudo mkdir -p "$VLLM_ENV_DIR"
-sudo chown "$USER":"$USER" "$VLLM_ENV_DIR"
-uv venv "$VLLM_ENV_DIR" --python "$VLLM_PYTHON_VERSION"
-
-# Install vLLM Packages
-source "$VLLM_ENV_DIR/bin/activate"
-uv pip install "vllm>=0.25.0" "flashinfer-python>=0.6.13" "nvidia-cutlass-dsl>=4.5.2" --torch-backend=auto
-deactivate
-sudo chmod -R o+rX "$VLLM_UV_PYTHON_DIR"
-
-# Verify NVFP4 / SM120 Kernel Path
-"$VLLM_ENV_DIR/bin/python" -c "import torch; from vllm.utils.flashinfer import has_flashinfer_b12x_gemm as g, has_flashinfer_b12x_moe as m; print(torch.cuda.get_device_capability(), g(), m())"
+# Install into an isolated environment and expose both commands
+sudo python3 -m venv "$VLLM_ENV_DIR"
+sudo "$VLLM_ENV_DIR/bin/pip" install "vllm==$VLLM_VERSION" huggingface_hub
+sudo "$VLLM_ENV_DIR/bin/vllm" download-kernels
+sudo ln -sfn "$VLLM_ENV_DIR/bin/vllm" /usr/local/bin/vllm
+sudo ln -sfn "$VLLM_ENV_DIR/bin/hf" /usr/local/bin/hf
 ```
 
 ### 1.3 Download the model
 
 <!-- ops-step
-id: vllm.models.prepare
-kind: file
--->
-
-<!-- ops-step
 id: vllm.models.download
-kind: command
+ansible_task: vllm.model.download | Download the model as the SSH login user
 -->
 
-```bash
-# Prepare Model Directories
-sudo mkdir -p "$VLLM_MODEL_DIR" "$VLLM_HF_CACHE"
-sudo chown -R "$USER":"$USER" "$VLLM_WORKDIR"
-
-# Download Model Weights
-hf download "$VLLM_MODEL_ID" --local-dir "$VLLM_MODEL_DIR"
+```bash { name=vllm-model }
+# Download as the login user; HF_TOKEN_PATH is read directly when configured
+HF_HOME="$VLLM_HF_CACHE" hf download "$VLLM_MODEL_ID" \
+  --local-dir "$VLLM_MODEL_DIR" --revision "$VLLM_MODEL_REVISION"
 ```
 
-### 1.4 Create the service user and environment
+### 1.4 Configure the server
 
-<!-- ops-step
-id: vllm.service_user.create
-kind: user
--->
+Create `/etc/vllm/config.yaml` with these values. Paths and the served name must
+match section 1.1. This profile targets one 96 GB Blackwell GPU with NVFP4
+weights, an FP8 KV cache and the native 262144-token context, without YaRN.
 
-<!-- ops-step
-id: vllm.environment.write
-kind: file
--->
-
-```bash
-# Create Service User and State Directory
-if ! id "$VLLM_SERVICE_USER" >/dev/null 2>&1; then
-  sudo useradd --system --no-create-home --shell /usr/sbin/nologin "$VLLM_SERVICE_USER"
-fi
-sudo chown -R "$VLLM_SERVICE_USER":"$VLLM_SERVICE_USER" "$VLLM_ENV_DIR" "$VLLM_WORKDIR"
-sudo mkdir -p "$VLLM_STATE_DIR"
-sudo chown "$VLLM_SERVICE_USER":"$VLLM_SERVICE_USER" "$VLLM_STATE_DIR"
-
-# Write Environment File
-sudo mkdir -p "$VLLM_CONFIG_DIR"
-sudo tee "$VLLM_ENV_FILE" >/dev/null <<EOF
-HOME=$VLLM_STATE_DIR
-TRITON_CACHE_DIR=$VLLM_STATE_DIR/.triton-cache
-HF_HOME=$VLLM_HF_CACHE
-VLLM_API_KEY=$VLLM_API_KEY_VALUE
-FLASHINFER_CUDA_ARCH_LIST=12.0f
-FLASHINFER_FORCE_SM=120f
-EOF
-sudo chmod 600 "$VLLM_ENV_FILE"
-sudo chown "$VLLM_SERVICE_USER":"$VLLM_SERVICE_USER" "$VLLM_ENV_FILE"
+```yaml
+model: /opt/models/nvidia--Qwen3.8-27B-NVFP4
+served-model-name: [Qwen3.8-27B-NVFP4]
+host: 127.0.0.1
+port: 8000
+max-model-len: 262144 # Input and output together; native context
+gpu-memory-utilization: 0.9 # Fraction of GPU memory
+kv-cache-dtype: fp8
+max-num-seqs: 64 # Admission limit; parallel capacity depends on context
+max-num-batched-tokens: 8192
+long-prefill-token-threshold: 1024 # Base chunk cap with competing requests
+long-prefill-token-threshold-adaptive: true # Share the token budget across requests
+mm-processor-cache-gb: 0
+reasoning-parser: qwen3
+enable-auto-tool-choice: true
+tool-call-parser: qwen3_coder
+disable-prefix-caching: true
+disable-flashinfer-autotune: true
+speculative-config:
+  method: mtp
+  num_speculative_tokens: 2 # MTP draft tokens
+override-generation-config:
+  temperature: 1.0 # Official thinking profile
+  top_p: 0.95
+  top_k: 20
+  min_p: 0
+  repetition_penalty: 1.0
+  presence_penalty: 0
+  frequency_penalty: 0
+  max_new_tokens: 131072 # 128K generated tokens, within the total context
+default-chat-template-kwargs:
+  enable_thinking: true
+  reasoning_effort: xhigh
 ```
+
+<!-- ops-step
+id: vllm.config.write
+ansible_task: vllm.config.write | Write vLLM server options
+-->
+
+```bash { name=vllm-config }
+# Create or edit the server options, then allow the service to read them
+sudoedit "$VLLM_CONFIG_DIR/config.yaml"
+sudo chown root:"$VLLM_SERVICE_USER" "$VLLM_CONFIG_DIR/config.yaml"
+sudo chmod 640 "$VLLM_CONFIG_DIR/config.yaml"
+```
+
+Ansible writes this file from `vllm_options`, adding the model, listener and
+optional `vllm_api_key`. A non-loopback listener requires an API key.
+
+The [official model card](https://huggingface.co/Qwen/Qwen3.8-27B#best-practices)
+defines the native context and thinking sampling profile.
+[Alibaba Model Studio](https://modelstudio.console.alibabacloud.com/ap-southeast-1/model/market/detail/qwen3.8-27b)
+lists a 128K output limit. Here `max_new_tokens` caps all generated tokens,
+including reasoning; input plus generation must fit the configured context.
 
 ### 1.5 Create or edit the systemd service file
 
-Create the unit with the block below, or use `sudoedit "$VLLM_SERVICE_FILE"` and
-replace the `$VLLM_*` placeholders with your values from step 1.1.
-When editing directly, use a single trailing `\` on continuation lines.
+Create `/etc/systemd/system/vllm.service` with this content:
 
-<!-- ops-step
-id: vllm.systemd.write
-kind: file
--->
-
-```bash
-# Write systemd Service
-sudo tee "$VLLM_SERVICE_FILE" >/dev/null <<EOF
+```ini
 [Unit]
-Description=vLLM server - $VLLM_MODEL_NAME - full context
+Description=vLLM inference service
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-Type=simple
-User=$VLLM_SERVICE_USER
-Group=$VLLM_SERVICE_USER
-EnvironmentFile=$VLLM_ENV_FILE
-Environment=PATH=$VLLM_CUDA_HOME/bin:/usr/bin:/bin
-Environment=LD_LIBRARY_PATH=$VLLM_CUDA_HOME/lib64
-WorkingDirectory=$VLLM_WORKDIR
-ExecStart=$VLLM_ENV_DIR/bin/vllm serve $VLLM_MODEL_DIR \\
-  --served-model-name $VLLM_MODEL_NAME \\
-  --trust-remote-code \\
-  --dtype bfloat16 \\
-  --max-model-len 262144 \\
-  --kv-cache-dtype fp8 \\
-  --gpu-memory-utilization 0.90 \\
-  --enable-chunked-prefill \\
-  --enable-prefix-caching \\
-  --reasoning-parser qwen3 \\
-  --enable-auto-tool-choice \\
-  --tool-call-parser qwen3_coder \\
-  --speculative-config '{"method":"mtp","num_speculative_tokens":2}' \\
-  --host $VLLM_HOST \\
-  --port $VLLM_PORT
+User=vllm
+Group=vllm
+WorkingDirectory=/var/lib/vllm
+Environment="HF_HOME=/var/lib/vllm/huggingface"
+Environment=HF_HUB_OFFLINE=1
+Environment="CUDA_HOME=/usr/local/cuda"
+ExecStart=/opt/vllm-env/bin/vllm serve --config /etc/vllm/config.yaml
 Restart=on-failure
 RestartSec=5
+TimeoutStartSec=1800
 LimitNOFILE=1048576
 LimitMEMLOCK=infinity
+NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
-EOF
+```
+
+<!-- ops-step
+id: vllm.systemd.write
+ansible_task: vllm.systemd.write | Write the vLLM systemd unit
+-->
+<!-- ops-step
+id: vllm.environment.write
+ansible_task: vllm.systemd.write | Write the vLLM systemd unit
+-->
+
+```bash { name=vllm-systemd-write }
+# Create or edit the unit separately from starting it
+sudoedit "$VLLM_SERVICE_FILE"
 ```
 
 ### 1.6 Reload systemd and start the service
 
 <!-- ops-step
+id: vllm.systemd.reload
+ansible_task: vllm.systemd.reload | Apply pending service changes
+-->
+<!-- ops-step
 id: vllm.systemd.start
-kind: command
+ansible_task: vllm.systemd.start | Enable and start vLLM
 -->
 
-```bash
-# Enable and Start Service
+```bash { name=vllm-systemd-start }
+# Apply the unit and start or restart the service
 sudo systemctl daemon-reload
-sudo systemctl enable --now vllm.service
-sudo systemctl status vllm.service --no-pager
+sudo systemctl enable vllm
+sudo systemctl restart vllm
 ```
 
-### 1.7 Verify the API
+### 1.7 Verify GPU access and the API
 
+<!-- ops-step
+id: vllm.torch.cuda_check
+ansible_task: vllm.torch.cuda_check | Verify CUDA access and installed package versions
+-->
+<!-- ops-step
+id: vllm.api.health
+ansible_task: vllm.api.health | Wait for the API to become healthy
+-->
 <!-- ops-step
 id: vllm.health.models
-kind: verify
+ansible_task: vllm.api.models | Read the served model identity
 -->
-
+<!-- ops-step
+id: vllm.api.chat
+ansible_task: vllm.api.chat | Verify a real generation request
+-->
+<!-- ops-step
+id: vllm.nvfp4.verify
+ansible_task: vllm.api.generate | Require a completed nonempty model answer
+-->
 <!-- ops-step
 id: vllm.health.tool_call
-kind: verify
+ansible_task: vllm.api.tools | Verify structured tool calling when enabled
 -->
 
-```bash
-# Check Model List
-curl -s "http://$VLLM_HOST:$VLLM_PORT/v1/models" \
-  -H "Authorization: Bearer $VLLM_API_KEY_VALUE" | jq .
+```bash { name=vllm-verify }
+# Verify CUDA from the service account
+sudo runuser -u "$VLLM_SERVICE_USER" -- "$VLLM_ENV_DIR/bin/python" -c \
+  'import torch; assert torch.cuda.is_available(); print(torch.cuda.get_device_name(0))'
 
-# Check Tool Call Path
-curl -s "http://$VLLM_HOST:$VLLM_PORT/v1/chat/completions" \
-  -H "Authorization: Bearer $VLLM_API_KEY_VALUE" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"model\":\"$VLLM_MODEL_NAME\",
-    \"messages\":[{\"role\":\"user\",\"content\":\"What is the weather in Brussels?\"}],
-    \"tools\":[{
-      \"type\":\"function\",
-      \"function\":{
-        \"name\":\"get_weather\",
-        \"description\":\"Get current weather for a location\",
-        \"parameters\":{\"type\":\"object\",\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"]}
-      }
-    }],
-    \"tool_choice\":\"auto\"
-  }" | jq '.choices[0].message.tool_calls'
+# Wait for the API, then verify the model and generate an answer
+curl -fsS --retry-connrefused --retry 180 --retry-delay 10 --max-time 10 \
+  "http://$VLLM_HOST:$VLLM_PORT/health"
+curl -fsS "http://$VLLM_HOST:$VLLM_PORT/v1/models"
+curl -fsS "http://$VLLM_HOST:$VLLM_PORT/v1/chat/completions" \
+  -H 'Content-Type: application/json' --data-binary @- <<JSON
+{"model":"$VLLM_MODEL_NAME","messages":[{"role":"user","content":"Reply with OK."}],"temperature":0,"max_tokens":32,"chat_template_kwargs":{"enable_thinking":false}}
+JSON
+
+# Verify the configured tool-call parser
+curl -fsS "http://$VLLM_HOST:$VLLM_PORT/v1/chat/completions" \
+  -H 'Content-Type: application/json' --data-binary @- <<JSON
+{"model":"$VLLM_MODEL_NAME","messages":[{"role":"user","content":"What is the weather in Brussels?"}],"tools":[{"type":"function","function":{"name":"get_weather","description":"Get current weather for a location","parameters":{"type":"object","properties":{"location":{"type":"string"}},"required":["location"]}}}],"tool_choice":"auto","temperature":0,"max_tokens":128,"chat_template_kwargs":{"enable_thinking":false}}
+JSON
 ```
+
+The GPU name should match the host. The API should report the selected model,
+its local root path and context, then return a nonempty answer with `finish_reason: stop`.
+The tool request should return a `get_weather` call with valid location arguments.
 
 ### 1.8 Follow logs (Optional)
 
@@ -267,7 +298,7 @@ id: vllm.logs.follow
 kind: observe
 -->
 
-```bash
-# Follow Logs
-journalctl -u vllm.service -f
+```bash { name=vllm-logs interactive=true }
+# Follow startup and request logs
+sudo journalctl -u vllm -f
 ```

@@ -1,0 +1,123 @@
+---
+- name: vllm.torch.cuda_check | Verify CUDA access and installed package versions
+  ansible.builtin.command:
+    argv:
+      - runuser
+      - -u
+      - "{{ vllm_service_user }}"
+      - --
+      - "{{ vllm_venv }}/bin/python"
+      - -c
+      - >-
+        import importlib.metadata, json, torch;
+        assert torch.cuda.is_available(), 'PyTorch cannot access CUDA';
+        print(json.dumps({'gpu': torch.cuda.get_device_name(0),
+        'capability': torch.cuda.get_device_capability(0),
+        'versions': {p: importlib.metadata.version(p) for p in ['vllm', 'torch', 'huggingface_hub']}}))
+  become: true
+  changed_when: false
+
+- name: vllm.api.health | Wait for the API to become healthy
+  ansible.builtin.uri:
+    url: "http://{{ '[' ~ vllm_host ~ ']' if ':' in vllm_host else vllm_host }}:{{ vllm_port }}/health"
+    status_code: 200
+    timeout: 10
+  register: vllm_health
+  until: vllm_health.status | default(0) == 200
+  retries: "{{ (vllm_ready_timeout | int / 10) | int }}"
+  delay: 10
+
+- name: vllm.api.models | Read the served model identity
+  ansible.builtin.uri:
+    url: "http://{{ '[' ~ vllm_host ~ ']' if ':' in vllm_host else vllm_host }}:{{ vllm_port }}/v1/models"
+    headers: "{{ {'Authorization': 'Bearer ' ~ vllm_api_key} if vllm_api_key | length > 0 else {} }}"
+    return_content: true
+  register: vllm_models
+  no_log: "{{ vllm_api_key | length > 0 }}"
+
+- name: vllm.context.parse | Normalize the configured context with vLLM
+  ansible.builtin.command:
+    argv:
+      - "{{ vllm_venv }}/bin/python"
+      - -c
+      - >-
+        import sys;
+        from vllm.utils.argparse_utils import human_readable_int_or_auto;
+        print(human_readable_int_or_auto(sys.argv[1]))
+      - "{{ vllm_options['max-model-len'] | string }}"
+  register: vllm_context_length
+  changed_when: false
+  when: "'max-model-len' in vllm_options"
+
+- name: vllm.api.identity | Require the configured model and context
+  ansible.builtin.assert:
+    that:
+      - vllm_models.json.data | selectattr('id', 'equalto', vllm_model_name) | list | length == 1
+      - (vllm_models.json.data | selectattr('id', 'equalto', vllm_model_name) | first).root == vllm_model_dir
+      - (vllm_models.json.data | selectattr('id', 'equalto', vllm_model_name) | first).max_model_len | int > 0
+      - >-
+        'max-model-len' not in vllm_options or
+        vllm_context_length.stdout | int == -1 or
+        (vllm_models.json.data | selectattr('id', 'equalto', vllm_model_name) | first).max_model_len | int
+        == vllm_context_length.stdout | int
+
+- name: vllm.api.chat | Verify a real generation request
+  ansible.builtin.uri:
+    url: "http://{{ '[' ~ vllm_host ~ ']' if ':' in vllm_host else vllm_host }}:{{ vllm_port }}/v1/chat/completions"
+    method: POST
+    headers: "{{ {'Authorization': 'Bearer ' ~ vllm_api_key} if vllm_api_key | length > 0 else {} }}"
+    body_format: json
+    body:
+      model: "{{ vllm_model_name }}"
+      messages:
+        - {role: user, content: Reply with OK.}
+      temperature: 0
+      max_tokens: 32
+      chat_template_kwargs: {enable_thinking: false}
+    timeout: 120
+    return_content: true
+  register: vllm_chat
+  no_log: "{{ vllm_api_key | length > 0 }}"
+
+- name: vllm.api.generate | Require a completed nonempty model answer
+  ansible.builtin.assert:
+    that:
+      - vllm_chat.json.choices[0].message.content | default('') | trim | length > 0
+      - vllm_chat.json.choices[0].finish_reason == 'stop'
+
+- name: vllm.api.tools | Verify structured tool calling when enabled
+  ansible.builtin.uri:
+    url: "http://{{ '[' ~ vllm_host ~ ']' if ':' in vllm_host else vllm_host }}:{{ vllm_port }}/v1/chat/completions"
+    method: POST
+    headers: "{{ {'Authorization': 'Bearer ' ~ vllm_api_key} if vllm_api_key | length > 0 else {} }}"
+    body_format: json
+    body:
+      model: "{{ vllm_model_name }}"
+      messages:
+        - {role: user, content: "What is the weather in Brussels?"}
+      tools:
+        - type: function
+          function:
+            name: get_weather
+            description: Get current weather for a location
+            parameters:
+              type: object
+              properties: {location: {type: string}}
+              required: [location]
+      tool_choice: auto
+      temperature: 0
+      max_tokens: 128
+      chat_template_kwargs: {enable_thinking: false}
+    timeout: 120
+    return_content: true
+  register: vllm_tools
+  no_log: "{{ vllm_api_key | length > 0 }}"
+  when: vllm_options.get('enable-auto-tool-choice', false) | bool
+
+- name: vllm.api.tools.require | Require valid tool arguments
+  ansible.builtin.assert:
+    that:
+      - vllm_tools.json.choices[0].message.tool_calls | default([]) | length > 0
+      - vllm_tools.json.choices[0].message.tool_calls[0].function.name == 'get_weather'
+      - (vllm_tools.json.choices[0].message.tool_calls[0].function.arguments | from_json).location | length > 0
+  when: vllm_options.get('enable-auto-tool-choice', false) | bool

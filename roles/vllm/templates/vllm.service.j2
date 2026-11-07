@@ -1,0 +1,24 @@
+[Unit]
+Description=vLLM inference service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ vllm_service_user }}
+Group={{ vllm_service_user }}
+WorkingDirectory={{ vllm_state_dir }}
+Environment={{ ('HF_HOME=' ~ vllm_state_dir ~ '/huggingface') | to_json }}
+Environment=HF_HUB_OFFLINE=1
+{% for key, value in vllm_environment.items() %}
+Environment={{ (key ~ '=' ~ value | string) | to_json }}
+{% endfor %}
+ExecStart={{ vllm_venv }}/bin/vllm serve --config {{ vllm_config_dir }}/config.yaml
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec={{ vllm_ready_timeout }}
+LimitNOFILE=1048576
+LimitMEMLOCK=infinity
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

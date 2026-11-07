@@ -1,0 +1,6 @@
+---
+- name: Install and serve vLLM
+  hosts: nvidia_hosts
+  gather_facts: true
+  roles:
+    - role: vllm

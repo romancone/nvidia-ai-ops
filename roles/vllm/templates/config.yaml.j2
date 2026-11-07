@@ -1,0 +1,1 @@
+{{ vllm_options | combine({'model': vllm_model_dir, 'served-model-name': [vllm_model_name], 'host': vllm_host, 'port': vllm_port | int} | combine({'api-key': vllm_api_key} if vllm_api_key | length > 0 else {})) | to_nice_yaml(indent=2, sort_keys=false) }}

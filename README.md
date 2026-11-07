@@ -16,7 +16,7 @@ terminal copy/paste remains valid.
 |---|---|---|
 | NVIDIA driver cleanup (optional) | [`cleanup.md`](cleanup.md) | [`cleanup.yml`](cleanup.yml) |
 | NVIDIA driver, CUDA toolkit, NVIDIA container toolkit | [`nvidia.md`](nvidia.md) | [`site.yml`](site.yml) |
-| vLLM native service | [`vllm.md`](vllm.md) | not automated yet |
+| vLLM native service | [`vllm.md`](vllm.md) | [`vllm.yml`](vllm.yml) |
 | API benchmark client and protocol | [`benchmark.md`](benchmark.md) | [`benchmark.yml`](benchmark.yml) |
 
 ## Ansible Quick Start
@@ -85,6 +85,12 @@ After a driver installation or update, reboot manually and rerun the playbook to
 verify the loaded driver. The playbook reports this requirement without rebooting.
 
 ## Human Recipe Quick Start
+
+vLLM has a separate playbook, `vllm.yml`. It installs vLLM and Hugging Face CLI,
+downloads the configured model and starts a local systemd service. Its settings
+are in `group_vars/nvidia_hosts.yml`; optional authentication uses a token file
+specified in ignored host variables. See [`vllm.md`](vllm.md) for configuration
+and manual steps.
 
 Open [`nvidia.md`](nvidia.md), review the variables, then run each shell block on
 the target host. With Runme, each fenced shell block can be executed as a cell.

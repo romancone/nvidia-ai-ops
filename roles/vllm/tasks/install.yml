@@ -1,0 +1,185 @@
+---
+- name: vllm.python.install | Install Python and build prerequisites
+  ansible.builtin.apt:
+    name: "{{ vllm_prereq_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
+- name: vllm.user.group | Create the service group
+  ansible.builtin.group:
+    name: "{{ vllm_service_user }}"
+    system: true
+  become: true
+
+- name: vllm.user.create | Create the service user
+  ansible.builtin.user:
+    name: "{{ vllm_service_user }}"
+    group: "{{ vllm_service_user }}"
+    home: "{{ vllm_state_dir }}"
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: true
+  become: true
+
+- name: vllm.directories.prepare | Prepare model, state and configuration directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ vllm_service_user }}"
+    mode: '0755'
+  loop:
+    - {path: "{{ vllm_state_dir }}", owner: "{{ vllm_service_user }}"}
+    - {path: "{{ vllm_config_dir }}", owner: root}
+    - {path: "{{ vllm_model_dir }}", owner: "{{ vllm_download_user }}"}
+    - {path: "{{ vllm_hf_cache }}", owner: "{{ vllm_download_user }}"}
+  become: true
+
+- name: vllm.packages.install | Install vLLM and Hugging Face CLI in a virtual environment
+  ansible.builtin.pip:
+    name:
+      - "vllm{{ '==' ~ vllm_version if vllm_version | length > 0 else '' }}"
+      - huggingface_hub
+    virtualenv: "{{ vllm_venv }}"
+    virtualenv_command: "{{ vllm_python }} -m venv"
+    state: present
+  register: vllm_packages
+  become: true
+  notify: Restart vllm
+
+- name: Configure kernels and validate the installed environment
+  when: not ansible_check_mode or not vllm_packages.changed
+  block:
+    - name: vllm.kernels.download | Install precompiled kernels with vLLM
+      ansible.builtin.command:
+        argv: ["{{ vllm_venv }}/bin/vllm", download-kernels]
+      register: vllm_kernels
+      changed_when: >-
+        (vllm_kernels.stdout_lines + vllm_kernels.stderr_lines)
+        | select('match', '^(Successfully installed |Installed [1-9][0-9]* packages? )')
+        | list | length > 0
+      become: true
+      when: not ansible_check_mode
+      notify: Restart vllm
+
+    - name: vllm.cli.link | Expose vLLM and hf commands
+      ansible.builtin.file:
+        src: "{{ vllm_venv }}/bin/{{ item }}"
+        dest: "/usr/local/bin/{{ item }}"
+        state: link
+      loop: [vllm, hf]
+      become: true
+
+    - name: vllm.options.inspect | Read supported options from the installed vLLM
+      ansible.builtin.command:
+        argv: ["{{ vllm_venv }}/bin/vllm", serve, --help=all]
+      register: vllm_serve_help
+      changed_when: false
+      check_mode: false
+
+    - name: vllm.options.require | Validate server options against the installed CLI help
+      vars:
+        vllm_supported_options: >-
+          {{ vllm_serve_help.stdout | regex_findall('(?m)^  --[^\n]+')
+             | join('\n') | regex_findall('--([a-z][a-z0-9-]*)') }}
+      ansible.builtin.assert:
+        that:
+          - vllm_options.keys() | difference(vllm_supported_options) | length == 0
+        fail_msg: >-
+          Options not listed by the installed vLLM CLI:
+          {{ vllm_options.keys() | difference(vllm_supported_options) }}.
+
+- name: Authenticate a new model download
+  no_log: true
+  when:
+    - not ansible_check_mode
+    - vllm_hf_token_file | length > 0
+    - vllm_existing_model.stat.checksum | default('') != (_vllm_model_identity | hash('sha256'))
+  block:
+    - name: vllm.token.read | Read the provided token when a download is needed
+      ansible.builtin.slurp:
+        src: "{{ vllm_hf_token_file }}"
+      register: vllm_token_content
+      become: false
+
+    - name: vllm.token.format | Require one Hugging Face token in the supplied file
+      ansible.builtin.assert:
+        that:
+          - vllm_token_content.content | b64decode | regex_findall('hf_[A-Za-z0-9]{20,}') | length == 1
+        fail_msg: The supplied file must contain exactly one Hugging Face token.
+
+    - name: vllm.token.verify | Verify configured Hugging Face authentication before downloading
+      ansible.builtin.command:
+        argv: [runuser, -u, "{{ vllm_download_user }}", --, "{{ vllm_venv }}/bin/hf", auth, whoami]
+      environment:
+        HF_HOME: "{{ vllm_hf_cache }}"
+        HF_TOKEN: "{{ vllm_token_content.content | b64decode | regex_search('hf_[A-Za-z0-9]{20,}') }}"
+      become: true
+      changed_when: false
+
+- name: vllm.model.invalidate | Remove the previous model download marker
+  ansible.builtin.file:
+    path: "{{ vllm_model_dir }}/.ansible-vllm-model"
+    state: absent
+  become: true
+  when:
+    - not ansible_check_mode
+    - vllm_existing_model.stat.checksum | default('') != (_vllm_model_identity | hash('sha256'))
+
+- name: vllm.model.download | Download the model as the SSH login user
+  ansible.builtin.command:
+    argv: >-
+      {{ ['runuser', '-u', vllm_download_user, '--', vllm_venv ~ '/bin/hf', 'download', vllm_model_id, '--local-dir', vllm_model_dir]
+         + (['--revision', vllm_model_revision] if vllm_model_revision | length > 0 else []) }}
+  environment: >-
+    {{ {'HF_HOME': vllm_hf_cache}
+       | combine({'HF_TOKEN': vllm_token_content.content | b64decode | regex_search('hf_[A-Za-z0-9]{20,}')}
+         if vllm_hf_token_file | length > 0 else {}) }}
+  become: true
+  no_log: "{{ vllm_hf_token_file | length > 0 }}"
+  when:
+    - not ansible_check_mode
+    - vllm_existing_model.stat.checksum | default('') != (_vllm_model_identity | hash('sha256'))
+  notify: Restart vllm
+
+- name: vllm.model.complete | Record a successful model download
+  ansible.builtin.copy:
+    content: "{{ _vllm_model_identity }}"
+    dest: "{{ vllm_model_dir }}/.ansible-vllm-model"
+    owner: "{{ vllm_download_user }}"
+    group: "{{ vllm_service_user }}"
+    mode: '0644'
+  become: true
+
+- name: vllm.config.write | Write vLLM server options
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ vllm_config_dir }}/config.yaml"
+    owner: root
+    group: "{{ vllm_service_user }}"
+    mode: '0640'
+  become: true
+  no_log: "{{ vllm_api_key | length > 0 }}"
+  notify: Restart vllm
+
+- name: vllm.systemd.write | Write the vLLM systemd unit
+  ansible.builtin.template:
+    src: vllm.service.j2
+    dest: "/etc/systemd/system/{{ vllm_service_name }}.service"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: Restart vllm
+
+- name: vllm.systemd.reload | Apply pending service changes
+  ansible.builtin.meta: flush_handlers
+
+- name: vllm.systemd.start | Enable and start vLLM
+  ansible.builtin.systemd_service:
+    name: "{{ vllm_service_name }}"
+    enabled: true
+    state: started
+  become: true
