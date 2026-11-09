@@ -1,0 +1,136 @@
+---
+- name: strata.model.signature | Define preparation settings
+  ansible.builtin.set_fact:
+    strata_signature: "{{ [strata_version, strata_family, strata_model, strata_config_tag, strata_context, strata_parallel, strata_vision, strata_port, strata_data, strata_cuda_home, strata_setup_options] | to_json | hash('sha256') }}"
+    strata_config_path: '{{ strata_source }}/strata-{{ strata_config_tag }}.json'
+
+- name: strata.model.stamp | Inspect preparation signature
+  ansible.builtin.slurp:
+    src: '{{ strata_source }}/.ops-{{ strata_config_tag }}'
+  register: strata_stamp
+  failed_when: false
+
+- name: strata.model.config | Inspect generated launch config
+  ansible.builtin.stat:
+    path: '{{ strata_config_path }}'
+  register: strata_config
+
+- name: strata.model.prepare | Prepare changed model settings
+  when:
+    - not ansible_check_mode
+    - strata_existing_revision.stdout | default('') | trim != strata_version or not strata_config.stat.exists or (strata_stamp.content | default('') | b64decode | trim) != strata_signature
+  block:
+    - name: strata.model.disk | Check free data storage before stopping the service
+      ansible.builtin.shell: |
+        available=$(df -B1 --output=avail {{ strata_data | quote }}) || exit 1
+        test "$(echo "$available" | tail -1 | tr -d ' ')" -ge {{ (strata_min_disk_gb | int) * 1024**3 }}
+      changed_when: false
+
+    - name: strata.model.stop | Stop the managed service before preparation
+      ansible.builtin.systemd_service:
+        name: strata
+        state: stopped
+      when: strata_existing_unit.stat.exists
+
+    - name: strata.model.capacity | Check available build RAM
+      ansible.builtin.shell: |
+        set -eu
+        test "$(awk '/MemAvailable:/ {print int($2/1024)}' /proc/meminfo)" -ge {{ strata_min_available_mb | int }}
+      changed_when: false
+
+    - name: strata.source | Check out the selected source
+      ansible.builtin.git:
+        repo: '{{ strata_repo }}'
+        dest: '{{ strata_source }}'
+        version: '{{ strata_version }}'
+        recursive: true
+        force: false
+      become_user: '{{ strata_user }}'
+      when: not ansible_check_mode and strata_existing_revision.stdout | default('') | trim != strata_version
+
+    - name: strata.model.setup | Run upstream source setup
+      ansible.builtin.command:
+        argv: >-
+          {{ ['systemd-run', '--wait', '--pipe', '--collect', '--unit=strata-prepare',
+              '--uid=' ~ strata_user, '--gid=' ~ strata_user,
+              '--working-directory=' ~ strata_source, '--setenv=HOME=' ~ strata_home,
+              '--setenv=PATH=' ~ strata_cuda_home ~ '/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+              '--setenv=PYTHONUNBUFFERED=1', '--property=MemoryMax=' ~ strata_memory_max,
+              '--property=MemorySwapMax=0', '--property=LimitMEMLOCK=infinity',
+              '--property=RuntimeMaxSec=' ~ (strata_setup_timeout | string),
+              '--property=SupplementaryGroups=video', strata_source ~ '/setup.sh',
+              '--setup', '--build', '--yes', '--no-start', '--no-browser',
+              '--source', 'huggingface', '--family', strata_family, '--model', strata_model,
+              '--backend', 'cuda', '--data-dir', strata_data,
+              '--context', strata_context | string, '--parallel', strata_parallel | string,
+              '--vision', strata_vision, '--host', '127.0.0.1', '--port', strata_port | string]
+              + strata_setup_options }}
+        chdir: '{{ strata_source }}'
+      async: '{{ strata_setup_timeout }}'
+      poll: 30
+
+    - name: strata.model.changed | Record completed preparation
+      ansible.builtin.set_fact:
+        strata_prepared: true
+
+- name: Read upstream model configuration
+  ansible.builtin.slurp:
+    src: '{{ strata_config_path }}'
+  register: strata_config_file
+  when: not ansible_check_mode or strata_config.stat.exists
+
+- name: Select prepared model
+  ansible.builtin.set_fact:
+    strata_model_info: '{{ strata_config_file.content | b64decode | from_json }}'
+  when: strata_config_file.content is defined
+
+- name: Require the prepared engine executable
+  ansible.builtin.stat:
+    path: '{{ strata_model_info.exe }}'
+    get_checksum: false
+  become_user: '{{ strata_user }}'
+  register: strata_engine
+  failed_when: not (strata_engine.stat.isreg | default(false) and strata_engine.stat.executable | default(false))
+  when: not ansible_check_mode
+
+- name: Validate prepared model settings
+  ansible.builtin.assert:
+    that:
+      - strata_model_info.host | default('127.0.0.1') == '127.0.0.1'
+      - strata_model_info.parallel | default(1) | int == strata_parallel | int
+      - strata_model_info.args[strata_model_info.args.index('--max-context') + 1] | int == strata_context | int
+  when: strata_model_info is defined
+
+- name: strata.model.profile | Set engine options in the upstream model config
+  vars:
+    user_args: "{{ (strata_user_args + ['--conversation-cache-mib', strata_conversation_cache_mib, '--conversation-cache-slots', strata_parallel]) | map('string') | list }}"
+    managed: "{{ strata_managed_flags + ['--conversation-cache-mib', '--conversation-cache-slots'] }}"
+    updated_lists: >-
+      {%- set result = {} -%}
+      {%- for key in ['args', 'user_args'] -%}
+        {%- set kept = [] -%}
+        {%- set group = namespace(owned=false) -%}
+        {%- for arg in strata_model_info.get(key, []) -%}
+          {%- if (arg | string).startswith('--') -%}
+            {%- set group.owned = (arg | string).split('=')[0] in managed -%}
+          {%- endif -%}
+          {%- if not group.owned -%}{%- set _ = kept.append(arg) -%}{%- endif -%}
+        {%- endfor -%}
+        {%- set _ = result.update({key: kept + user_args}) -%}
+      {%- endfor -%}
+      {{ result }}
+  ansible.builtin.copy:
+    content: "{{ strata_model_info | combine(updated_lists) | to_nice_json }}\n"
+    dest: '{{ strata_config_path }}'
+    owner: '{{ strata_user }}'
+    group: '{{ strata_user }}'
+  register: strata_profile
+  when: strata_model_info is defined and (strata_model_info | combine(updated_lists)) != strata_model_info
+
+- name: strata.model.record | Record validated preparation settings
+  ansible.builtin.copy:
+    content: '{{ strata_signature }}'
+    dest: '{{ strata_source }}/.ops-{{ strata_config_tag }}'
+    owner: '{{ strata_user }}'
+    mode: '0644'
+  when: not ansible_check_mode

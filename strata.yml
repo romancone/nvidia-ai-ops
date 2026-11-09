@@ -1,0 +1,7 @@
+---
+- name: Prepare Strata inference
+  hosts: nvidia_hosts
+  gather_facts: true
+  become: true
+  roles:
+    - role: strata

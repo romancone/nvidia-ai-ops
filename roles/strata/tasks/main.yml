@@ -1,0 +1,179 @@
+---
+- name: strata.settings | Validate deployment settings
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.distribution == 'Ubuntu'
+      - ansible_facts.architecture == 'x86_64'
+      - strata_user is match('^[a-z_][a-z0-9_-]*$') and strata_user != 'root'
+      - strata_version is match('^[0-9a-f]{40}$')
+      - strata_family is match('^[a-z][a-z0-9_-]*$')
+      - strata_model is match('^[A-Za-z0-9][A-Za-z0-9_.-]*$')
+      - strata_config_tag is match('^[a-z0-9][a-z0-9_.-]*$')
+      - strata_conversation_cache_mib | int > 0
+      - strata_context | int >= 8192
+      - strata_parallel | int >= 1 and strata_parallel | int <= 8
+      - strata_vision in ['yes', 'no', 'gpu', 'cpu']
+      - 1024 <= strata_port | int <= 65535
+      - strata_memory_reserve_gib | int >= 10
+      - strata_memory_max is match('^[1-9][0-9]*M$')
+      - strata_memory_max[:-1] | int <= (ansible_facts.memtotal_mb | int) - (strata_memory_reserve_gib | int) * 1024
+      - strata_min_available_mb | int > 0 and strata_min_disk_gb | int > 0
+      - strata_setup_timeout | int > 0
+      - strata_setup_options is sequence and strata_setup_options is not string
+      - strata_user_args is sequence and strata_user_args is not string and strata_environment is mapping
+      - (strata_user_args | select('match', '^--') | map('regex_replace', '=.*$', '') | difference(strata_managed_flags) | length) == 0
+      - strata_environment.keys() | select('match', '^[A-Za-z_][A-Za-z0-9_]*$') | list | length == strata_environment | length
+      - strata_source is match('^/[A-Za-z0-9_/-]+$')
+      - strata_data is match('^/[A-Za-z0-9_/-]+$')
+      - strata_home is match('^/[A-Za-z0-9_/-]+$')
+      - strata_cuda_home is match('^/[A-Za-z0-9_./-]+$')
+    fail_msg: Select a pinned source revision and model settings for this Ubuntu CUDA host.
+
+- name: strata.packages | Install build prerequisites
+  ansible.builtin.apt:
+    name: "{{ ['acl', 'build-essential', 'git', 'ca-certificates', 'curl', 'cmake', 'ninja-build', 'python3', 'python3-venv', 'python3-dev', 'util-linux', 'iproute2'] + strata_cuda_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: strata.port | Require a free API port or the managed listener before deployment
+  ansible.builtin.shell: &strata_listener_check |
+    set -eu
+    sockets=$(ss -H -ltnp 'sport = :{{ strata_port | int }}')
+    listeners=$(printf '%s\n' "$sockets" | awk '$4 ~ /^(127\.0\.0\.1|0\.0\.0\.0|\*|\[::\]):/')
+    if [ -z "$listeners" ]; then
+      {{ 'echo "Strata API listener missing" >&2; exit 1' if strata_listener_required | default(false) else 'exit 0' }}
+    fi
+    pid=$(systemctl show strata.service --property=MainPID --value)
+    if [ "${pid:-0}" -eq 0 ] || ! systemctl is-active --quiet strata.service ||
+       printf '%s\n' "$listeners" | grep -qv "pid=$pid,"; then
+      echo "API port {{ strata_port | int }} is occupied outside the active strata.service: $listeners" >&2
+      exit 1
+    fi
+  changed_when: false
+  when: strata_start_service | bool and not ansible_check_mode
+
+- name: strata.hardware | Require a working NVIDIA driver
+  ansible.builtin.command: nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader,nounits
+  changed_when: false
+  check_mode: false
+
+- name: strata.compiler | Require the installed CUDA compiler
+  ansible.builtin.command: '{{ strata_cuda_home }}/bin/nvcc --version'
+  changed_when: false
+  check_mode: false
+
+- name: strata.user | Create the service account
+  ansible.builtin.user:
+    name: '{{ strata_user }}'
+    home: '{{ strata_home }}'
+    system: true
+    shell: /usr/sbin/nologin
+    groups: video
+    append: true
+  register: strata_account
+
+- name: strata.directories | Create source and data directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+    owner: '{{ strata_user }}'
+    group: '{{ strata_user }}'
+    mode: '0755'
+  loop: ['{{ strata_source }}', '{{ strata_data }}', '{{ strata_home }}']
+
+- name: strata.existing.unit | Inspect the managed unit
+  ansible.builtin.stat:
+    path: /etc/systemd/system/strata.service
+  register: strata_existing_unit
+
+- name: strata.existing.source | Inspect the existing revision
+  ansible.builtin.command:
+    argv: [git, -C, '{{ strata_source }}', rev-parse, HEAD]
+  register: strata_existing_revision
+  become_user: '{{ strata_user }}'
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: not ansible_check_mode or not strata_account.changed
+
+- name: strata.source.clean | Require unmodified tracked upstream files
+  ansible.builtin.command:
+    argv: [git, -C, '{{ strata_source }}', status, --porcelain, --untracked-files=no, --ignore-submodules=untracked]
+  register: strata_source_status
+  become_user: '{{ strata_user }}'
+  changed_when: false
+  failed_when: strata_source_status.rc != 0 or strata_source_status.stdout | length > 0
+  check_mode: false
+  when: strata_existing_revision.rc | default(1) == 0
+
+- name: strata.prepare | Build and prepare the selected model
+  ansible.builtin.include_tasks: model.yml
+
+- name: strata.service | Install the bounded systemd unit
+  ansible.builtin.template:
+    src: strata.service.j2
+    dest: /etc/systemd/system/strata.service
+    mode: '0644'
+  register: strata_unit
+
+- name: strata.service.reload | Reload systemd units
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: strata_unit is changed
+
+- name: strata.service.start | Enable the selected local daemon when requested
+  ansible.builtin.systemd_service:
+    name: strata
+    enabled: true
+    state: "{{ 'restarted' if strata_unit is changed or strata_prepared | default(false) or strata_profile is changed else 'started' }}"
+  when: strata_start_service | bool and not ansible_check_mode
+
+- name: strata.verify | Verify local API identity and context
+  ansible.builtin.uri:
+    url: 'http://127.0.0.1:{{ strata_port }}/v1/models'
+  register: strata_ready
+  until: >-
+    strata_ready.status == 200 and
+    (strata_ready.json.data | default([]) | map(attribute='id') | list) == [strata_model_info.model_name] and
+    (strata_ready.json.data | default([]) | map(attribute='meta.n_ctx', default=0) | list) == [strata_context | int]
+  retries: 180
+  delay: 10
+  when: strata_start_service | bool and not ansible_check_mode
+
+- name: strata.verify.listener | Verify the ready API listener belongs to strata.service
+  ansible.builtin.shell: *strata_listener_check
+  vars:
+    strata_listener_required: true
+  changed_when: false
+  when: strata_start_service | bool and not ansible_check_mode
+
+- name: strata.verify.slots | Verify the effective runtime slot count
+  ansible.builtin.uri:
+    url: 'http://127.0.0.1:{{ strata_port }}/metrics'
+  register: strata_metrics
+  failed_when: >-
+    strata_metrics.json.live.parallel | default(1) | int != strata_parallel | int or
+    not (strata_metrics.json.conversation_cache.enabled | default(false) | bool) or
+    strata_metrics.json.conversation_cache.slots | default(0) | int != strata_parallel | int or
+    strata_metrics.json.conversation_cache.budget_mib | default(0) | int <= 0 or
+    strata_metrics.json.conversation_cache.budget_mib | int != strata_conversation_cache_mib | int
+  when: strata_start_service | bool and not ansible_check_mode
+
+- name: strata.verify.generation | Require a real generated response
+  ansible.builtin.uri:
+    url: 'http://127.0.0.1:{{ strata_port }}/v1/chat/completions'
+    method: POST
+    body_format: json
+    body:
+      model: '{{ strata_model_info.model_name }}'
+      messages: [{role: user, content: 'Name the capital of France.'}]
+      max_tokens: 64
+    timeout: 600
+  register: strata_generation
+  failed_when: >-
+    strata_generation.status != 200 or
+    strata_generation.json.usage.completion_tokens | default(0) | int == 0 or
+    strata_generation.json.choices | default([]) | length == 0
+  when: strata_start_service | bool and not ansible_check_mode
+

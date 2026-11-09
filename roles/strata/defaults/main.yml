@@ -1,0 +1,28 @@
+---
+strata_repo: https://github.com/Niko1221/Strata.git
+strata_version: 146df3c468739147f520ac3816de806f71232571
+strata_user: strata
+strata_home: /var/lib/strata
+strata_source: /opt/strata-upstream
+strata_data: /opt/strata-data
+strata_family: ''
+strata_model: ''
+strata_config_tag: ''
+strata_context: 131072
+strata_parallel: 4
+strata_vision: 'yes'
+strata_port: 8080
+strata_cuda_home: '{{ cuda_toolkit_home | default("/usr/local/cuda") }}'
+strata_cuda_packages: []
+strata_setup_options: []
+# Stable ownership: omitting one of these flags removes its override from both lists.
+strata_managed_flags: [--ram-keep-gib, --conversation-cache-min-free-mib, --ple-io, --no-ple-prefetch, --no-prefill-borrow, --prefill]
+strata_user_args: []
+strata_conversation_cache_mib: 5120
+strata_environment: {}
+strata_memory_reserve_gib: 10
+strata_memory_max: "{{ (ansible_facts.memtotal_mb | int) - (strata_memory_reserve_gib | int) * 1024 }}M"
+strata_min_available_mb: 46000
+strata_min_disk_gb: 160
+strata_setup_timeout: 86400
+strata_start_service: false

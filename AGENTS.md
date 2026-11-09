@@ -11,6 +11,13 @@
   do not mix it with previously committed or parked work
 - Keep raw run logs and temporary evidence outside the repository
 
+## Third-party products
+
+Never modify third-party products. Do not patch, fork to change behavior,
+rewrite installed files, or monkey-patch dependencies at runtime. Use
+documented upstream configuration and public interfaces. If upstream lacks a
+required capability, report the limitation and stop before changing the product.
+
 ## Git
 
 - Use `codex/<topic>` feature branches for new work. Propose the name for human

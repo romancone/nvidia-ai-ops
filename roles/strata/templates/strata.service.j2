@@ -1,0 +1,29 @@
+[Unit]
+Description=Strata inference service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ strata_user }}
+Group={{ strata_user }}
+SupplementaryGroups=video
+Environment=HOME={{ strata_home }}
+WorkingDirectory={{ strata_source }}
+{% for key, value in strata_environment.items() %}
+Environment={{ (key ~ '=' ~ value) | replace('%', '%%') | to_json }}
+{% endfor %}
+ExecStart={{ strata_source }}/.venv/bin/python {{ strata_source }}/serve/server.py --engine strata --config {{ strata_config_path }} --host 127.0.0.1 --port {{ strata_port }} --max-queue 0
+Restart=no
+KillMode=control-group
+TimeoutStopSec=60
+MemoryMax={{ strata_memory_max }}
+MemorySwapMax=0
+OOMPolicy=stop
+LimitMEMLOCK=infinity
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -14,11 +14,14 @@ formatting. This file owns the repository layout, role behavior and recipe mappi
 | [nvidia.md](nvidia.md) / [site.yml](site.yml) | Manual and Ansible paths for NVIDIA Driver, CUDA Toolkit and Container Toolkit |
 | [cleanup.md](cleanup.md) / [cleanup.yml](cleanup.yml) | Optional NVIDIA driver package cleanup |
 | [vllm.md](vllm.md) / [vllm.yml](vllm.yml) | Manual and Ansible paths for native vLLM serving and Hugging Face CLI |
+| [strata.md](strata.md) / [strata.yml](strata.yml) | Manual and Ansible paths for CUDA Strata preparation and opt-in serving |
+| [strata-plan.md](strata-plan.md) | Final Strata profile and verification status |
+| [TODO.md](TODO.md) | Temporary work notes in Russian; empty after completion |
 | [benchmark.md](benchmark.md) / [benchmark.yml](benchmark.yml) | API benchmark protocol and isolated llama-benchy installation |
 | [roles/](roles/) | Source of truth for task order, supported settings and verification |
 | [ansible.cfg](ansible.cfg) / [hosts.example.ini](hosts.example.ini) | Select ignored `./hosts` inventory / provide its public template |
 | [group_vars/all.yml](group_vars/all.yml) | Default SSH user |
-| [group_vars/nvidia_hosts.yml](group_vars/nvidia_hosts.yml) | GPU package and vLLM settings mirrored by the paired manual recipes |
+| [group_vars/nvidia_hosts.yml](group_vars/nvidia_hosts.yml) | GPU package, vLLM and Strata settings mirrored by the paired manual recipes |
 | `hosts` / `host_vars/` | Ignored inventory and per-host connection or package overrides |
 | [.agents/skills/benchmark-report-review/](.agents/skills/benchmark-report-review/SKILL.md) | Review workflow for benchmark imports, coverage and report migrations |
 
@@ -28,6 +31,8 @@ optional in the manual but included in `site.yml` by default. Cleanup runs only
 through the separate `cleanup.yml` playbook. `vllm.yml` runs only the `vllm` role
 and requires an already working NVIDIA driver and CUDA compiler.
 `benchmark.yml` installs the API client and runner; benchmarks require an explicit run.
+`strata.yml` runs only `strata`, requires a working NVIDIA driver and CUDA compiler,
+and prepares one model without enabling its service by default.
 
 ## Role Behavior
 
@@ -55,6 +60,14 @@ and requires an already working NVIDIA driver and CUDA compiler.
   [plotter](roles/llama_benchy/files/llama-benchy-plot.py) reads those results and
   counts observed SSE tokens in that common window and plots aggregate decode,
   decode per request and TTFT separately after each run
+- `strata` adapts the sibling AMD role's account, source setup, preparation stamp
+  and bounded service to CUDA. Upstream setup verifies pinned weights. The unit reads its model JSON directly;
+  inventory supplies the native user_args overrides.
+  Model and slot choices stay in inventory. Service activation is opt-in;
+  enabled deployments check model identity, context and effective slots, then
+  require enabled conversation cache with matching slots before real generation.
+  Build the pinned upstream checkout with unmodified tracked source files.
+  The AMD evaluation harness, Go dependency and NVMe tuning are not included
 
 ## Recipe Mappings
 
