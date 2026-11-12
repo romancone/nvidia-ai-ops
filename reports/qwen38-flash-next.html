@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Qwen3.8-Flash-Next · NVIDIA AI Ops</title>
-<link rel="stylesheet" href="report.css?v=cards-row">
-<script src="report.js?v=vram-label" defer>
+<link rel="stylesheet" href="report.css?v=occupied">
+<script src="report.js?v=occupied" defer>
 </script>
 </head>
 <body data-model="qwen38-flash-next">
@@ -23,7 +23,7 @@
 </div>
 <p id="loading" class="muted">Loading saved measurements…</p>
 <p class="legend">
-<strong>Decode/user</strong> excludes prefill and includes pauses during generation. <strong>TTFT</strong> includes prefill. The common decode window is the intersection of all client streams; SSE fragments are not exact tokens, so no aggregate token rate is inferred. DRAM is minimum sampled host free memory; VRAM is engine-reported free video memory, not peak consumption. — means no saved measurement. Disk is installed model artifacts, checked on node3 on 12 Nov 2026.</p>
+<strong>Decode/user</strong> excludes prefill and includes pauses during generation. <strong>TTFT</strong> includes prefill. The common decode window is the intersection of all client streams; SSE fragments are not exact tokens, so no aggregate token rate is inferred. Occupied memory = total − saved free memory. DRAM includes OS and filesystem cache; VRAM uses engine-reported values, not measured load peaks. — means no saved measurement. Disk is installed model artifacts, checked on node3 on 12 Nov 2026.</p>
 <footer class="foot"><span data-hardware></span><br>
 <a href="../evaluation/benchmark-data.json">Canonical measurement JSON</a> · Raw evidence remains on node3 at the path recorded in the JSON. Saved runs only; no new benchmarks.</footer>
 </main>

@@ -20,6 +20,6 @@ Cold prefill can wait for the engine control channel. The load snapshots showed 
 - On node3, upstream `146df3c` loaded Qwen3.8-Flash-Next NVFP4/GPTQ with a 262144-token context. The API reported four slots and an enabled four-slot, 5120 MiB conversation cache. The manual process had a 10 GiB OS reserve and swap disabled. Reapplying the role changed zero tasks and preserved the server and engine PIDs
 - Prepared the upstream installation recipe and role with native model JSON, bounded RAM, disabled swap and opt-in service startup. The benchmark client is unchanged
 
-The [session handoff](STRATA-HANDOFF.md) records the selected decode share of 0 and the discarded experiments. At the original decode share of 0.5, Short streamed to four clients at once. Long responses of 256 tokens had no decode overlap. In the four-client Max run, two streams overlapped for 23.786 seconds.
+The selected decode share is 0. At the original decode share of 0.5, Short streamed to four clients at once. Long responses of 256 tokens had no decode overlap. In the four-client Max run, two streams overlapped for 23.786 seconds.
 
 Investigate a speed drop of 50% or more against the same client count, workload and metric using available RAM, swap and disk activity. Direct PLE reads from SSD are part of the previous NVFP4 profile only.

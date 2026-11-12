@@ -1,0 +1,73 @@
+name: Deploy reports to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - reports/**
+      - evaluation/**
+      - profiles/**
+      - .github/workflows/deploy-reports.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - reports/**
+      - evaluation/**
+      - profiles/**
+      - .github/workflows/deploy-reports.yml
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Prepare reports
+        env:
+          SITE_DIR: ${{ runner.temp }}/pages
+        run: |
+          mkdir -p "$SITE_DIR"
+          cp -a reports evaluation profiles "$SITE_DIR/"
+          cat > "$SITE_DIR/index.html" <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=reports/index.html">
+          <title>Model benchmarks</title>
+          <a href="reports/index.html">Open model benchmarks</a>
+          </html>
+          HTML
+          test -s "$SITE_DIR/reports/index.html"
+          test -s "$SITE_DIR/evaluation/benchmark-data.json"
+
+      - name: Upload reports
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/pages
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy reports
+        id: deployment
+        uses: actions/deploy-pages@v4

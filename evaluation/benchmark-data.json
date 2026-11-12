@@ -4065,7 +4065,16 @@
     "vram_gib": 95.59,
     "ram_gib": 62.66,
     "host": "node3",
-    "os": "Ubuntu 24.04.5"
+    "os": "Ubuntu 24.04.5",
+    "installed_vram_gib": 96,
+    "installed_dram_gib": 64,
+    "cpu": "Intel Core i9-10900KF",
+    "cpu_cores": 10,
+    "cpu_threads": 20,
+    "dram_type": "DDR4",
+    "dram_speed_mts": 2933,
+    "dram_modules": "2 × 32 GiB, dual-channel",
+    "configuration_source": "node3 lscpu and dmidecode, read-only inspection 2026-11-12; CPU/DRAM details describe the inspected platform, not per-run telemetry"
   },
   "models": [
     {
@@ -4168,6 +4177,7 @@
     "ttft_s": "Mean request-to-first-token time, including prefill.",
     "common_decode_s": "Intersection of all client decode intervals, separately for each measured batch. SSE fragments are not exact token counts; no aggregate token throughput is inferred.",
     "memory": "DRAM: minimum host MemFree from saved snapshots, not process consumption or a continuous bound. GPU: engine-reported free VRAM; not comparable to a workload peak. Missing samples remain null.",
-    "engine_gpu_free_gib": "Minimum engine.vram_free_mib across saved engine snapshots, converted to GiB; engine-reported headroom, not a measured workload peak"
+    "engine_gpu_free_gib": "Minimum engine.vram_free_mib across saved engine snapshots, converted to GiB; engine-reported headroom, not a measured workload peak",
+    "occupied_memory": "Displayed occupied GiB = reported total minus saved free GiB. DRAM includes OS and filesystem cache, not model-only RSS. VRAM uses engine-reported free memory, not a measured load peak. Unknown free memory remains unknown."
   }
 }

@@ -294,3 +294,10 @@ section.panel {
 .model-group > .note { font-size:11px; margin:10px 0 0 }
 @media(max-width:1000px) { .workload-cards { gap:8px; grid-template-columns:repeat(3,minmax(215px,1fr)); overflow-x:auto } .workload-cards .card { padding:10px 8px } .card-table th { font-size:9px; padding:6px 2px } .card-table td,.card-table td:first-child { font-size:11px; padding:7px 2px } }
 @media(max-width:500px) { .model-heading { align-items:flex-start; flex-direction:column; gap:6px } }
+
+.hardware-chip { background:#e7edf8; color:#365b87; border:1px solid #cbd8eb; font-weight:600 }
+.platform { display:grid; gap:4px; margin:14px 0; font-size:13px; color:var(--muted) }
+.platform strong { color:var(--text); font-weight:600 }
+.model-group .hardware-row { margin-bottom:6px }
+.hardware-row + .chips { margin-top:0 }
+@media(prefers-color-scheme:dark) { .hardware-chip { background:#243348; color:#b4cff2; border-color:#3c526f } }
