@@ -9,7 +9,13 @@
   "No tests" includes syntax checks and benchmark reruns; use static inspection
 - Keep review changes unstaged when requested. Inspect the current working diff;
   do not mix it with previously committed or parked work
-- Keep raw run logs and temporary evidence outside the repository
+- Keep scratch scripts, build outputs and transient debug files outside the repository
+- Keep only clean, completed tests in the repository. Store their structured
+  results in one dataset under `evaluation/`; keep web pages in `reports/`.
+  Keep raw inputs/outputs and evidence archives on the
+  benchmark host, outside the repository; record their location and checksums.
+  Keep failed attempts, diagnostics, scratch files and experimental product builds
+  outside the repository; never bulk-copy temporary directories
 
 ## Third-party products
 
@@ -123,6 +129,8 @@ Apply these rules when benchmark data is in scope:
   explicitly agreed context and output budget
 - Identify the canonical dataset; pages and generated summaries must not maintain
   independent measurement values
+- Preserve source paths, attempt identity and checksums for completed results.
+  Do not import incomplete attempts or fill missing measurements with guesses
 - Keep microbenchmarks, server workloads and capacity measurements distinct.
   Reuse a result only when its workload and relevant configuration match
 - Preserve model artifact, quantization, backend, concurrency, context, cache,
@@ -162,3 +170,6 @@ pipeline. Keep file ownership there, not in these rules.
 For benchmark imports, coverage reviews and report migrations, use
 [benchmark-report-review](.agents/skills/benchmark-report-review/SKILL.md).
 Routine text and CSS edits do not need the full workflow.
+
+For overview cards and model report presentation, use
+[benchmark-report-layout](.agents/skills/benchmark-report-layout/SKILL.md).

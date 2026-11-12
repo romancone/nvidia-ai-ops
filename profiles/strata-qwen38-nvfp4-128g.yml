@@ -1,0 +1,15 @@
+---
+# Planned profile: no deployment until its memory budget has been selected.
+inference_engine: strata
+inference_profile_ready: false
+strata_family: nvfp4
+strata_model: NVFP4
+strata_config_tag: nvfp4-nvfp4
+strata_context: 262144
+strata_parallel: 4
+strata_memory_reserve_gib: 10
+# Cache size and cgroup limit remain to be selected on the upgraded host.
+strata_user_args:
+  - --ple-io
+  - ram
+strata_start_service: false

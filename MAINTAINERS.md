@@ -18,12 +18,21 @@ formatting. This file owns the repository layout, role behavior and recipe mappi
 | [strata-plan.md](strata-plan.md) | Final Strata profile and verification status |
 | [TODO.md](TODO.md) | Temporary work notes in Russian; empty after completion |
 | [benchmark.md](benchmark.md) / [benchmark.yml](benchmark.yml) | API benchmark protocol and isolated llama-benchy installation |
+| [inference.yml](inference.yml) / [profiles/](profiles/) | Complete serving profiles and engine selection; planned profiles cannot deploy |
+| [evaluation/benchmark-data.json](evaluation/benchmark-data.json) | Completed test records, derived timing metrics, saved functional answers and source checksums; raw evidence stays on node3 at the archive path recorded in the JSON |
+| [reports/](reports/) | `index.html` compares model configurations; each model has its own page. `report.js` renders only `evaluation/benchmark-data.json`; CSS and HTML contain no measurement values. `strata.html` redirects old links |
 | [roles/](roles/) | Source of truth for task order, supported settings and verification |
 | [ansible.cfg](ansible.cfg) / [hosts.example.ini](hosts.example.ini) | Select ignored `./hosts` inventory / provide its public template |
 | [group_vars/all.yml](group_vars/all.yml) | Default SSH user |
-| [group_vars/nvidia_hosts.yml](group_vars/nvidia_hosts.yml) | GPU package, vLLM and Strata settings mirrored by the paired manual recipes |
+| [group_vars/nvidia_hosts.yml](group_vars/nvidia_hosts.yml) | GPU package settings and optional inference profile selection |
 | `hosts` / `host_vars/` | Ignored inventory and per-host connection or package overrides |
 | [.agents/skills/benchmark-report-review/](.agents/skills/benchmark-report-review/SKILL.md) | Review workflow for benchmark imports, coverage and report migrations |
+
+`roles/*/README.md` lists public role defaults and behavior. Profile YAML files own
+model settings; role defaults remain reusable. `inference.yml` loads one complete
+profile before including its role. The engine-specific playbooks share this loader
+and reject a profile for the wrong engine. Profile values take precedence over
+inventory; extra variables take precedence over profiles.
 
 All playbooks target `nvidia_hosts`. `site.yml` applies `nvidia_driver`,
 `cuda_toolkit` and `nvidia_container_toolkit` in that order. Container Toolkit is
@@ -62,8 +71,8 @@ and prepares one model without enabling its service by default.
   decode per request and TTFT separately after each run
 - `strata` adapts the sibling AMD role's account, source setup, preparation stamp
   and bounded service to CUDA. Upstream setup verifies pinned weights. The unit reads its model JSON directly;
-  inventory supplies the native user_args overrides.
-  Model and slot choices stay in inventory. Service activation is opt-in;
+  the selected profile supplies the native user_args overrides.
+  Model and slot choices stay in profiles selected by inventory. Service activation is opt-in;
   enabled deployments check model identity, context and effective slots, then
   require enabled conversation cache with matching slots before real generation.
   Build the pinned upstream checkout with unmodified tracked source files.

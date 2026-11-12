@@ -1,7 +1,6 @@
 ---
-- name: Prepare Strata inference
-  hosts: nvidia_hosts
-  gather_facts: true
-  become: true
-  roles:
-    - role: strata
+- name: Deploy the selected strata profile
+  ansible.builtin.import_playbook: inference.yml
+  vars:
+    inference_default_profile: strata-qwen38-iq3s-64g
+    inference_expected_engine: strata

@@ -1,6 +1,6 @@
 ---
-- name: Install and serve vLLM
-  hosts: nvidia_hosts
-  gather_facts: true
-  roles:
-    - role: vllm
+- name: Deploy the selected vllm profile
+  ansible.builtin.import_playbook: inference.yml
+  vars:
+    inference_default_profile: vllm-qwen38-27b-nvfp4
+    inference_expected_engine: vllm

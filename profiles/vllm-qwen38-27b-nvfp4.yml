@@ -1,0 +1,38 @@
+---
+inference_engine: vllm
+inference_profile_ready: true
+vllm_version: 0.33.0
+vllm_model_id: nvidia/Qwen3.8-27B-NVFP4
+vllm_model_revision: 482ca0f3832238542f8f5295dde86b5f22711d80
+vllm_environment:
+  CUDA_HOME: /usr/local/cuda
+vllm_options:
+  max-model-len: 262144 # Input and output together; native context
+  gpu-memory-utilization: 0.9 # Fraction of GPU memory
+  kv-cache-dtype: fp8
+  max-num-seqs: 64 # Admission limit; parallel capacity depends on context
+  max-num-batched-tokens: 8192
+  long-prefill-token-threshold: 1024 # Base chunk cap with competing requests
+  long-prefill-token-threshold-adaptive: true # Share the token budget across requests
+  mm-processor-cache-gb: 0
+  reasoning-parser: qwen3
+  enable-auto-tool-choice: true
+  tool-call-parser: qwen3_coder
+  disable-prefix-caching: true
+  disable-flashinfer-autotune: true
+  speculative-config:
+    method: mtp
+    num_speculative_tokens: 2 # MTP draft tokens
+  override-generation-config:
+    temperature: 1.0 # Official thinking profile
+    top_p: 0.95
+    top_k: 20
+    min_p: 0
+    repetition_penalty: 1.0
+    presence_penalty: 0
+    frequency_penalty: 0
+    max_new_tokens: 131072 # 128K generated tokens, within the total context
+  default-chat-template-kwargs:
+    enable_thinking: true
+    reasoning_effort: xhigh
+

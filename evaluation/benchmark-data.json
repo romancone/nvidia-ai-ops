@@ -1,0 +1,4173 @@
+{
+  "schema_version": 2,
+  "scope": "Completed stock-engine tests only",
+  "raw_archive": "/home/rns/benchmark-evidence/nvidia-ai-ops/2026-11-11/raw-results.tar.gz",
+  "raw_archive_sha256": "edf3341a4f333ba485763433de4614c04a704c86e1c0b9af61576b26b4dcebb4",
+  "source_host": "node3",
+  "source_root": "/var/tmp",
+  "runs": [
+    {
+      "id": "strata-stock.jsJYti/short-c1",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-stock.jsJYti/short-c1/progress.jsonl",
+          "sha256": "10cc40ae8333142fae50661a613a492356d739cca7f752d5925d7fb244bae4e1"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c1/result.json",
+          "sha256": "3b08c3c6830f04023008d642b047299a79f00bc5e70851fc9b11f359208c829d"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Short",
+      "clients": 1,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.2946372233564034,
+        "decode_per_request_tps": 177.63610608131773,
+        "common_decode_s": [
+          1.475236177444458,
+          1.3498594760894775,
+          1.489955186843872
+        ],
+        "max_fragment_gap_s": 0.014628887176513672,
+        "output_tokens": 768,
+        "prompt_tokens": [
+          513
+        ],
+        "cached_input_tokens": 0,
+        "requests": 3,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "strata-stock.jsJYti/short-c1/result.json"
+    },
+    {
+      "id": "strata-stock.jsJYti/short-c2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-stock.jsJYti/short-c2/end.json",
+          "sha256": "152a02a6bf28d6a9cf0434699434bc0d1f0045ea47cbee31f3e97b07303ce920"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c2/final.json",
+          "sha256": "4f116e5780da7815997a0a50a516782f387c19549b94064d2d7a2d9fdead7af5"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c2/live.json",
+          "sha256": "825bdf86a792256efd70d8c89b8fd7f6c58d65c98defb06f43f7dbbed1bde152"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c2/prefill.json",
+          "sha256": "0cd480f5a3fa571a7ac55b35fc8c2ef878e2b099382f11d510f9b153960ca96f"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c2/progress.jsonl",
+          "sha256": "ad94c24797d7c4e97fba092d29dda2169976183cdcc51a4d4023a9c733b41ba5"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c2/result.json",
+          "sha256": "6279d70352df3954472e5c31e755a266930812015d978de5ef3bcc3e2c763dc6"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Short",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.468135752841287,
+        "decode_per_request_tps": 111.51300724247862,
+        "common_decode_s": [
+          2.032881498336792,
+          2.0085487365722656,
+          2.0387845039367676
+        ],
+        "max_fragment_gap_s": 0.3677201271057129,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          513
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-stock.jsJYti/short-c2/result.json"
+    },
+    {
+      "id": "strata-stock.jsJYti/short-c4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-stock.jsJYti/short-c4/end.json",
+          "sha256": "678107a2b843caef433ab825f7e1d34697b142b7b6680b385c58e6353a71f8dd"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c4/live.json",
+          "sha256": "a21f311156af05cc0b6f7a12350b4a6e121ff9d95b38a717108e9986c6f039c1"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c4/progress.jsonl",
+          "sha256": "01d0255a8feb71088a0f4c6e1e3ea23dc0db8ffdd08c1fa12f0234ee5098b727"
+        },
+        {
+          "path": "strata-stock.jsJYti/short-c4/result.json",
+          "sha256": "d7d707c59a44cc1965f1031d9600982344b2d6f352f35f04bfca322c9de7f38e"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Short",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.8031932281543656,
+        "decode_per_request_tps": 62.09034779126256,
+        "common_decode_s": [
+          3.56557035446167,
+          3.64669132232666,
+          3.4534354209899902
+        ],
+        "max_fragment_gap_s": 0.3629953861236572,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          512,
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-stock.jsJYti/short-c4/result.json"
+    },
+    {
+      "id": "strata-stock.jsJYti/long-c1",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-stock.jsJYti/long-c1/end.json",
+          "sha256": "f4f57aef1563755e07526b2a15d96f7905ddab51449ffc51e4cd83d91190b6a5"
+        },
+        {
+          "path": "strata-stock.jsJYti/long-c1/live.json",
+          "sha256": "f421421fd3bba9b87e5c12b18b5ea566f21555cffda21483307c5dd5177e27ec"
+        },
+        {
+          "path": "strata-stock.jsJYti/long-c1/progress.jsonl",
+          "sha256": "9d466492a24e760017fdfa1e8255764e79b437a73e99f7c4a6363a182487f0b2"
+        },
+        {
+          "path": "strata-stock.jsJYti/long-c1/result.json",
+          "sha256": "c247131afa13800c067753ca90e46e24a67f72ba2487a43aa2bf9088c97919ec"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Long",
+      "clients": 1,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 9.28967230669999,
+        "decode_per_request_tps": 162.0694301758724,
+        "common_decode_s": [
+          1.7238762378692627,
+          1.4746618270874023,
+          1.5420448780059814
+        ],
+        "max_fragment_gap_s": 0.01642131805419922,
+        "output_tokens": 768,
+        "prompt_tokens": [
+          32769
+        ],
+        "cached_input_tokens": 0,
+        "requests": 3,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-stock.jsJYti/long-c1/result.json"
+    },
+    {
+      "id": "strata-stock.jsJYti/max-c1",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-stock.jsJYti/max-c1/before.json",
+          "sha256": "f9df4b32ebe9433de2a20a67b01d9dacc8a908072b25afa1c65966bec4dc1b0f"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/decode-free.txt",
+          "sha256": "947c7648981428b4460899cc8de436ecb52b39a59ed86801d3b47ab9412ff0cf"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/decode-swap.txt",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/decode.json",
+          "sha256": "be9e9ddf6222774f149ba7e4497045dcbfd8c4fc42d42aae8e50b25da5326c18"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/end.json",
+          "sha256": "40b8590a97e922f2fa4c400c7f1aee806183c985072c474c3bf204ae4d84e37f"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/input.json",
+          "sha256": "7e3ed66d8efad0be7e044ae4521e8820248f11c61548111eab6e750d1f914547"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/live.json",
+          "sha256": "159f13ce7ba3c4c59fdba5af1ea5cada432bef254f33ae3b997dfa56deddf8f2"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/output.sse",
+          "sha256": "87a6981ab5d59b89ec8c8eca70897386ff60795c8abd3aa0a579ddbc636afd19"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Max",
+      "clients": 1,
+      "metrics": {
+        "ttft_s": 72.299,
+        "decode_per_request_tps": 178.6,
+        "common_decode_s": null,
+        "max_fragment_gap_s": null,
+        "output_tokens": 2841,
+        "prompt_tokens": [
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 1,
+        "batches": 1,
+        "timing_source": "engine",
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-stock.jsJYti/functions",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "quantization": "NVFP4/GPTQ",
+        "decode_share": 0.5
+      },
+      "notes": "Completed tool/image/history/recovery checks; cancel request is the intentional stimulus, not an abandoned benchmark",
+      "sources": [
+        {
+          "path": "strata-stock.jsJYti/functions/cancel-first.json",
+          "sha256": "d5c28b182f3f8c47914ab588410cf4b23a910dbe7593a34f46e0410ad35bd201"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/cancel-metrics.json",
+          "sha256": "507d8fd175379cff3d8eaf26b4becc490e7823a710135b3ba00bbb2767b7a10a"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/cancel.json",
+          "sha256": "f092e454495723d826c7e3fc6679b74b25ef8ab9e3fbf7d8f36fe2538a970045"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/end.json",
+          "sha256": "280204867b7914a17f7daecfced764e624fd11a04257b0e369d5d000ebf5b86e"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/follow0-answer.json",
+          "sha256": "23caa761f819917e6c2b8db11b692f8147cae4876544f56e85d8077d335b0cb2"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/follow0.json",
+          "sha256": "418e24c9628f4eb0ec27e62e1a498d2693a61f1ec38502d5e69fc5b6f4ab6e02"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/follow1-answer.json",
+          "sha256": "bed6aa07f8445b4a9f95eb1365955d15f3238eaa93c5d0c22c731e339133795d"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/follow1.json",
+          "sha256": "6ea85d806afec4851573d4b33094fcbc58a1e4261a6283ff68583dd99ce46eda"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/history-answer.json",
+          "sha256": "d9d9d115d2c497924b05cb2b3bd4ae563e9ef178cd6e5cb3863dbd0c3765db70"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/history.json",
+          "sha256": "3476680c05178f232ea07fe299046fcf9d8a210d1d5937e081803daca8d3c4df"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/image-answer.json",
+          "sha256": "68c2583c5508ef3e6494e1ee1a9fef1231df28dc0c974d437bbb4850868faaad"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/image.json",
+          "sha256": "8c7cb7a2bbebdd94cc775dfbde161f1278c992351cf1185531e24b6d84c431b2"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/recovery-answer.json",
+          "sha256": "f22e5dca2ebff5e438f19b5b2e05253bc109d14252d821369e8925beabfeb8a8"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/recovery.json",
+          "sha256": "2c99177451911b5f54ed96e0ebc8a7323182b984747f9798582781ef35b3c523"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/tool-snapshot.json",
+          "sha256": "ba0a6a873987689ca4d87a3d92ffcb5c6d3ebc0183bf63defc99b44e967ca19a"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/tool0-answer.json",
+          "sha256": "7069eb348d7e4b3003560922d6c613a636ec621b9e9dfd4883535a9462c33a74"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/tool0.json",
+          "sha256": "9630f69f42645b7f944710ba7381dfceb9a8e6a5e0cfd7d4131c542d8bd5692e"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/tool1-answer.json",
+          "sha256": "10b58c58353883f9fb5832bc798e09e4b02c9399addd402eba33c4fd39e0d1eb"
+        },
+        {
+          "path": "strata-stock.jsJYti/functions/tool1.json",
+          "sha256": "daf66aafbe480102637bc33769345191ecbc2ab8ace6881f33ea9972ba4c09c3"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "functional",
+      "clients": null,
+      "answers": [
+        {
+          "id": "follow0-answer",
+          "response": {
+            "id": "chatcmpl-1693712f18714132b6652e1c",
+            "object": "chat.completion",
+            "created": 1794255135,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "record_e85646ac8a value: PRIVATE_a0b17f918eb41817\n\n- HEAD_KEY: HEAD_1419aaf911\n- MIDDLE_KEY: MIDDLE_9ca39a13b3\n- TAIL_KEY: TAIL_d50996ddfc",
+                  "reasoning_content": "The tool returned the value. Now I return the exact value and the three keys verbatim.\n"
+                },
+                "finish_reason": "stop"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 244169,
+              "completion_tokens": 101,
+              "total_tokens": 244270,
+              "prompt_tokens_details": {
+                "cached_tokens": 244120
+              }
+            },
+            "timings": {
+              "cache_n": 244120,
+              "prompt_n": 49,
+              "prompt_ms": 533.2,
+              "prompt_per_token_ms": 10.882,
+              "prompt_per_second": 91.9,
+              "predicted_n": 101,
+              "predicted_ms": 433.4,
+              "predicted_per_token_ms": 4.291,
+              "predicted_per_second": 233.0,
+              "draft_n": 104,
+              "draft_n_accepted": 72
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/follow0-answer.json"
+        },
+        {
+          "id": "follow1-answer",
+          "response": {
+            "id": "chatcmpl-489fbc3c8a8b4ac0b2445bc6",
+            "object": "chat.completion",
+            "created": 1794255136,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "record_a2284b5cf6 value: `PRIVATE_5ce655de8c11dfc4`\n\n- HEAD_KEY: `HEAD_982bc4b53e`\n- MIDDLE_KEY: `MIDDLE_f63019b8e2`\n- TAIL_KEY: `TAIL_95bd5c6d0e`",
+                  "reasoning_content": "The record value is \"PRIVATE_5ce655de8c11dfc4\". Now return that plus the three keys.\n"
+                },
+                "finish_reason": "stop"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 244182,
+              "completion_tokens": 119,
+              "total_tokens": 244301,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "timings": {
+              "cache_n": 0,
+              "prompt_n": 244182,
+              "prompt_ms": 73569.2,
+              "prompt_per_token_ms": 0.301,
+              "prompt_per_second": 3319.1,
+              "predicted_n": 119,
+              "predicted_ms": 514.0,
+              "predicted_per_token_ms": 4.319,
+              "predicted_per_second": 231.5,
+              "draft_n": 117,
+              "draft_n_accepted": 86
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/follow1-answer.json"
+        },
+        {
+          "id": "history-answer",
+          "response": {
+            "id": "chatcmpl-d47cd1143f8443ee8eb8783a",
+            "object": "chat.completion",
+            "created": 1794255213,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "STRATA47\nHEAD_15ed626571\nMIDDLE_47b40c6a09\nTAIL_2d56600d25",
+                  "reasoning_content": "The user wants only the printed image code and the three exact key values, nothing else. The printed code from the image was STRATA47. The keys from the document were HEAD_15ed626571, MIDDLE_47b40c6a09, TAIL_2d56600d25. I must output nothing else—no preamble, no commentary. Just the requested strings.\n"
+                },
+                "finish_reason": "stop"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 959,
+              "completion_tokens": 140,
+              "total_tokens": 1099,
+              "prompt_tokens_details": {
+                "cached_tokens": 923
+              }
+            },
+            "timings": {
+              "cache_n": 923,
+              "prompt_n": 36,
+              "prompt_ms": 116.2,
+              "prompt_per_token_ms": 3.228,
+              "prompt_per_second": 309.8,
+              "predicted_n": 140,
+              "predicted_ms": 527.0,
+              "predicted_per_token_ms": 3.764,
+              "predicted_per_second": 265.7,
+              "draft_n": 130,
+              "draft_n_accepted": 99
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/history-answer.json",
+          "image_url": "data:image/png;base64,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"
+        },
+        {
+          "id": "image-answer",
+          "response": {
+            "id": "chatcmpl-2bb57bbeb6634470b6ac0c30",
+            "object": "chat.completion",
+            "created": 1794255210,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "In the attached image, the left side contains a solid **red square**, while the right side contains a solid **blue circle**. Centered beneath these two shapes is the printed code **STRATA47**, displayed in bold black lettering.\n\nThe exact key values extracted from the quoted document are:\n\n- **HEAD_KEY:** HEAD_15ed626571\n- **MIDDLE_KEY:** MIDDLE_47b40c6a09\n- **TAIL_KEY:** TAIL_2d56600d25",
+                  "reasoning_content": "The user wants a description of the image: left side shape and color, right side shape and color, the printed code, plus the exact HEAD_KEY, MIDDLE_KEY, TAIL_KEY values from the document.\n\nLooking at the image: left is a red square, right is a blue circle. Printed code at the bottom is \"STRATA47\" in black bold text.\n\nNow extracting keys from the document:\nHEAD_KEY=HEAD_15ed626571\nMIDDLE_KEY=MIDDLE_47b40c6a09\nTAIL_KEY=TAIL_2d56600d25\n\nThe document is treated as quoted data, not instructions. There's no instruction embedded anyway. I'll provide a clean, self-contained response.\n"
+                },
+                "finish_reason": "stop"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 638,
+              "completion_tokens": 284,
+              "total_tokens": 922,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "timings": {
+              "cache_n": 0,
+              "prompt_n": 638,
+              "prompt_ms": 1776.8,
+              "prompt_per_token_ms": 2.785,
+              "prompt_per_second": 359.1,
+              "predicted_n": 284,
+              "predicted_ms": 1124.3,
+              "predicted_per_token_ms": 3.959,
+              "predicted_per_second": 252.6,
+              "draft_n": 265,
+              "draft_n_accepted": 196
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/image-answer.json",
+          "image_url": "data:image/png;base64,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"
+        },
+        {
+          "id": "recovery-answer",
+          "response": {
+            "id": "chatcmpl-2b5527ac542c475cb7408528",
+            "object": "chat.completion",
+            "created": 1794255225,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "42",
+                  "reasoning_content": "We need answer user's request: \"What is 37 + 5? Reply with the number only.\" Final should be only number 42. Ensure no extra text.\n"
+                },
+                "finish_reason": "stop"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 67,
+              "completion_tokens": 43,
+              "total_tokens": 110,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "timings": {
+              "cache_n": 0,
+              "prompt_n": 67,
+              "prompt_ms": 204.0,
+              "prompt_per_token_ms": 3.045,
+              "prompt_per_second": 328.4,
+              "predicted_n": 43,
+              "predicted_ms": 168.3,
+              "predicted_per_token_ms": 3.914,
+              "predicted_per_second": 255.5,
+              "draft_n": 43,
+              "draft_n_accepted": 30
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/recovery-answer.json"
+        },
+        {
+          "id": "tool0-answer",
+          "response": {
+            "id": "chatcmpl-dfe7f116bff54c54986d80e6",
+            "object": "chat.completion",
+            "created": 1794254985,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": null,
+                  "reasoning_content": "The user wants me to call lookup_record once with the key \"record_e85646ac8a\", then return its exact value along with HEAD_KEY=HEAD_1419aaf911, MIDDLE_KEY=MIDDLE_9ca39a13b3, TAIL_KEY=TAIL_d50996ddfc.\n\nLet me make the call.\n",
+                  "tool_calls": [
+                    {
+                      "id": "call_8662c5eea4cb4e91ad8965d3",
+                      "type": "function",
+                      "function": {
+                        "name": "lookup_record",
+                        "arguments": "{\"key\":\"record_e85646ac8a\"}"
+                      }
+                    }
+                  ]
+                },
+                "finish_reason": "tool_calls"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 244000,
+              "completion_tokens": 121,
+              "total_tokens": 244121,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "timings": {
+              "cache_n": 0,
+              "prompt_n": 244000,
+              "prompt_ms": 74482.8,
+              "prompt_per_token_ms": 0.305,
+              "prompt_per_second": 3275.9,
+              "predicted_n": 121,
+              "predicted_ms": 522.8,
+              "predicted_per_token_ms": 4.321,
+              "predicted_per_second": 231.4,
+              "draft_n": 119,
+              "draft_n_accepted": 84
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/tool0-answer.json"
+        },
+        {
+          "id": "tool1-answer",
+          "response": {
+            "id": "chatcmpl-e1b53ae8323b44c0a2f54ce9",
+            "object": "chat.completion",
+            "created": 1794255060,
+            "model": "qwen3.8-flash-next-nvfp4-nvfp4",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": null,
+                  "reasoning_content": "The user wants me to call lookup_record once with key \"record_a2284b5cf6\", then return its exact value plus the HEAD_KEY, MIDDLE_KEY, TAIL_KEY values from the document.\n\nHEAD_KEY=HEAD_982bc4b53e\nMIDDLE_KEY=MIDDLE_f63019b8e2\nTAIL_KEY=TAIL_95bd5c6d0e\n\nLet me make the call.\n",
+                  "tool_calls": [
+                    {
+                      "id": "call_fe2c843859be44999cb8a289",
+                      "type": "function",
+                      "function": {
+                        "name": "lookup_record",
+                        "arguments": "{\"key\":\"record_a2284b5cf6\"}"
+                      }
+                    }
+                  ]
+                },
+                "finish_reason": "tool_calls"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 243999,
+              "completion_tokens": 136,
+              "total_tokens": 244135,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            },
+            "timings": {
+              "cache_n": 0,
+              "prompt_n": 243999,
+              "prompt_ms": 74515.4,
+              "prompt_per_token_ms": 0.305,
+              "prompt_per_second": 3274.5,
+              "predicted_n": 136,
+              "predicted_ms": 589.1,
+              "predicted_per_token_ms": 4.332,
+              "predicted_per_second": 230.9,
+              "draft_n": 137,
+              "draft_n_accepted": 96
+            }
+          },
+          "source": "strata-stock.jsJYti/functions/tool1-answer.json"
+        }
+      ]
+    },
+    {
+      "id": "strata-overlap.DEZESK/long2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-overlap.DEZESK/long2/1794255884.mem",
+          "sha256": "ce29af0b06f595458d59540057f392eb78d2f134e43c44b9edbd08ad2b793164"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/1794255884.metrics",
+          "sha256": "989845e5447dd37596b2b7f0295e5f46d79060377e7779a1ec03d8f36eb00d2f"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/1794255912.mem",
+          "sha256": "3090731e6d040a3a833538bc9017fa91d9c58a32e03e413f5cf88f9ca298b86d"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/1794255912.metrics",
+          "sha256": "290a9a8ca06561c2b5359dea75ede1e2e675b341caddf8a6baed9630242d1ef3"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/1794255944.mem",
+          "sha256": "8b8a6be510af125e4270edafa543f04b5194f7acb8a2c06a9d611ec6f6cdd738"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/1794255944.metrics",
+          "sha256": "d27f6bd442fd959ea17d2574cee46a303f044f14a09867393b23ec3fe6aefb96"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/end.json",
+          "sha256": "33c09144d0caa1d21d61c1950112d612524c5110bda0283807cca6987b713dd6"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/progress.jsonl",
+          "sha256": "576d3fcff6145e1e54198996e417910697aec679268b2286925d75113cb9efbd"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long2/result.json",
+          "sha256": "12d02d1f8ca04ba87ae0bedf20ee5df4bb13e2acae333115ff1002c796c3c1b9"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Long",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 13.771171300671995,
+        "decode_per_request_tps": 88.8188511742177,
+        "common_decode_s": [
+          0,
+          0,
+          0
+        ],
+        "max_fragment_gap_s": 0.7255504131317139,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          32768,
+          32769,
+          32770
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": 43.98200988769531,
+        "min_mem_available_gib": 51.487220764160156,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-overlap.DEZESK/long2/result.json"
+    },
+    {
+      "id": "strata-overlap.DEZESK/long4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-overlap.DEZESK/long4/1794255974.mem",
+          "sha256": "4cdc2a723994e8401d8166d70e1846be25cfdc0c911738c0371399fe47343ce2"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long4/1794255974.metrics",
+          "sha256": "ce5bb4361fe36b0954bdde35ab8c959ec7ca016f08519ecdd83ddab01acfc047"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long4/1794256061.mem",
+          "sha256": "ae2076d0bd80ddbc41d74b0b9a1d5949e3ffdd403735924b330743158f27a816"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long4/1794256061.metrics",
+          "sha256": "063bca80464565da0ff881c6862c1ab70887a96e566b2dda5a7b805e6c05cfaf"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long4/end.json",
+          "sha256": "7d481dcf840a62a5191ca6a28b0d9cb348cccf2b92e1ff89847fe0bfc5ef3221"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long4/progress.jsonl",
+          "sha256": "33b280b3e52f54f5b65d4127ad01ae6631ae085654a94cfbafdcfc5a32c7a0bf"
+        },
+        {
+          "path": "strata-overlap.DEZESK/long4/result.json",
+          "sha256": "1fe69a09ab4f4adb75b604cfb996f95605bdbc522a6b38bf52e60b542a3163a5"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Long",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 25.749101948415046,
+        "decode_per_request_tps": 62.60741267709907,
+        "common_decode_s": [
+          0,
+          0,
+          0
+        ],
+        "max_fragment_gap_s": 0.8060882091522217,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          32768,
+          32769,
+          32770
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": 43.94195556640625,
+        "min_mem_available_gib": 51.46708297729492,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-overlap.DEZESK/long4/result.json"
+    },
+    {
+      "id": "strata-overlap.DEZESK/max2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256163.mem",
+          "sha256": "0f61797c026099a3bd53c6f63c3f895fd34b874e284603d7dfba3b38447980c3"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256163.metrics",
+          "sha256": "fecfdf17e3d53f75640c18955ff2a102802d358f67eb54fba7514d69b1b67728"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256205.mem",
+          "sha256": "f48e9f6eb85fbcc858f7faf7212a1763adaa010ec01aa41ef3ffcb8a1adbd85e"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256205.metrics",
+          "sha256": "0096b3cd30cc05db5adb600722ee4c8b554f7d977510488e6e39fcb2ac06305c"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256280.mem",
+          "sha256": "2349de6bbea35c4469353b02725ef16596183f58d8462bbbd0557cdbdbe33e6d"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256280.metrics",
+          "sha256": "cca39559827d83b9faa5abb679d18495c20ae512d66a774339624ea86f3701cd"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256342.mem",
+          "sha256": "f7cbb397d8eb64095a231d707ea41f470c0ff6bdf5cb3fb09bec5b2bc8bdc871"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/1794256342.metrics",
+          "sha256": "23418bd0e46213d0f99b598ee60de2f105a5829d5f3d2f980cef1720af6295ee"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/client0.jsonl",
+          "sha256": "8ea9a9a28bd34196c5693e1a2a71a2e6bd6dd128672c6b40ecebde64e89e67a9"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/client1.jsonl",
+          "sha256": "2c037fc73a2f4d87a727d95f23abcbd56675b250db6c5f8445a26e496035c1fb"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max2/end.json",
+          "sha256": "931a93ace92e80760607d5b5a230935de267dc10fbb86e257d5d4901639d376a"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s2-p2048-reserve10/max/c2/requests/000002.json",
+          "sha256": "3d4056a5eded519c57ddbb780d320e724b8cd177d31c7d87014754b7b9c86d49"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s2-p2048-reserve10/max/c2/requests/000003.json",
+          "sha256": "f1848dc037068312e85f5b99a56c39185cc05b863a63688566cb4fafc9d12eea"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Max",
+      "clients": 2,
+      "metrics": {
+        "ttft_s": 128.6896494626999,
+        "decode_per_request_tps": 94.0904396381463,
+        "common_decode_s": [
+          0
+        ],
+        "max_fragment_gap_s": 1.968287706375122,
+        "output_tokens": 6903,
+        "prompt_tokens": [
+          245750,
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 2,
+        "batches": 1,
+        "min_mem_free_gib": 41.3824577331543,
+        "min_mem_available_gib": 48.912139892578125,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-overlap.DEZESK/max4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0.5,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256361.mem",
+          "sha256": "33470718a136f7b99721ccb228231a84bbe3995b43f93b2a1391783e07d1d3de"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256361.metrics",
+          "sha256": "eaa7a164c79a7aa25faab72c7861dec658f6e9d13821be5fe3a4e261cb6e7795"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256434.mem",
+          "sha256": "b25200db140173ed26c1a5cf3cd06a3d6a4036d2db7fd7d459c1adeaeed6c48a"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256434.metrics",
+          "sha256": "1358f8a64a27db576137de9a98d6deabf08b013084e98d7274e9401128d26f30"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256531.mem",
+          "sha256": "7bcabcbd5f90c4be97000d783b3e245b7f15d135c012bd524c1721aacd240bc4"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256531.metrics",
+          "sha256": "89b30a73817ead8dde6ccfb826f18129a9a79473f52f85c49a5b07edf786bd44"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256601.mem",
+          "sha256": "eb0fe625368772910b54fdc2a5295791b9a332185dd0e6dbcc8e5169a645228e"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256601.metrics",
+          "sha256": "46b38b55c2640f6756157c5c820e013548be3c2a31d53b2f0995264ef7990548"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256673.mem",
+          "sha256": "6340f14d9fe68728cb9ee7d56ba900f3189e1fb67b019d498b3f7b776f0db09b"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256673.metrics",
+          "sha256": "88ee8e8671f62f40187eb628b8a1d7c201d0c945bb4f8f02be4a26261c788ee5"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256747.mem",
+          "sha256": "2d571b8793e8db6dcfc79c2091e8c4ad9809670797f6541a72711b1cdf060284"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/1794256747.metrics",
+          "sha256": "3123eae5a6f233ac92deb50aa274fc0a54c14ab68d00bdc56ce12aa95235657f"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/client0.jsonl",
+          "sha256": "05da9d85b1e5da56a5923df1435e7be423f520b31ed5787fb6b0c01002c6d906"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/client1.jsonl",
+          "sha256": "792b484f698203147715b209ada6ec723c01b8dfa96a3e627fa4ff8a71cc5a33"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/client2.jsonl",
+          "sha256": "80b2e76cd3db9301d45e32c99ed5925110b0208f4d2934aa99285c165e2c2368"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/client3.jsonl",
+          "sha256": "dd027df2e897b9da2f7f2c22847545e909f7661d0c93e54684aed4b8fc0861fd"
+        },
+        {
+          "path": "strata-overlap.DEZESK/max4/end.json",
+          "sha256": "3fc167fe60f23aee057653857939398702e8a771ec56e6bbafec2c2d5ef949e5"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000004.json",
+          "sha256": "087ab489fab05843f894165464fe4a38cc979ef0e02c3a5ddebe2ddc70451451"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000005.json",
+          "sha256": "41d3c46c1739f0c0f62de0656c513bf88ca3233c61372643bf62713d0912f39a"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000006.json",
+          "sha256": "93459e3ef3d155e93313c180003d4e25828f392dbeba601ef49a398153c4437f"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000007.json",
+          "sha256": "59938676d8d21f385b4e8ff325c1d4578b275a4d381bc5b0946f5cb9d3c9d589"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Max",
+      "clients": 4,
+      "metrics": {
+        "ttft_s": 210.09878849983215,
+        "decode_per_request_tps": 88.16973094307413,
+        "common_decode_s": [
+          0
+        ],
+        "max_fragment_gap_s": 2.2923755645751953,
+        "output_tokens": 27172,
+        "prompt_tokens": [
+          245751,
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 4,
+        "batches": 1,
+        "min_mem_free_gib": 41.737579345703125,
+        "min_mem_available_gib": 49.272865295410156,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-share0.knwRqo/long2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-share0.knwRqo/long2/1794257968.mem",
+          "sha256": "4ba64dfbba05f9be86ca960df4890a17f139afb9bd2ed550dd0b2c82b0a68440"
+        },
+        {
+          "path": "strata-share0.knwRqo/long2/1794257968.metrics",
+          "sha256": "ceab980a0b4afad98774b08b7970c515561577984b3689d4dc106830eaa270db"
+        },
+        {
+          "path": "strata-share0.knwRqo/long2/end.json",
+          "sha256": "ab6fffa2927590a8e8781016a61801b49297dfe2bfb9abbd1d00142765b95d0c"
+        },
+        {
+          "path": "strata-share0.knwRqo/long2/progress.jsonl",
+          "sha256": "02664468c7e9e9503660cff22b46d37cf7995b54807add58af5596815658a08f"
+        },
+        {
+          "path": "strata-share0.knwRqo/long2/result.json",
+          "sha256": "aab53fb91d18ab157097386e0fd3941f7cc8da469857578811bc3e9de57c87ef"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Long",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 13.37657979366486,
+        "decode_per_request_tps": 61.690445450461,
+        "common_decode_s": [
+          2.336890459060669,
+          2.5131959915161133,
+          2.505811929702759
+        ],
+        "max_fragment_gap_s": 9.863322734832764,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          32769,
+          32770
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": 44.64708709716797,
+        "min_mem_available_gib": 51.720367431640625,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-share0.knwRqo/long2/result.json"
+    },
+    {
+      "id": "strata-share0.knwRqo/long4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-share0.knwRqo/long4/1794258021.mem",
+          "sha256": "833106903bdb52b18b1c166348e857686fe1e3a24e3ef3d9c9feb960c1f6e248"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/1794258021.metrics",
+          "sha256": "648069b4767aeeae96905a90a782b77b2405dbb784cbc7fa5555eda5f4692613"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/1794258095.mem",
+          "sha256": "915d0b6a7a8a1f05bd6fc48af7767d619fd3e48df1350ee3f85397653c42ad0f"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/1794258095.metrics",
+          "sha256": "f60a57d28cc448a2cf15167f722a1aa898647d81de2d82f3d29bf1871426f895"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/1794258169.mem",
+          "sha256": "2d09921a9f2c046cad4d8513ac06e5800cae163452d4af7f4669a0e949f4bf6c"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/1794258169.metrics",
+          "sha256": "279096b3af856c245e34623ad4ae54e646fa63fb28c1eef25257f7e8d8bc91b3"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/end.json",
+          "sha256": "608b9875af0769a92a9ee270b40962fbbecc7f503f2c6b6a27006d0ed4ab4090"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/progress.jsonl",
+          "sha256": "10c2f5bae8e062299aca9e769065bbdc5ee5e38efecc460b2e2dff019e05a4f1"
+        },
+        {
+          "path": "strata-share0.knwRqo/long4/result.json",
+          "sha256": "4a328669035d28c58c452eae61407cdc1e91645d8db3fe81aef5bfe335a55efe"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Long",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 23.22862703699987,
+        "decode_per_request_tps": 25.269480390148157,
+        "common_decode_s": [
+          3.9114089012145996,
+          3.9316036701202393,
+          3.823594093322754
+        ],
+        "max_fragment_gap_s": 9.632600545883179,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          32769,
+          32770
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": 44.51471710205078,
+        "min_mem_available_gib": 51.58882141113281,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "native_result_source": "strata-share0.knwRqo/long4/result.json"
+    },
+    {
+      "id": "strata-share0.knwRqo/max2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-share0.knwRqo/max2/1794258189.mem",
+          "sha256": "a3759dbae46fdfa019880c7b06473748880161ed84d637d3d2c369026d4f55cf"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/1794258189.metrics",
+          "sha256": "53bc4b66bf0db293b81225c7d4941b9a7ccae968a1ae9c69c654b3f7ae691158"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/1794258259.mem",
+          "sha256": "a7558aa40064fefd5dff3db04ca0e3f9aba0879009799e22ea1ba219a6e97570"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/1794258259.metrics",
+          "sha256": "b083ce60ce8230b0a683b22643ea0cdda54a8e1a87b56f85d72cdf7d91e3f478"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/1794258331.mem",
+          "sha256": "831e548fd774c553a6edf0ca9200552c40cbc829294f911ff3899319c367a4d4"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/1794258331.metrics",
+          "sha256": "cdcdaa20afb9b6c05bd6a664d8002cc0cfa49403bba67cd280c3ce445b68f914"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/client0.jsonl",
+          "sha256": "62e05273af0fe04e33ab781d8eac773bc81e9d2aa30d7a55fc85906fc7b59a76"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/client1.jsonl",
+          "sha256": "c2dc6f928eadd34000787c35eb2ae0795db7cef269129ad47ad77ce887622731"
+        },
+        {
+          "path": "strata-share0.knwRqo/max2/end.json",
+          "sha256": "f5ac35b1fe74e0d73de3b3aa4023485d92e73356ab993e725cb478c1ca527309"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s2-p2048-reserve10/max/c2/requests/000002.json",
+          "sha256": "3d4056a5eded519c57ddbb780d320e724b8cd177d31c7d87014754b7b9c86d49"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s2-p2048-reserve10/max/c2/requests/000003.json",
+          "sha256": "f1848dc037068312e85f5b99a56c39185cc05b863a63688566cb4fafc9d12eea"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Max",
+      "clients": 2,
+      "metrics": {
+        "ttft_s": 112.1524909734726,
+        "decode_per_request_tps": 68.65027041110379,
+        "common_decode_s": [
+          27.445775508880615
+        ],
+        "max_fragment_gap_s": 75.96451044082642,
+        "output_tokens": 6790,
+        "prompt_tokens": [
+          245750,
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 2,
+        "batches": 1,
+        "min_mem_free_gib": 41.874149322509766,
+        "min_mem_available_gib": 48.95282745361328,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-share0.knwRqo/max4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "NVFP4/GPTQ",
+        "ple_io": "direct",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "Completion does not imply simultaneous decode; use the saved SSE windows",
+      "sources": [
+        {
+          "path": "strata-share0.knwRqo/max4/1794258384.mem",
+          "sha256": "08ca0df30bca9829c12b1a3ba33aa50a0cda09d4dcb0350152dc4b8e7d6c24a0"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258384.metrics",
+          "sha256": "32bc6c2f886107d694e0414433cbbb660da0e76931d358d95d79e0f854e0b9e5"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258455.mem",
+          "sha256": "2aa90b37bab3fef09887f04c924dfa61fcd4f08ad574f18038958b22bdb4eb01"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258455.metrics",
+          "sha256": "031aae43b0c3bc83dfd22aefde445c6662162ec9fe3fb1224c9cdae619287fbd"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258526.mem",
+          "sha256": "ec1415e7503a232125d5eb9787c51140c2b27c8fe45e1826f34b6688854a042a"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258526.metrics",
+          "sha256": "16afa159755578be51697a7ea4619ea86bb2365bb17f56f877a392b1c7d06e51"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258607.mem",
+          "sha256": "74b273fd20e0cb7c2dd7df3f0dcf61b2856efc4b73991798c157cc8ef2646c0b"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258607.metrics",
+          "sha256": "3aabf4460f03bcbc96c72d4a50550be20ea3b58a0425be62e86bd352cecdebf5"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258681.mem",
+          "sha256": "816e1c372ee0a19656e24381d25572e75c61d2313f2813be17c789c8b48a088d"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258681.metrics",
+          "sha256": "fb03e5a3552a46b73eab573e32b5b95489266d093b8f0f165fdd5a292d9041e9"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258699.mem",
+          "sha256": "dfb3ef2b1a6271bb08a22a06d022a8a31b2c7f98c273285ed0400454e27d2249"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/1794258699.metrics",
+          "sha256": "af8e7e92966dfe1a3e1095fcb65c6c406694cf9a864eaa30c590f83b7897eaa7"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/client0.jsonl",
+          "sha256": "52136927f2e365960c99ab7339a156839d8eaba36168aa9fa460dafe299583bc"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/client1.jsonl",
+          "sha256": "91a1a8f379793e0a5ce4f39574871def3b3b2fc9d2a3404bbd93fcf9b57bf62b"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/client2.jsonl",
+          "sha256": "865a77a8f4444e8519e9998512d720420f7fff5884aacef9b8a6e51a23a75657"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/client3.jsonl",
+          "sha256": "edf9e7a6c712cfbb8b6de2717683ae3f1b25d7c74dc3cb0cc755806a2863c90d"
+        },
+        {
+          "path": "strata-share0.knwRqo/max4/end.json",
+          "sha256": "59bf5ab945fe373d8d0738ee273d984b37be24994f8e3eb8ad68dfc820990050"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000004.json",
+          "sha256": "087ab489fab05843f894165464fe4a38cc979ef0e02c3a5ddebe2ddc70451451"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000005.json",
+          "sha256": "41d3c46c1739f0c0f62de0656c513bf88ca3233c61372643bf62713d0912f39a"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000006.json",
+          "sha256": "93459e3ef3d155e93313c180003d4e25828f392dbeba601ef49a398153c4437f"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000007.json",
+          "sha256": "59938676d8d21f385b4e8ff325c1d4578b275a4d381bc5b0946f5cb9d3c9d589"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-nvfp4",
+      "workload": "Max",
+      "clients": 4,
+      "metrics": {
+        "ttft_s": 192.09829246997833,
+        "decode_per_request_tps": 22.142690577507587,
+        "common_decode_s": [
+          9.48617172241211
+        ],
+        "max_fragment_gap_s": 77.85848760604858,
+        "output_tokens": 4977,
+        "prompt_tokens": [
+          245751,
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 4,
+        "batches": 1,
+        "min_mem_free_gib": 41.76560592651367,
+        "min_mem_available_gib": 48.85453414916992,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 1.2705078125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-iq3s.NagPEU/short1",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/short1/before.json",
+          "sha256": "9067c7a6378b9aeb489f49003350592a7ab4b209344d21fbbf90cd3b1a09387e"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short1/before.mem",
+          "sha256": "e918882cf8ef8322a0e058b1385be89e09fb05abcd4dc8de579321c56b9b7df1"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short1/end.json",
+          "sha256": "9a2359c13f0be84ba052bed6791400caec75cfa68edfa34ebb961a213fa47927"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short1/end.mem",
+          "sha256": "085c92f60a83165071c6d2eb3b915688d27d0f794aec43ed1bfa9e5766c4bb41"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short1/progress.jsonl",
+          "sha256": "56b7b194d96517cc5999ae2d39d4714a6469d2c591ece1ebb9c7b861785c049d"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short1/result.json",
+          "sha256": "da4ee56463b96e1a97fd09fe7e1aad6d27d6a03f582ffd7f938dbf1cf1a5dc2e"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Short",
+      "clients": 1,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.230108480337852,
+        "decode_per_request_tps": 225.72779012080562,
+        "common_decode_s": [
+          1.1178882122039795,
+          1.0684325695037842,
+          1.211935043334961
+        ],
+        "max_fragment_gap_s": 0.013161420822143555,
+        "output_tokens": 768,
+        "prompt_tokens": [
+          512,
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 3,
+        "batches": 3,
+        "min_mem_free_gib": 15.262798309326172,
+        "min_mem_available_gib": 26.926284790039062,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "native_result_source": "strata-iq3s.NagPEU/short1/result.json"
+    },
+    {
+      "id": "strata-iq3s.NagPEU/short2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/short2/before.json",
+          "sha256": "9138e7ffe921fb1300580ae0230a2dc49608364e4faf085c16925f71783e7c90"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short2/before.mem",
+          "sha256": "5c098658e10446b25b7612a7ff2cbaaca44ae30bdf9c2af16ec6e34f6b57a6b0"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short2/end.json",
+          "sha256": "7459107b9e95c30374aad103316fa648b901b13711ba99bc20f0ba3399c02b43"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short2/end.mem",
+          "sha256": "576229b24a3c84696ef9a71c366e9e758fb3cab31e2ff8169fab2bdc238972e2"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short2/progress.jsonl",
+          "sha256": "c8b3512ea3f58eef9ba00f792ba95b479006a4887fff7d6ad10284d6149cecdc"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short2/result.json",
+          "sha256": "69a666b2f71e8b28adc9e4c7ed0ab3dff5dc7c4bf763b6bab377ed87db8322d9"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Short",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.36029779464782524,
+        "decode_per_request_tps": 120.16282976604232,
+        "common_decode_s": [
+          1.8717830181121826,
+          1.980454921722412,
+          2.0265986919403076
+        ],
+        "max_fragment_gap_s": 0.294757604598999,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          512,
+          513
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": 15.273506164550781,
+        "min_mem_available_gib": 26.937000274658203,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "native_result_source": "strata-iq3s.NagPEU/short2/result.json"
+    },
+    {
+      "id": "strata-iq3s.NagPEU/short4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/short4/1794266454.mem",
+          "sha256": "78bf081e55e78490d5742175e090f6e1fcaf9a7d8c88b91b545e0320b65178d4"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/1794266454.metrics",
+          "sha256": "b6609fbf824a2f7e83775a7b35eb216c30197fa1523a3020db25f8cd26fc69a8"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/before.json",
+          "sha256": "ef881def2e0038353940fcc039f17e2d1aa80a6b1b11a2588ca1ca9c1b624740"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/before.mem",
+          "sha256": "b950062b3f849c5dcb87d77a87999b3432bd8de58b9d9216d2c363768c1b0a60"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/end.json",
+          "sha256": "82aafdb05162a7d56a9459304e199a1bb1f33fac310b33dc637a4dbb31d87b7d"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/end.mem",
+          "sha256": "d596a0d120eef164fe6c119b7f07a307e63319f3538be0b61c800881043c1a22"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/progress.jsonl",
+          "sha256": "c75a2e08eca1b392c644dbdb99840bb035ac7c9e73af73d1b15399e017f557a6"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/short4/result.json",
+          "sha256": "5a26589e76a703347abb332561d53c1fb5e8de40f28441320545fa35cf9be39f"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Short",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.6457692918387087,
+        "decode_per_request_tps": 73.10290002396282,
+        "common_decode_s": [
+          3.070219039916992,
+          2.9170639514923096,
+          2.793513536453247
+        ],
+        "max_fragment_gap_s": 0.2924063205718994,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          512,
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": 15.136310577392578,
+        "min_mem_available_gib": 26.80029296875,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "native_result_source": "strata-iq3s.NagPEU/short4/result.json"
+    },
+    {
+      "id": "strata-iq3s.NagPEU/long1",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/long1/1794266476.mem",
+          "sha256": "3bd4498c54b50f012d612b6c4060d22fd409dd6e1371a36d28042dd7e68e0ded"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/1794266476.metrics",
+          "sha256": "56b896b59e1d0128feb079d311ccd8afcfe9367e2bdba1939ffb9da508b5231a"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/before.json",
+          "sha256": "849e4a74ca778fb247a847a11d79e52210bf44e71b0f93c06cf7d1818ee72280"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/before.mem",
+          "sha256": "fa2e3aa1cbcf63cbc26a79bd994a9967b21e756687f67d6aaf330e5d2ce212ee"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/end.json",
+          "sha256": "7749e173228e8ba99ef42fb706ec1966257f7e17962c860ddcd98b605d1d2b02"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/end.mem",
+          "sha256": "456c24ca565f1b3c243d699e7277ecba05d499eee0725d54e5bc2e49eadcd8f3"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/progress.jsonl",
+          "sha256": "b9e47a8b07a5d187f315a95b6c1614d92571eb13e78fd26921212cc074dd5c10"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long1/result.json",
+          "sha256": "7c4e5c592fa89f4017d41e149b13483a3727add8bdebb598a122823faa331168"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Long",
+      "clients": 1,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 5.513174526335206,
+        "decode_per_request_tps": 188.66975196953157,
+        "common_decode_s": [
+          1.3106937408447266,
+          1.3398301601409912,
+          1.407804012298584
+        ],
+        "max_fragment_gap_s": 0.014203548431396484,
+        "output_tokens": 768,
+        "prompt_tokens": [
+          32768,
+          32769
+        ],
+        "cached_input_tokens": 0,
+        "requests": 3,
+        "batches": 3,
+        "min_mem_free_gib": 13.026512145996094,
+        "min_mem_available_gib": 24.69150161743164,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "native_result_source": "strata-iq3s.NagPEU/long1/result.json"
+    },
+    {
+      "id": "strata-iq3s.NagPEU/long2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/long2/1794266515.mem",
+          "sha256": "4c69b8afd25f87098416fb677c34e7a3f1c1de382a56b4c5fd49657530c7018a"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/1794266515.metrics",
+          "sha256": "7caa5ee5e68b56064730afdfd4d448fe7d784058a5579ba31eec6812f42f85fe"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/1794266532.mem",
+          "sha256": "9a60b3ca420d9ff7030819ef91a3edef7aebf2d999df7e7ae2d6fbeede387bc2"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/1794266532.metrics",
+          "sha256": "e57718cac6ae47e08ffb840865c5ef5f1e72e61aba669f3401f63074e3d295bc"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/before.json",
+          "sha256": "2a10a37c1f701e5d3a005658a2ef8325caa901e9560c6bcedcc597fc6068ef34"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/before.mem",
+          "sha256": "cb97a9d160844248eb90f479b179ee516810cfc3778e1a4ddaec0823c4afad30"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/end.json",
+          "sha256": "90301bb1d2415ae6e874616cb7b3baffa7d009463529279c6b3e3872a06180b0"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/end.mem",
+          "sha256": "129b4ec42bf2f87b120040cc7f9657579239f26131c94402d6e0339530117168"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/progress.jsonl",
+          "sha256": "ec81c6ac83e7aaf1c266d6177c2176268d6d8095672aa01da181093cbc8575ec"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long2/result.json",
+          "sha256": "6adecc085810e67cd436e861aeaba418bd5981401a065b52b7c5d8ece83861d5"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Long",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 8.571594972347762,
+        "decode_per_request_tps": 68.77406833800497,
+        "common_decode_s": [
+          2.1465213298797607,
+          2.426784038543701,
+          2.4263556003570557
+        ],
+        "max_fragment_gap_s": 5.877709865570068,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          32769
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": 12.785362243652344,
+        "min_mem_available_gib": 24.45513153076172,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "native_result_source": "strata-iq3s.NagPEU/long2/result.json"
+    },
+    {
+      "id": "strata-iq3s.NagPEU/long4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/long4/1794266575.mem",
+          "sha256": "7a05b3b7f0cd6a4c59dca9119e29c28099e00edec8ded245284938aae906c3f2"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/1794266575.metrics",
+          "sha256": "e977a005f4e97770b0df71ad9785a1bde2390f9a1c0c2607bd016ff866230b62"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/1794266623.mem",
+          "sha256": "8a12367ad9a041ddd32f84109457c9506c0ee72e80636844e49360ef2ad5f246"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/1794266623.metrics",
+          "sha256": "48fe2344c41179cbfbc889144dbab82c9032f03633f45c6eb77c6eae3c48fdb3"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/before.json",
+          "sha256": "f9ce14402e71fc5ad06e370236f87ec442f3da5f0dfb584184c74a171558fbd9"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/before.mem",
+          "sha256": "6be6de25f97a8c746aa57acaa37fd6c7a286f9681e41b50811f339630f8503e9"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/end.json",
+          "sha256": "9d07eb5b81d10795ac264c04889b5dd9d5e4b8d4757a192eee1df184b66d4423"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/end.mem",
+          "sha256": "630ce6e742f0d298d2ca943cbba5e7865729840af843ca88880b5c138b128cb8"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/progress.jsonl",
+          "sha256": "8f31181ecd0c4c019af04b370b4106d749a2fb51f5960bbc494307a7117b3415"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/long4/result.json",
+          "sha256": "59073c60666aaa555e5d4def8680ce8a260441d9de76997d1a144dfdbf3371d2"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Long",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 14.843187230003727,
+        "decode_per_request_tps": 30.697623144556275,
+        "common_decode_s": [
+          3.777540683746338,
+          3.6359012126922607,
+          3.42496657371521
+        ],
+        "max_fragment_gap_s": 5.9339118003845215,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          32768,
+          32769,
+          32770,
+          32771
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": 12.787288665771484,
+        "min_mem_available_gib": 24.194610595703125,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "native_result_source": "strata-iq3s.NagPEU/long4/result.json"
+    },
+    {
+      "id": "strata-iq3s.NagPEU/max1",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/max1/1794266663.mem",
+          "sha256": "50f34264780c19c984179781a49a267f6957289ab1eb52274f2189859eeac232"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max1/1794266663.metrics",
+          "sha256": "7f082fa083d130c2ec51fa295c843fd15b8e26a06907f304ea09b6e6cacedd55"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max1/before.json",
+          "sha256": "122db118cd7278ec0b3f0f86b0887bd6dc98ec57ae4b7df75f81b47b0f3deab2"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max1/before.mem",
+          "sha256": "49affe6d7653bc239cd5c7d06bfd27a8073d18a75515a7d4cfd2d9e4a337d676"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max1/client0.jsonl",
+          "sha256": "4c1285c259c58bb28ed511a5a50862eeb2446b518422a394c17863b5a42f118f"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max1/end.json",
+          "sha256": "73490d61d61e46c558163b4834a4a08d6730aeea2373d2beab587e53fb513da8"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max1/end.mem",
+          "sha256": "0ccffaf7ab8c0a96f3dce92299389c4cb08e3cab6d8937c0567cc84049638cda"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        },
+        {
+          "path": "strata-stock.jsJYti/max-c1/input.json",
+          "sha256": "7e3ed66d8efad0be7e044ae4521e8820248f11c61548111eab6e750d1f914547"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Max",
+      "clients": 1,
+      "metrics": {
+        "ttft_s": 46.01639151573181,
+        "decode_per_request_tps": 196.7977378700415,
+        "common_decode_s": [
+          0.4979732036590576
+        ],
+        "max_fragment_gap_s": 0.015700340270996094,
+        "output_tokens": 99,
+        "prompt_tokens": [
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 1,
+        "batches": 1,
+        "min_mem_free_gib": 16.203994750976562,
+        "min_mem_available_gib": 23.980159759521484,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-iq3s.NagPEU/max2",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266721.mem",
+          "sha256": "ee8399e823bf4719bfd339c04ba48c64aedcc57ffcbf4e4d6174b0e960e322b3"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266721.metrics",
+          "sha256": "7c2972e53932b086cd6533635993706cfb3105b2d3ed01d7a58d090b5adc5be7"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266734.mem",
+          "sha256": "e7b95200dd1c9b7c8ac2d0c23661e95dfcb740e1f40db29dc86e9bd767d9da61"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266734.metrics",
+          "sha256": "8508ee69282de329f598d008fb06fc1bca69af2981a78e7d4abb84759141c4cf"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266757.mem",
+          "sha256": "7ffc707f77dd2bfae10f3674dbc75b3e01449271bfffb15d70f8cf4c8d68d390"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266757.metrics",
+          "sha256": "c02200b39fcdd7b45e64dc2ad2a335a7032446c979f809d1f2a2b8abaa0cb522"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266828.mem",
+          "sha256": "030d57db8a445c45246f813c200129ce964d55f32f1664bbe4d48fd8880dc0d6"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/1794266828.metrics",
+          "sha256": "96ca3f90d9ef16258ba354ca8f2bb8f719d0095b05a7037b2f693255af5dead9"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/before.json",
+          "sha256": "a2667c1897245ed5b2a94e79267cb349757af04217eb62dfa96c3dd228a2be75"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/before.mem",
+          "sha256": "321a3760ade2887c3e64a89b840084b0c6be3de0a1e3260678215a2a1cb7b89e"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/client0.jsonl",
+          "sha256": "02f7b129e103e3df56e26b487c2fef92d7b7330bff949223cb0424c9adad4561"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/client1.jsonl",
+          "sha256": "37e89094fd12fda0fcd452417ba9c5a36e51f76527c2c412a3ff606749f3cac9"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/end.json",
+          "sha256": "90a0da0ea545ac955db3e02b2483617123eddac07d737c1a145480f84e3aca61"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max2/end.mem",
+          "sha256": "5c2d86ac7b6943a9b4ae8f776fc9a84328450a08c2d981f04a4ae67b0665990c"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s2-p2048-reserve10/max/c2/requests/000002.json",
+          "sha256": "3d4056a5eded519c57ddbb780d320e724b8cd177d31c7d87014754b7b9c86d49"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s2-p2048-reserve10/max/c2/requests/000003.json",
+          "sha256": "f1848dc037068312e85f5b99a56c39185cc05b863a63688566cb4fafc9d12eea"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Max",
+      "clients": 2,
+      "metrics": {
+        "ttft_s": 71.50947272777557,
+        "decode_per_request_tps": 82.49533907334211,
+        "common_decode_s": [
+          37.51213049888611
+        ],
+        "max_fragment_gap_s": 47.53272747993469,
+        "output_tokens": 8926,
+        "prompt_tokens": [
+          245750,
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 2,
+        "batches": 1,
+        "min_mem_free_gib": 14.520034790039062,
+        "min_mem_available_gib": 22.298351287841797,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-iq3s.NagPEU/max4",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 5120
+      },
+      "notes": "",
+      "sources": [
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794266896.mem",
+          "sha256": "f2a04f9e24fe0edb5a0b7c74ee41c3bf7d0c2ce85518f54f463c7e8fb85e4918"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794266896.metrics",
+          "sha256": "0132159a221e2c9b46bcdd77260ac58076136207d87182d84eb6b417b5841afc"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794266982.mem",
+          "sha256": "ee7526f4398dbde28e244763a35aecea50f6653289418405683a0960c8254f78"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794266982.metrics",
+          "sha256": "f8f0ecaf76e065d1e080e2fb7f53706d32b67032dbb27e273b8ef6a100e0b5ef"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794267052.mem",
+          "sha256": "484806e96533ed66c2e960ac95ff544dc0daf3c2120bb4781fb5cb45c0c61c2f"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794267052.metrics",
+          "sha256": "88f1cbd1b248a5578ae758eae6d493c496651574f51d5a202a97a0362c14e8c2"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794267114.mem",
+          "sha256": "ef7d32d49422e8c1846ae91b11e12c3b66b40f1380ecde8666f11c23f0c917e8"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/1794267114.metrics",
+          "sha256": "86c6481c820591d6c3cf257f8279f3f47a94ff8ddb0f8d69497cf297be5b6d7c"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/before.json",
+          "sha256": "92c0d5e98d58143cfc8c6414d2644be017634d3c91e6ad08b45f66b7a2fb86c0"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/before.mem",
+          "sha256": "5c2d86ac7b6943a9b4ae8f776fc9a84328450a08c2d981f04a4ae67b0665990c"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/client0.jsonl",
+          "sha256": "99e3ea9aea7ebf6bc2ced44fa601ba91c040048d45a40a7f8ac4c29a7f13d07e"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/client1.jsonl",
+          "sha256": "4a8904da58000781e927df94188862d8100f56d5e33b3d13c13d2b241f1ba9d6"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/client2.jsonl",
+          "sha256": "cdd668e51fc613af6ea4455681a720addc603911f60c0bf1c452f465382ead15"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/client3.jsonl",
+          "sha256": "ea9d9f5c8e23fda17e2f667f076e2a3ccda6b5a25fb0bcedf292cb53e99f6f95"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/end.json",
+          "sha256": "469ed1ff11240a5dc37c323c8368ababf27d3d5762f2f4ee8f7c0288b03454c1"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/max4/end.mem",
+          "sha256": "025706ecc27a1246a41e3191dea4da8be18821a2f706db459505168bd221e7d4"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/model.json",
+          "sha256": "cf014d19091971adab96e50bd273267b0b87da7cec7c8f546b47328f917419ae"
+        },
+        {
+          "path": "strata-iq3s.NagPEU/props.json",
+          "sha256": "31419d204b4d950ec829f52986363203c43b903bf8933a58a27f8a23d13fb103"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000004.json",
+          "sha256": "087ab489fab05843f894165464fe4a38cc979ef0e02c3a5ddebe2ddc70451451"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000005.json",
+          "sha256": "41d3c46c1739f0c0f62de0656c513bf88ca3233c61372643bf62713d0912f39a"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000006.json",
+          "sha256": "93459e3ef3d155e93313c180003d4e25828f392dbeba601ef49a398153c4437f"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000007.json",
+          "sha256": "59938676d8d21f385b4e8ff325c1d4578b275a4d381bc5b0946f5cb9d3c9d589"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Max",
+      "clients": 4,
+      "metrics": {
+        "ttft_s": 120.90378189086914,
+        "decode_per_request_tps": 58.323982014608404,
+        "common_decode_s": [
+          6.190857648849487
+        ],
+        "max_fragment_gap_s": 48.55052995681763,
+        "output_tokens": 29562,
+        "prompt_tokens": [
+          245751,
+          245752
+        ],
+        "cached_input_tokens": 0,
+        "requests": 4,
+        "batches": 1,
+        "min_mem_free_gib": 14.019325256347656,
+        "min_mem_available_gib": 21.805492401123047,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      }
+    },
+    {
+      "id": "strata-max4-8960.1B1ic6",
+      "status": "completed",
+      "configuration": {
+        "engine": "Strata",
+        "build": "146df3c468739147f520ac3816de806f71232571",
+        "model": "Qwen3.8-Flash-Next",
+        "quantization": "IQ3_S",
+        "ple_io": "ram",
+        "decode_share": 0,
+        "context_per_slot": 262144,
+        "cache_mib": 8960,
+        "cgroup_gib": 52
+      },
+      "notes": "Max C=4 plus completed history restoration; one input was warm",
+      "sources": [
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269343.mem",
+          "sha256": "064b46877e28e93768a87587b938527dc36b6f1a2679bf55a68ab6325cab2a58"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269343.metrics",
+          "sha256": "51f47636899191b0265a2637cdc9d88dae262a06bb6a4f537f20670f29299d25"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269376.mem",
+          "sha256": "3f8cdf205bf2cc28f54a05a22bd16e8f7b6604ae65f445fc1e4e231e62326cbf"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269376.metrics",
+          "sha256": "b25a296e039c151dd44407f8f0f8876f36d838162d3257826de4cc93dfad6f43"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269392.mem",
+          "sha256": "b217b51b5d8600a94c47dd59088b10820fcd6233e8c98f4c77d3e8daee181f35"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269392.metrics",
+          "sha256": "2d4931d5a7cd618d56446bbcc312d6117c5b5066d9f147e1dbb1865daad55f0c"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269413.mem",
+          "sha256": "5c9a96100337c337e666b23127204ea33a9d402b0f6507f7221c21c5b70d1634"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269413.metrics",
+          "sha256": "68cd49804b349c1989ea259c6eea70d2943370de20eb385c4fd5340f40a00cd0"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269425.mem",
+          "sha256": "dcb1cd8e470588eff59ecfe6b8526f002680e18c8d0f5bfccdc05ebcb3e215ca"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269425.metrics",
+          "sha256": "80cda53292ebd8172049ae53fcf0352eb9738aa0663425cd715299f829df16a3"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269445.mem",
+          "sha256": "891d9526b98ff448c65dff0a4f1f74e5957fc60872f709077d9da744b3b9d607"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269445.metrics",
+          "sha256": "15045bc10ea0c89e0c9eca574a9a4bfaf8abcd149c96703f06b2b717603adbcf"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269477.mem",
+          "sha256": "1389e9693675b82de3b098b9ba456739674d67c124f4bd53874833775550a751"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/1794269477.metrics",
+          "sha256": "ce23e4bea8668e65e15524df3f2504dcbfeea2a419c4166653b99bf2e2c73287"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/before.json",
+          "sha256": "76f2468daa2b708d850f6696e8493f829200cb5adc961ee2fa7f959f0ea62e15"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/client0.jsonl",
+          "sha256": "792d00c8dbad9e1a37c279a8e751b7638c3ff59aeff21f3f649fc75d1a721201"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/client1.jsonl",
+          "sha256": "2e9589a61f1542bc948c0befe12c89850b496cb95bd0f7270a5921991f0d254a"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/client2.jsonl",
+          "sha256": "898d5aad2e8e32aa20239d5267e06ad23a1de3f48e919f30eab028961c13e38a"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/client3.jsonl",
+          "sha256": "41cd17987cd342b176b93734066a17689c72893e2e780f3044341f036ce57f39"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/end.json",
+          "sha256": "497cb5b6d5e867c243a87bb96f07e125523ab697221fe56b35ea8847af82eb0b"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/follow-1-1794269598.json",
+          "sha256": "e066856d7fd113346a1ac508ca602d69dadde70f82f9f4f521379146893ad611"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/follow-1-1794269604.json",
+          "sha256": "5ce050532bfff9bfc36a64907c767f858a25945bc1c1fc2491fa453c8de19b3b"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/follow-3-1794269596.json",
+          "sha256": "71abcb49f9157bc9da28764efecd11d25ce4e09f3b136b9ff8b5e4ba18f07f6f"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/follow-3-1794269601.json",
+          "sha256": "1cd38c677abcc0a9553818f6465a910679a4d5e58219e63062c9e3db5bbe09bf"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/restore-1.json",
+          "sha256": "49949c0e29da3a768a706ac642154f85e9f237853c3079422ed918e719f2c99a"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/restore-2.json",
+          "sha256": "7663167e4367930d2d5883e74045ceeb522b0bc1838f8e9e5de985d7a3338fed"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/swap.before",
+          "sha256": "108dddb40c5bc8cd460896674fce9870ff41ac5b4cb792d7b6a6bc56e6f62bd5"
+        },
+        {
+          "path": "strata-max4-8960.1B1ic6/swap.end",
+          "sha256": "f6a7336b212acca4848c157df9c08402f001ac5fcb66c3ea56611d5f748df5f3"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000004.json",
+          "sha256": "087ab489fab05843f894165464fe4a38cc979ef0e02c3a5ddebe2ddc70451451"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000005.json",
+          "sha256": "41d3c46c1739f0c0f62de0656c513bf88ca3233c61372643bf62713d0912f39a"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000006.json",
+          "sha256": "93459e3ef3d155e93313c180003d4e25828f392dbeba601ef49a398153c4437f"
+        },
+        {
+          "path": "strata-ssd-run-20261109-s4-p2048-reserve10/max/c4/requests/000007.json",
+          "sha256": "59938676d8d21f385b4e8ff325c1d4578b275a4d381bc5b0946f5cb9d3c9d589"
+        }
+      ],
+      "model_key": "qwen38-flash-next",
+      "variant": "strata-iq3s",
+      "workload": "Max",
+      "clients": 4,
+      "metrics": {
+        "ttft_s": 79.94371902942657,
+        "decode_per_request_tps": 36.16114357752957,
+        "common_decode_s": [
+          28.9684636592865
+        ],
+        "max_fragment_gap_s": 47.08316445350647,
+        "output_tokens": 10812,
+        "prompt_tokens": [
+          245751,
+          245752
+        ],
+        "cached_input_tokens": 245747,
+        "requests": 4,
+        "batches": 1,
+        "min_mem_free_gib": 10.64871597290039,
+        "min_mem_available_gib": 18.611957550048828,
+        "max_queued": 0,
+        "max_admitting": 0,
+        "engine_gpu_free_gib": 19.2548828125
+      },
+      "workload_budget": {
+        "input_tokens": 245752,
+        "output_limit": 16384
+      },
+      "history_cache": {
+        "parked_after_batch": 2,
+        "bytes_after_batch": 8929260300,
+        "restored_histories": 2,
+        "restored_tokens": [
+          248626,
+          247822
+        ],
+        "note": "Repeated follow-up switching restored both histories; first follow-ups reused GPU slots"
+      }
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/short/c1",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 512",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 1,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "512",
+          "--concurrency",
+          "1",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c1/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c1/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c1/result.json",
+        "max_running": 1.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 237,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 1,
+            "start": 1794084529.9680219,
+            "end": 1794084533.422864,
+            "overlap_seconds": 3.4548420906066895,
+            "max_running": 1.0
+          },
+          {
+            "run_index": 2,
+            "requests": 1,
+            "start": 1794084533.57973,
+            "end": 1794084536.818058,
+            "overlap_seconds": 3.238327980041504,
+            "max_running": 1.0
+          },
+          {
+            "run_index": 3,
+            "requests": 1,
+            "start": 1794084536.9862208,
+            "end": 1794084540.385918,
+            "overlap_seconds": 3.3996970653533936,
+            "max_running": 1.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c1/command.json",
+          "sha256": "0039d5e6d3db790a97e7309170ad9b87b15d94e84c068e84e3a4baaacd4922a8"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c1/metrics.jsonl",
+          "sha256": "94b25d470e5181f976b23c944419d666a703e1e1cb2d851bae0d74df8f659d59"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c1/progress.jsonl",
+          "sha256": "090a0b91235ea703723a76a7fec90fdaff0d97d992af939e5725d2378fde9903"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c1/result.json",
+          "sha256": "84fa5ca7deec74a991b921ef7bb747f729807a850d069cadb79dc7cab4556943"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Short",
+      "clients": 1,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.16798073332756758,
+        "decode_per_request_tps": 75.85349157111139,
+        "common_decode_s": [
+          3.4548420906066895,
+          3.238327980041504,
+          3.3996970653533936
+        ],
+        "max_fragment_gap_s": 0.039177656173706055,
+        "output_tokens": 768,
+        "prompt_tokens": [
+          513
+        ],
+        "cached_input_tokens": 0,
+        "requests": 3,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/short/c1/result.json"
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/short/c2",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 512",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 2,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "512",
+          "--concurrency",
+          "2",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c2/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c2/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c2/result.json",
+        "max_running": 2.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 241,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 2,
+            "start": 1794085155.9418478,
+            "end": 1794085159.1663764,
+            "overlap_seconds": 3.2245285511016846,
+            "max_running": 2.0
+          },
+          {
+            "run_index": 2,
+            "requests": 2,
+            "start": 1794085159.5570803,
+            "end": 1794085162.492191,
+            "overlap_seconds": 2.9351108074188232,
+            "max_running": 2.0
+          },
+          {
+            "run_index": 3,
+            "requests": 2,
+            "start": 1794085162.7734563,
+            "end": 1794085165.7336233,
+            "overlap_seconds": 2.9601669311523438,
+            "max_running": 2.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c2/command.json",
+          "sha256": "b2cee40e72c3f464f777c445d28e4601319bafb6e620366129838230e1aa0bed"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c2/metrics.jsonl",
+          "sha256": "9927a826c6d860f722071ddbe569e962502a5eae387d583c7a32e975a1b53541"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c2/progress.jsonl",
+          "sha256": "7a1fd9b640d7d69af1e1ec9d5bd7ed4d14642cdc8f7a821554e1daf3fdac2048"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c2/result.json",
+          "sha256": "1f11be4f2796d96ec921ef01e4fc1b5e0ce2a2cf17a9f6a3ebcff2dd830be033"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Short",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.27329233232497546,
+        "decode_per_request_tps": 82.46503895802891,
+        "common_decode_s": [
+          3.2245285511016846,
+          2.9351108074188232,
+          2.9601669311523438
+        ],
+        "max_fragment_gap_s": 0.03567075729370117,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/short/c2/result.json"
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/short/c4",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 512",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 4,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "512",
+          "--concurrency",
+          "4",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c4/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c4/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c4/result.json",
+        "max_running": 4.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 255,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 4,
+            "start": 1794085170.9787035,
+            "end": 1794085173.5469475,
+            "overlap_seconds": 2.568243980407715,
+            "max_running": 4.0
+          },
+          {
+            "run_index": 2,
+            "requests": 4,
+            "start": 1794085174.572176,
+            "end": 1794085177.6791115,
+            "overlap_seconds": 3.106935501098633,
+            "max_running": 4.0
+          },
+          {
+            "run_index": 3,
+            "requests": 4,
+            "start": 1794085178.204124,
+            "end": 1794085181.1862674,
+            "overlap_seconds": 2.9821434020996094,
+            "max_running": 4.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c4/command.json",
+          "sha256": "4d5e4fbfde0b5c9c4c5dd9f5b4ba7c3187e83e22f65744c73424878df92e2b03"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c4/metrics.jsonl",
+          "sha256": "0d0a70a19385904fd23926a527f21c0a1508b426307f6d7cec8215f9ab773bfd"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c4/progress.jsonl",
+          "sha256": "2b289543e88a96b50a7c8b03dd6c6ba404965c7ab412f99fcf7d718bbd1e4a08"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c4/result.json",
+          "sha256": "578f99c0efe88ee0efe97d9b37a9355634e0a5070dadb9b8527e9415dd120366"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Short",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.3434529593359912,
+        "decode_per_request_tps": 81.37477691766895,
+        "common_decode_s": [
+          2.568243980407715,
+          3.106935501098633,
+          2.9821434020996094
+        ],
+        "max_fragment_gap_s": 0.0368647575378418,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          512,
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/short/c4/result.json"
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/short/c8",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 512",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 8,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "512",
+          "--concurrency",
+          "8",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c8/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c8/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c8/result.json",
+        "max_running": 8.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 294,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 8,
+            "start": 1794085187.925844,
+            "end": 1794085190.5991235,
+            "overlap_seconds": 2.6732795238494873,
+            "max_running": 8.0
+          },
+          {
+            "run_index": 2,
+            "requests": 8,
+            "start": 1794085191.9505117,
+            "end": 1794085194.779854,
+            "overlap_seconds": 2.8293423652648926,
+            "max_running": 8.0
+          },
+          {
+            "run_index": 3,
+            "requests": 8,
+            "start": 1794085196.3583171,
+            "end": 1794085199.0911958,
+            "overlap_seconds": 2.7328786849975586,
+            "max_running": 8.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c8/command.json",
+          "sha256": "11c95e4f7f4c78e7a90eb9076507971e342e372e6a07b3890d4e6cf1ca46aedc"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c8/metrics.jsonl",
+          "sha256": "e85f73b9ae78baba9ccc8df28599c2548367396cfb1e8ec9895652aee5d608f1"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c8/progress.jsonl",
+          "sha256": "6b3c9d5b2538ddba58b911115826ccd8170ee1661d7a8c8136fbdda1e91669bc"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c8/result.json",
+          "sha256": "8b43acec5b83f3318e59540032c9cabdef4d8a985acff4665c0b20a4a4937761"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Short",
+      "clients": 8,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.47271965612647665,
+        "decode_per_request_tps": 78.38416915372315,
+        "common_decode_s": [
+          2.6732795238494873,
+          2.8293423652648926,
+          2.7328786849975586
+        ],
+        "max_fragment_gap_s": 0.1396777629852295,
+        "output_tokens": 6144,
+        "prompt_tokens": [
+          511,
+          512,
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 24,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/short/c8/result.json"
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/short/c16",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 512",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 16,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "512",
+          "--concurrency",
+          "16",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c16/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c16/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c16/result.json",
+        "max_running": 16.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 334,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 16,
+            "start": 1794085207.4923387,
+            "end": 1794085210.099987,
+            "overlap_seconds": 2.6076483726501465,
+            "max_running": 16.0
+          },
+          {
+            "run_index": 2,
+            "requests": 16,
+            "start": 1794085212.486033,
+            "end": 1794085215.5336335,
+            "overlap_seconds": 3.047600507736206,
+            "max_running": 16.0
+          },
+          {
+            "run_index": 3,
+            "requests": 16,
+            "start": 1794085217.3071737,
+            "end": 1794085220.2140994,
+            "overlap_seconds": 2.906925678253174,
+            "max_running": 16.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c16/command.json",
+          "sha256": "948e6b0829464a859c9e459f3e27d6485a90bb00a873b7243f21cb75188b5376"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c16/metrics.jsonl",
+          "sha256": "45556d07270a3bf9a6955160e98cacff0aa818f8846579b304e8b913b2035513"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c16/progress.jsonl",
+          "sha256": "bfb2db774d09fc8f1769bed5ba99239ed7f39df762ecb7cbd32f010114af12c9"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c16/result.json",
+          "sha256": "a7dd0264bd1470d5d9ecbe3166f1b0ed4f88d7973aa946b0e65bdc4f52a7a39d"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Short",
+      "clients": 16,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.854549590439395,
+        "decode_per_request_tps": 71.38953895447628,
+        "common_decode_s": [
+          2.6076483726501465,
+          3.047600507736206,
+          2.906925678253174
+        ],
+        "max_fragment_gap_s": 0.2942636013031006,
+        "output_tokens": 12288,
+        "prompt_tokens": [
+          512,
+          513,
+          514
+        ],
+        "cached_input_tokens": 0,
+        "requests": 48,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/short/c16/result.json"
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/short/c17",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 512",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 17,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "512",
+          "--concurrency",
+          "17",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c17/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/short/c17/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c17/result.json",
+        "max_running": 17.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 340,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 17,
+            "start": 1794085237.9768214,
+            "end": 1794085240.7158034,
+            "overlap_seconds": 2.7389819622039795,
+            "max_running": 17.0
+          },
+          {
+            "run_index": 2,
+            "requests": 17,
+            "start": 1794085242.9169538,
+            "end": 1794085245.55212,
+            "overlap_seconds": 2.6351661682128906,
+            "max_running": 17.0
+          },
+          {
+            "run_index": 3,
+            "requests": 17,
+            "start": 1794085248.2595878,
+            "end": 1794085251.2291703,
+            "overlap_seconds": 2.9695825576782227,
+            "max_running": 17.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c17/command.json",
+          "sha256": "cec62f1abf51065807519443fd364129121383b730e369def9d469e874c4de42"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c17/metrics.jsonl",
+          "sha256": "fdec14e0e2192998292dc881ed0b0fa041ab1374d553bef48216e081fd20f8bc"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c17/progress.jsonl",
+          "sha256": "4d94d34292953cc158994b771175fec7c81e68c88e5aaa789d8a15f3071a98d7"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/short/c17/result.json",
+          "sha256": "2028492021922d7ddf8aed4ce1700ed606aa8e8d5fa619f0d90dff6ec4cde94b"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Short",
+      "clients": 17,
+      "workload_budget": {
+        "input_tokens": 512,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 0.986440409885094,
+        "decode_per_request_tps": 71.52058529023084,
+        "common_decode_s": [
+          2.7389819622039795,
+          2.6351661682128906,
+          2.9695825576782227
+        ],
+        "max_fragment_gap_s": 0.401486873626709,
+        "output_tokens": 13056,
+        "prompt_tokens": [
+          511,
+          512,
+          513,
+          514,
+          515
+        ],
+        "cached_input_tokens": 0,
+        "requests": 51,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/short/c17/result.json"
+    },
+    {
+      "id": "vllm-c1-validation.7oakPa/long/c1",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "MTP2 | autotune off | thinking/xhigh | T=1 | input 32768",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 1,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "32768",
+          "--concurrency",
+          "1",
+          "--save-result",
+          "/var/tmp/vllm-c1-validation.7oakPa/long/c1/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-c1-validation.7oakPa/long/c1/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c1/result.json",
+        "max_running": 1.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 549,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 1,
+            "start": 1794084554.4450798,
+            "end": 1794084557.7065005,
+            "overlap_seconds": 3.261420726776123,
+            "max_running": 1.0
+          },
+          {
+            "run_index": 2,
+            "requests": 1,
+            "start": 1794084562.0781424,
+            "end": 1794084565.5323164,
+            "overlap_seconds": 3.454174041748047,
+            "max_running": 1.0
+          },
+          {
+            "run_index": 3,
+            "requests": 1,
+            "start": 1794084570.0132134,
+            "end": 1794084573.5061631,
+            "overlap_seconds": 3.4929497241973877,
+            "max_running": 1.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-c1-validation.7oakPa/long/c1/command.json",
+          "sha256": "5f6f792e9fe913764ca07a8463632f8960d22f4040a51510bfa6e20805cf04bc"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/long/c1/metrics.jsonl",
+          "sha256": "1e223f92a13eebb75c62c20f939e3c8cb72edae6f238f9654d5a5ff1afef5267"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/long/c1/progress.jsonl",
+          "sha256": "ae1044af4a629f4a0000a01c9ccc7691451f9d10f611d9f826e625f7e37e80ac"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/long/c1/result.json",
+          "sha256": "554288f2ef95591aea43efd29e3aa6474e2ecfc09154613c0e9a6d0e8cce6230"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-c1-validation.7oakPa/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Long",
+      "clients": 1,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 4.410302948342481,
+        "decode_per_request_tps": 75.0049037154749,
+        "common_decode_s": [
+          3.261420726776123,
+          3.454174041748047,
+          3.4929497241973877
+        ],
+        "max_fragment_gap_s": 0.07712173461914062,
+        "output_tokens": 768,
+        "prompt_tokens": [
+          32768,
+          32769
+        ],
+        "cached_input_tokens": 0,
+        "requests": 3,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-c1-validation.7oakPa/long/c1/result.json"
+    },
+    {
+      "id": "vllm-long-scheduler.mhesfq17/long/c2",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "Long 32768/256; prefill threshold 1024 adaptive; batch budget 8192; MTP2",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 2,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "32768",
+          "--concurrency",
+          "2",
+          "--save-result",
+          "/var/tmp/vllm-long-scheduler.mhesfq17/long/c2/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-long-scheduler.mhesfq17/long/c2/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c2/result.json",
+        "max_running": 2.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 884,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 2,
+            "start": 1794087784.2270994,
+            "end": 1794087787.5401907,
+            "overlap_seconds": 3.313091278076172,
+            "max_running": 2.0
+          },
+          {
+            "run_index": 2,
+            "requests": 2,
+            "start": 1794087796.2939885,
+            "end": 1794087799.3569272,
+            "overlap_seconds": 3.062938690185547,
+            "max_running": 2.0
+          },
+          {
+            "run_index": 3,
+            "requests": 2,
+            "start": 1794087808.849161,
+            "end": 1794087812.004611,
+            "overlap_seconds": 3.1554501056671143,
+            "max_running": 2.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c2/command.json",
+          "sha256": "4d17233da314157394f88dcb0c3efa3a32bfae1f69c33274673988288430a97d"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c2/metrics.jsonl",
+          "sha256": "534113e5a5070abab4419d1076ee0441d656f05a326db32159eca2445905c3f0"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c2/progress.jsonl",
+          "sha256": "cff236fa8e1e0fc17bca5c5e551899fd85bb313f11a8106598ed8f1c8735409f"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c2/result.json",
+          "sha256": "8a40e9626dd2999d1f68171cf2f587b027396c091d7ddfef3ed14acfb3ca7349"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/config.yaml",
+          "sha256": "8493acdf284ffdb8318ce79a0fc6f867a2da757a4274daa189b94baa5dfae74b"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/models.json",
+          "sha256": "41e3bbe9175a59e27896f24b7bddd279cbe22e8c2a30f203c695b5287054970f"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/native-args.json",
+          "sha256": "8f9d32545fff28ee0bdb87a9101746f8068ef4733a4db8376043b9778c81d10d"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Long",
+      "clients": 2,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 8.498105606166064,
+        "decode_per_request_tps": 71.07305788580945,
+        "common_decode_s": [
+          3.313091278076172,
+          3.062938690185547,
+          3.1554501056671143
+        ],
+        "max_fragment_gap_s": 0.695213794708252,
+        "output_tokens": 1536,
+        "prompt_tokens": [
+          32768,
+          32769,
+          32770,
+          32771
+        ],
+        "cached_input_tokens": 0,
+        "requests": 6,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-long-scheduler.mhesfq17/long/c2/result.json"
+    },
+    {
+      "id": "vllm-long-scheduler.mhesfq17/long/c4",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "Long 32768/256; prefill threshold 1024 adaptive; batch budget 8192; MTP2",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 4,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "32768",
+          "--concurrency",
+          "4",
+          "--save-result",
+          "/var/tmp/vllm-long-scheduler.mhesfq17/long/c4/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-long-scheduler.mhesfq17/long/c4/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c4/result.json",
+        "max_running": 4.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 1576,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 4,
+            "start": 1794087853.2075894,
+            "end": 1794087856.7085273,
+            "overlap_seconds": 3.5009379386901855,
+            "max_running": 4.0
+          },
+          {
+            "run_index": 2,
+            "requests": 4,
+            "start": 1794087875.180325,
+            "end": 1794087878.848667,
+            "overlap_seconds": 3.668341875076294,
+            "max_running": 4.0
+          },
+          {
+            "run_index": 3,
+            "requests": 4,
+            "start": 1794087897.3206165,
+            "end": 1794087901.0557327,
+            "overlap_seconds": 3.7351162433624268,
+            "max_running": 4.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c4/command.json",
+          "sha256": "1387f0a0cb936719f84edc8554f838e6129de74544a5a5250217cc7fdc6392a8"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c4/metrics.jsonl",
+          "sha256": "8ea7cb77f363c718200b535600366a68effb2081958945487fa49f1593f1074a"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c4/progress.jsonl",
+          "sha256": "e73c9d059e49f346e2bdd65115ac1214dd1ce47d74bdce52288a862d45e6c0be"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c4/result.json",
+          "sha256": "dc0643c113e717c5b9f8079a0cc46419cce1f3334d89e5e5cb90b488a51cc224"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/config.yaml",
+          "sha256": "8493acdf284ffdb8318ce79a0fc6f867a2da757a4274daa189b94baa5dfae74b"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/models.json",
+          "sha256": "41e3bbe9175a59e27896f24b7bddd279cbe22e8c2a30f203c695b5287054970f"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/native-args.json",
+          "sha256": "8f9d32545fff28ee0bdb87a9101746f8068ef4733a4db8376043b9778c81d10d"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Long",
+      "clients": 4,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 17.356614879419794,
+        "decode_per_request_tps": 59.70444155073012,
+        "common_decode_s": [
+          3.5009379386901855,
+          3.668341875076294,
+          3.7351162433624268
+        ],
+        "max_fragment_gap_s": 1.0906033515930176,
+        "output_tokens": 3072,
+        "prompt_tokens": [
+          32769,
+          32770
+        ],
+        "cached_input_tokens": 0,
+        "requests": 12,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-long-scheduler.mhesfq17/long/c4/result.json"
+    },
+    {
+      "id": "vllm-long-scheduler.mhesfq17/long/c8",
+      "status": "completed",
+      "configuration": {
+        "engine": "vLLM",
+        "label": "Long 32768/256; prefill threshold 1024 adaptive; batch budget 8192; MTP2",
+        "model": "Qwen3.8-27B",
+        "quantization": "NVFP4",
+        "version": "0.33.0",
+        "context_per_slot": 262144
+      },
+      "completion": {
+        "concurrency": 8,
+        "command": [
+          "llama-benchy",
+          "--base-url",
+          "http://127.0.0.1:8000/v1",
+          "--model",
+          "nvidia/Qwen3.8-27B-NVFP4",
+          "--served-model-name",
+          "Qwen3.8-27B-NVFP4",
+          "--tokenizer",
+          "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+          "--tg",
+          "256",
+          "--depth",
+          "0",
+          "--exact-tg",
+          "--latency-mode",
+          "generation",
+          "--skip-coherence",
+          "--runs",
+          "3",
+          "--pp",
+          "32768",
+          "--concurrency",
+          "8",
+          "--save-result",
+          "/var/tmp/vllm-long-scheduler.mhesfq17/long/c8/result.json",
+          "--format",
+          "json",
+          "--emit-progress",
+          "/var/tmp/vllm-long-scheduler.mhesfq17/long/c8/progress.jsonl",
+          "--save-total-throughput-timeseries",
+          "--exit-on-first-fail"
+        ],
+        "status": "complete",
+        "result": "c8/result.json",
+        "max_running": 8.0,
+        "max_waiting": 0,
+        "preemptions": 0.0,
+        "samples": 2953,
+        "returncode": 0,
+        "decode_batches": [
+          {
+            "run_index": 1,
+            "requests": 8,
+            "start": 1794087979.9716916,
+            "end": 1794087983.875752,
+            "overlap_seconds": 3.9040603637695312,
+            "max_running": 8.0
+          },
+          {
+            "run_index": 2,
+            "requests": 8,
+            "start": 1794088020.9532187,
+            "end": 1794088024.680774,
+            "overlap_seconds": 3.727555274963379,
+            "max_running": 8.0
+          },
+          {
+            "run_index": 3,
+            "requests": 8,
+            "start": 1794088061.994573,
+            "end": 1794088065.8047266,
+            "overlap_seconds": 3.8101534843444824,
+            "max_running": 8.0
+          }
+        ],
+        "expected_batches": 3
+      },
+      "sources": [
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c8/command.json",
+          "sha256": "5616fb167dda8c6edd587f6318d90241ed475ff008fa8a9346120c109eddc442"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c8/metrics.jsonl",
+          "sha256": "1bb3c971fdfc7763a6834dc3fab35ef6c58953344494c848e5697f45180a924f"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c8/progress.jsonl",
+          "sha256": "6d2fcba2505aea5cad2cb6aef5653ef5b1ab0ec16af399738fc1edb7332ebba7"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/long/c8/result.json",
+          "sha256": "5951fff6ac5ac6791433ee384876c4b615f5733676495f5ccdbe59e961a71b6a"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/config.yaml",
+          "sha256": "8493acdf284ffdb8318ce79a0fc6f867a2da757a4274daa189b94baa5dfae74b"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/config.before.yaml",
+          "sha256": "4d7f942bf759d1d2d7d8aebc3cfbe13cda6c6e04e8a803894f31079625f962a6"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/models.json",
+          "sha256": "41e3bbe9175a59e27896f24b7bddd279cbe22e8c2a30f203c695b5287054970f"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/native-args.json",
+          "sha256": "8f9d32545fff28ee0bdb87a9101746f8068ef4733a4db8376043b9778c81d10d"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/server-packages.txt",
+          "sha256": "2c60ecacbf69d070a561b9a4e1d23b4103c148199e34acba4f6d43fa06ab5fd6"
+        },
+        {
+          "path": "vllm-long-scheduler.mhesfq17/client-packages.txt",
+          "sha256": "4cbe0a33e161c7d40865fc66475d05d05f97bba9ad24bb7a1d712e3107f73541"
+        }
+      ],
+      "model_key": "qwen38-27b",
+      "variant": "vllm-nvfp4",
+      "workload": "Long",
+      "clients": 8,
+      "workload_budget": {
+        "input_tokens": 32768,
+        "output_limit": 256
+      },
+      "metrics": {
+        "ttft_s": 35.32993150349406,
+        "decode_per_request_tps": 54.22457570063175,
+        "common_decode_s": [
+          3.9040603637695312,
+          3.727555274963379,
+          3.8101534843444824
+        ],
+        "max_fragment_gap_s": 1.2943940162658691,
+        "output_tokens": 6144,
+        "prompt_tokens": [
+          32768,
+          32769
+        ],
+        "cached_input_tokens": 0,
+        "requests": 24,
+        "batches": 3,
+        "min_mem_free_gib": null,
+        "min_mem_available_gib": null,
+        "max_queued": null,
+        "max_admitting": null,
+        "engine_gpu_free_gib": null
+      },
+      "native_result_source": "vllm-long-scheduler.mhesfq17/long/c8/result.json"
+    }
+  ],
+  "hardware": {
+    "gpu": "RTX PRO 6000 Blackwell Max-Q",
+    "vram_gib": 95.59,
+    "ram_gib": 62.66,
+    "host": "node3",
+    "os": "Ubuntu 24.04.5"
+  },
+  "models": [
+    {
+      "id": "qwen38-flash-next",
+      "name": "Qwen3.8-Flash-Next",
+      "page": "qwen38-flash-next.html",
+      "variants": [
+        "strata-iq3s",
+        "strata-nvfp4"
+      ]
+    },
+    {
+      "id": "qwen38-27b",
+      "name": "Qwen3.8-27B",
+      "page": "qwen38-27b.html",
+      "variants": [
+        "vllm-nvfp4"
+      ]
+    }
+  ],
+  "variants": {
+    "strata-iq3s": {
+      "label": "IQ3_S",
+      "engine": "Strata",
+      "kv": "INT8",
+      "mtp": 4,
+      "ple": "RAM",
+      "sampling": "T 1 · top_p 0.95 · top_k 20",
+      "measured_cache_mib": 5120,
+      "current_cache_mib": 8960,
+      "profile": "strata-qwen38-iq3s-64g",
+      "note": "Short/Long/Max: cache 5120 MiB. Cache 8960 MiB has a separate Max C=4 repeat with one warm input.",
+      "disk": {
+        "bytes": 86073257984,
+        "paths": [
+          {
+            "path": "/opt/strata-data/models/IQ3_S",
+            "bytes": 83617701888
+          },
+          {
+            "path": "/opt/strata-data/packs/iq3_s",
+            "bytes": 1548005376
+          },
+          {
+            "path": "/opt/strata-data/models/mmproj-Qwen3.8-Flash-Next-BF16.gguf",
+            "bytes": 907550720
+          }
+        ],
+        "source": "node3: du -s -B1, 2026-11-12",
+        "scope": "Installed model artifacts, including prepared pack and vision projector where separate; excludes runtime and benchmark evidence"
+      }
+    },
+    "strata-nvfp4": {
+      "label": "NVFP4 / GPTQ",
+      "engine": "Strata",
+      "kv": "INT8",
+      "mtp": 4,
+      "ple": "SSD direct",
+      "sampling": "T 1 · top_p 0.95 · top_k 20",
+      "measured_cache_mib": 5120,
+      "current_cache_mib": 5120,
+      "profile": "strata-qwen38-nvfp4-64g",
+      "note": "Short and C=1: decode share 0.5. Long/Max C=2/4: share 0. These are different measured scheduler settings.",
+      "disk": {
+        "bytes": 127959683072,
+        "paths": [
+          {
+            "path": "/opt/strata-data/models/Maximilian228--Qwen3.8-Flash-Next-NVFP4-GPTQ-Strata",
+            "bytes": 127959683072
+          }
+        ],
+        "source": "node3: du -s -B1, 2026-11-12",
+        "scope": "Installed model artifacts, including prepared pack and vision projector where separate; excludes runtime and benchmark evidence"
+      }
+    },
+    "vllm-nvfp4": {
+      "label": "NVFP4",
+      "engine": "vLLM 0.33.0",
+      "kv": "FP8",
+      "mtp": 2,
+      "ple": null,
+      "sampling": "T 1 · top_p 0.95 · top_k 20",
+      "profile": "vllm-qwen38-27b-nvfp4",
+      "note": "Short and Long C=1 use the earlier scheduler; Long C=2/4/8 uses adaptive threshold 1024 and batch budget 8192. No retained Max benchmark.",
+      "disk": {
+        "bytes": 21945466880,
+        "paths": [
+          {
+            "path": "/opt/models/nvidia--Qwen3.8-27B-NVFP4",
+            "bytes": 21945466880
+          }
+        ],
+        "source": "node3: du -s -B1, 2026-11-12",
+        "scope": "Installed model artifacts, including prepared pack and vision projector where separate; excludes runtime and benchmark evidence"
+      }
+    }
+  },
+  "metric_definitions": {
+    "decode_per_request_tps": "Mean of (completion_tokens - 1) / (last nonempty fragment - first nonempty fragment), including pauses; prefill excluded. NVFP4 Max C=1 uses saved engine timing.",
+    "ttft_s": "Mean request-to-first-token time, including prefill.",
+    "common_decode_s": "Intersection of all client decode intervals, separately for each measured batch. SSE fragments are not exact token counts; no aggregate token throughput is inferred.",
+    "memory": "DRAM: minimum host MemFree from saved snapshots, not process consumption or a continuous bound. GPU: engine-reported free VRAM; not comparable to a workload peak. Missing samples remain null.",
+    "engine_gpu_free_gib": "Minimum engine.vram_free_mib across saved engine snapshots, converted to GiB; engine-reported headroom, not a measured workload peak"
+  }
+}

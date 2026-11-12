@@ -1,0 +1,34 @@
+---
+- name: Deploy the selected inference profile
+  hosts: nvidia_hosts
+  gather_facts: true
+  tasks:
+    - name: Validate profile name
+      ansible.builtin.assert:
+        that:
+          - (inference_profile | default(inference_default_profile | default('strata-qwen38-iq3s-64g'))) is match('^[a-z0-9][a-z0-9-]*$')
+        fail_msg: Select a profile filename from profiles/ without the .yml suffix.
+
+    - name: Load the complete profile
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/profiles/{{ inference_profile | default(inference_default_profile | default('strata-qwen38-iq3s-64g')) }}.yml"
+
+    - name: Require a deployable profile for the selected playbook
+      ansible.builtin.assert:
+        that:
+          - inference_profile_ready | bool
+          - inference_engine in ['strata', 'vllm']
+          - inference_expected_engine is not defined or inference_engine == inference_expected_engine
+        fail_msg: This profile is planned or belongs to another engine. Use inference.yml for engine selection.
+
+    - name: Prepare Strata
+      ansible.builtin.include_role:
+        name: strata
+        apply:
+          become: true
+      when: inference_engine == 'strata'
+
+    - name: Install and serve vLLM
+      ansible.builtin.include_role:
+        name: vllm
+      when: inference_engine == 'vllm'

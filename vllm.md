@@ -4,14 +4,13 @@ Native systemd service paired with [vllm.yml](vllm.yml) and the
 [vllm role](roles/vllm/). Install a working NVIDIA driver and CUDA Toolkit first with
 [nvidia.md](nvidia.md). Container Toolkit is needed only for Docker workloads.
 
-For Ansible, shared values are in `group_vars/nvidia_hosts.yml`. Put local
-credentials and overrides in ignored `host_vars/<host>.yml`, for example:
+For Ansible, model settings are in [the vLLM profile](profiles/vllm-qwen38-27b-nvfp4.yml).
+Select `inference_profile: vllm-qwen38-27b-nvfp4` in host variables; see the
+[profile catalog](README.md#inference-profiles) for override precedence. Put local
+credentials in ignored `host_vars/<host>.yml`, for example:
 
 ```yaml
 # vllm_hf_token_file: /path/to/hf-token.txt
-# vllm_model_revision: commit-or-tag
-# vllm_environment:
-#   CUDA_HOME: /path/to/cuda
 ```
 
 Run the separate playbook from the repository root:
