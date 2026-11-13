@@ -12,9 +12,9 @@ for scope and permissions and [MAINTAINERS.md](../../../MAINTAINERS.md) for owne
 
 - Group each model and quantization variant under its full model name and engine
 - Show exactly three workload cards per model variant: Short, Long and Max, in
-  that order, side by side in one row
-- Keep that row in the narrow in-app browser too. Do not switch to full-width
-  stacked cards at a desktop breakpoint; use horizontal scrolling when needed
+  that order: three columns above 700 px and one column at 700 px or narrower
+- Stack Short, Long and Max vertically on mobile; keep compact tables inside
+  each card and preserve the three-column layout on wider screens
 - Inside each card, use one compact table with users as rows, not separate user
   tiles or cards. Derive client counts from the selected saved series rather
   than limiting the table to 1/2/4
@@ -54,7 +54,8 @@ for scope and permissions and [MAINTAINERS.md](../../../MAINTAINERS.md) for owne
 ## Visual review
 
 When browser verification is authorized, inspect the rendered overview at the
-actual in-app browser width: all three cards must share a row, headings must stay
-unbroken, and user counts must remain readable. Check model-page filters and
+mobile and wide widths: cards must stack in one column at 700 px or narrower
+and share a three-column row above it. Headings must stay unbroken and user
+counts must remain readable. Check model-page filters and
 navigation when affected. Capture the resulting view for the user. Do not run
 benchmarks, change host settings, stage or publish as part of a presentation edit.

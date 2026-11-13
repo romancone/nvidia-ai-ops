@@ -89,14 +89,26 @@ verify the loaded driver. The playbook reports this requirement without rebootin
 
 [Model overview](reports/index.html) · [Qwen3.8 Flash-Next](reports/qwen38-flash-next.html) · [Qwen3.8 27B](reports/qwen38-27b.html)
 
-Serve the repository root to view the pages and their shared JSON:
+Open the report HTML files directly in a browser. The canonical dataset is
+`evaluation/benchmark-data.json`; `reports/benchmark-data.js` is a generated
+copy used both on GitHub Pages and from disk. Never edit it independently.
+Clean source files are in [evaluation/](evaluation/README.md). After changing the JSON:
 
 ```bash
-python3 -m http.server 8088 --bind 127.0.0.1
+python3 - <<'PYDATA'
+import json
+from pathlib import Path
+
+data = json.loads(Path("evaluation/benchmark-data.json").read_text())
+Path("reports/benchmark-data.js").write_text(
+    "// Generated from evaluation/benchmark-data.json; do not edit.\n"
+    "window.benchmarkDataset = "
+    + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n"
+)
+PYDATA
 ```
 
-Open [the report](http://127.0.0.1:8088/reports/index.html). `evaluation/` holds
-measurement data; `reports/` holds the web pages and presentation code.
+Pages regenerates the viewing copy from the canonical JSON during build.
 
 ## Inference Profiles
 
@@ -117,7 +129,7 @@ ansible-playbook inference.yml --limit gpu1.example.com --diff
 |---|---|---|---|---|
 | [strata-qwen38-iq3s-64g](profiles/strata-qwen38-iq3s-64g.yml) | Flash-Next IQ3_S / Strata | 64 GiB | 4×256K; 8960 MiB cache; PLE RAM; 52 GiB cgroup | Measured; default selection |
 | [strata-qwen38-nvfp4-64g](profiles/strata-qwen38-nvfp4-64g.yml) | Flash-Next NVFP4/GPTQ / Strata | 64 GiB | 4×256K; 5120 MiB cache; PLE SSD direct | Previous measured configuration |
-| [strata-qwen38-nvfp4-128g](profiles/strata-qwen38-nvfp4-128g.yml) | Flash-Next NVFP4/GPTQ / Strata | 128 GiB | Planned 4×256K and PLE RAM; memory/cache budget pending | Incomplete; deployment blocked |
+| [strata-qwen38-nvfp4-128g](profiles/strata-qwen38-nvfp4-128g.yml) | Flash-Next NVFP4/GPTQ / Strata | 128 GiB | 4×256K; 24576 MiB cache; PLE RAM; 114521 MiB cgroup | Four near-Max histories restored on node3 |
 | [vllm-qwen38-27b-nvfp4](profiles/vllm-qwen38-27b-nvfp4.yml) | Qwen3.8-27B NVFP4 / vLLM 0.33.0 | Existing 96 GB GPU host configuration | 256K; FP8 KV; MTP 2; max-num-seqs 64 | Preserved vLLM settings; not Flash-Next |
 
 Strata profiles retain a 10 GiB OS reserve and prohibit process swap. Four request
@@ -138,16 +150,14 @@ reject a selection for the other engine. Strata prepares files without starting
 its service; vLLM retains its existing install-and-start behavior. The selector
 does not stop another engine or a manually started server. Downloads remain on disk.
 
-The 128 GiB file records the next planned configuration without inventing a cache
-budget or claiming validation. Complete it and mark it ready only after the
-memory settings have been chosen. New profile loading has not yet been deployed
-or tested; measurement status above refers to the saved runtime configurations.
+The 128 GiB NVFP4 profile parks histories of at least 1024 tokens. The
+[report](reports/qwen38-flash-next.html#strata-nvfp4-128g) records the hardware
+and cache settings used for each measurement.
 
 Completed tests are stored in [benchmark-data.json](evaluation/benchmark-data.json).
-Their unchanged inputs, outputs and measurement snapshots stay on node3 at
-`/home/rns/benchmark-evidence/nvidia-ai-ops/2026-11-11/raw-results.tar.gz`.
-The JSON records the archive location, source paths and SHA-256 checksums.
-Failed attempts and temporary diagnostics are excluded from the dataset.
+Clean inputs, outputs and measurement snapshots live in `evaluation/raw/`.
+The [manifest](evaluation/raw-manifest.json) records original paths and SHA-256
+checksums. Failed attempts, diagnostics and experiment history remain on node3.
 
 ## Role Settings
 

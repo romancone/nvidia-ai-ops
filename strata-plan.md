@@ -7,7 +7,7 @@ process swap disabled. Max C=4 retained two parked RAM histories and both
 were restored. See the [IQ3_S results](reports/qwen38-flash-next.html#cache-8960).
 
 The [catalog](README.md#inference-profiles) also preserves the previous NVFP4
-profile with direct PLE reads and records the unverified 128 GiB plan.
+profile with direct PLE reads and the 128 GiB profile with PLE in RAM.
 
 Install using the [recipe](strata.md) or [playbook](strata.yml).
 The [report](reports/qwen38-flash-next.html) shows completed stock-engine benchmarks.
@@ -23,3 +23,28 @@ Cold prefill can wait for the engine control channel. The load snapshots showed 
 The selected decode share is 0. At the original decode share of 0.5, Short streamed to four clients at once. Long responses of 256 tokens had no decode overlap. In the four-client Max run, two streams overlapped for 23.786 seconds.
 
 Investigate a speed drop of 50% or more against the same client count, workload and metric using available RAM, swap and disk activity. Direct PLE reads from SSD are part of the previous NVFP4 profile only.
+
+## NVFP4/GPTQ on 128 GiB DRAM
+
+**Validated on node3 on 12 November 2026.** Four 32 GiB DIMMs run at
+DDR4-2400. The [128 GiB report](reports/qwen38-flash-next.html#strata-nvfp4-128g)
+covers Short, Long and Max at 1, 2 and 4 clients. The four-client Max batch
+had 18.11 s of common decode and a 71.92 s longest pause. Max C=1 direct
+free-memory snapshots bracketed the request. Native telemetry sampled
+available memory during the run.
+
+- The original four-slot cache parked short conversations and displaced two near-Max histories by entry count
+- The stock 1024-token parking threshold preserved all four near-Max histories after GPU-slot replacement. The four snapshots totaled 15.08 GiB and restored 246845–254710 tokens each, with all markers correct
+- The measured histories, largest replacement and 10% margin require 20.81 GiB. The profile retains the 24 GiB budget and 114521 MiB cgroup ceiling. Corrected workload snapshots reached minima of 45.09 GiB free and 52.17 GiB available, with zero process swap and OOM events
+- Eight slots project to 38.05 GiB of cache and approximately 15.83 GiB of extra RAM for displaced GPU experts, leaving 9.76 GiB free before transient allocations. The requested eight-slot run stopped before launch at the 10 GiB reserve check
+- Tool-result continuation, cancellation with recovery and RAM history restoration, and independent image histories at 1, 2 and 4 clients passed
+- The corrected four-slot profile serves on loopback. The role rerun changed zero tasks and preserved both PIDs
+
+## Limits and evidence
+
+- Four slots are validated; eight were rejected by the projected memory budget, not a measured failure
+- Performance runs used a zero-token cache parking threshold; the deployed 1024-token threshold was verified separately for history retention and functional behavior
+- Max stopped at EOS within a hard 16384-token output ceiling; different answer lengths are not equal-work throughput comparisons
+- Sparse memory and queue snapshots do not establish continuous bounds; Max C=1 free-memory samples bracketed the request
+- Results, configuration identity, source paths and archive checksums are in [the canonical dataset](evaluation/benchmark-data.json); clean originals are in `evaluation/raw/`; experiment history remains on node3
+- Use [benchmark.md](benchmark.md) for future authorized measurements; no further runs are pending

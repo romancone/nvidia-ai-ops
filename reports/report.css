@@ -301,3 +301,7 @@ section.panel {
 .model-group .hardware-row { margin-bottom:6px }
 .hardware-row + .chips { margin-top:0 }
 @media(prefers-color-scheme:dark) { .hardware-chip { background:#243348; color:#b4cff2; border-color:#3c526f } }
+
+@media(max-width:700px) {
+  .workload-cards { grid-template-columns:minmax(0,1fr); overflow-x:visible }
+}

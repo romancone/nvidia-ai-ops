@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Model benchmarks · NVIDIA AI Ops</title>
 <link rel="stylesheet" href="report.css?v=occupied">
-<script src="report.js?v=occupied" defer>
+<script src="report.js?v=27b-128g-overview" defer>
 </script>
 </head>
 <body data-model="">
@@ -25,9 +25,9 @@
 </div>
 <p id="loading" class="muted">Loading saved measurements…</p>
 <p class="legend">
-<strong>Decode/user</strong> excludes prefill and includes pauses during generation. <strong>TTFT</strong> includes prefill. The common decode window is the intersection of all client streams; SSE fragments are not exact tokens, so no aggregate token rate is inferred. Occupied memory = total − saved free memory. DRAM includes OS and filesystem cache; VRAM uses engine-reported values, not measured load peaks. — means no saved measurement. Disk is installed model artifacts, checked on node3 on 12 Nov 2026.</p>
+<strong>Decode/user</strong> excludes prefill and includes pauses during generation. <strong>TTFT</strong> includes prefill. The common decode window is the intersection of all client streams; SSE fragments are not exact tokens, so no aggregate token rate is inferred. DRAM occupied = total − saved free memory, including OS and filesystem cache; VRAM uses sampled GPU usage where available, otherwise total minus engine-reported free VRAM. — means no saved measurement. Disk is installed model artifacts, checked on node3 on 12 Nov 2026.</p>
 <footer class="foot"><span data-hardware></span><br>
-<a href="../evaluation/benchmark-data.json">Canonical measurement JSON</a> · Raw evidence remains on node3 at the path recorded in the JSON. Saved runs only; no new benchmarks.</footer>
+<a href="../evaluation/benchmark-data.json">Canonical measurement JSON</a> · Clean source data is in <a href="../evaluation/README.md">evaluation/</a>; experiment history remains on node3. Saved runs only; no new benchmarks.</footer>
 </main>
 </body>
 </html>

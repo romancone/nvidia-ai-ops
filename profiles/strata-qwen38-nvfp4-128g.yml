@@ -1,15 +1,44 @@
 ---
-# Planned profile: no deployment until its memory budget has been selected.
 inference_engine: strata
-inference_profile_ready: false
+inference_profile_ready: true
+strata_version: 146df3c468739147f520ac3816de806f71232571
 strata_family: nvfp4
-strata_model: NVFP4
+strata_model: NVFP4 # Ready-made GPTQ pack with NVFP4 expert weights
 strata_config_tag: nvfp4-nvfp4
-strata_context: 262144
-strata_parallel: 4
-strata_memory_reserve_gib: 10
-# Cache size and cgroup limit remain to be selected on the upgraded host.
-strata_user_args:
+strata_context: 262144 # Per conversation, input and output together; no YaRN
+strata_parallel: 4 # Request four 256K slots
+strata_memory_reserve_gib: 10 # Keep available for the OS
+strata_memory_max: 114521M # Node3 observed MemFree less 10 GiB reserve and 2 GiB headroom
+strata_vision: gpu
+strata_setup_options:
+  - --kv
+  - int8
+  - --kv-streaming
+  - 'off' # Keep context on the GPU
+  - --low-ram
+  - resident # Low-RAM expert placement; NVFP4 setup computes a bounded RAM cache
+  - --mtp
+  - 'on'
+  - --vram-reserve-mib
+  - '1024'
+strata_conversation_cache_mib: 24576 # Shared across the four slots
+strata_user_args: # Operator overrides in the upstream model JSON
+  - --ram-keep-gib
+  - '{{ strata_memory_reserve_gib }}'
+  - --conversation-cache-min-free-mib
+  - '{{ (strata_memory_reserve_gib | int) * 1024 }}'
+  - --conversation-cache-min-tokens
+  - '1024' # Keep short side requests from evicting parked long histories
   - --ple-io
   - ram
-strata_start_service: false
+  - --no-ple-prefetch
+  - --no-prefill-borrow
+  - --prefill
+  - '2048'
+strata_environment:
+  STRATA_BATCH_MTP: '1' # Enable MTP in concurrent decode where supported
+  STRATA_BATCH_DECODE_SHARE: '0' # Skip decode between chunks of another request's prefill
+  STRATA_SLOT_COPY_DIRECT: '1' # Transfer GPU history between sessions without a RAM KV copy
+  STRATA_EMBED_VRAM: '1' # Keep BF16 token embeddings on the GPU
+  MALLOC_MMAP_THRESHOLD_: '1048576' # glibc mmap threshold used by the reference profile
+strata_start_service: false # Prepare only; do not enable or start the service

@@ -16,11 +16,10 @@ formatting. This file owns the repository layout, role behavior and recipe mappi
 | [vllm.md](vllm.md) / [vllm.yml](vllm.yml) | Manual and Ansible paths for native vLLM serving and Hugging Face CLI |
 | [strata.md](strata.md) / [strata.yml](strata.yml) | Manual and Ansible paths for CUDA Strata preparation and opt-in serving |
 | [strata-plan.md](strata-plan.md) | Final Strata profile and verification status |
-| [TODO.md](TODO.md) | Temporary work notes in English; empty after completion |
 | [benchmark.md](benchmark.md) / [benchmark.yml](benchmark.yml) | API benchmark protocol and isolated llama-benchy installation |
 | [inference.yml](inference.yml) / [profiles/](profiles/) | Complete serving profiles and engine selection; planned profiles cannot deploy |
-| [evaluation/benchmark-data.json](evaluation/benchmark-data.json) | Completed test records, derived timing metrics, saved functional answers and source checksums; raw evidence stays on node3 at the archive path recorded in the JSON |
-| [reports/](reports/) | `index.html` compares model configurations; each model has its own page. `report.js` renders only `evaluation/benchmark-data.json`; CSS and HTML contain no measurement values. `strata.html` redirects old links |
+| [evaluation/benchmark-data.json](evaluation/benchmark-data.json) | Completed test records, derived timing metrics, saved functional answers and source checksums; clean originals live in `evaluation/raw/`, indexed by `evaluation/raw-manifest.json`; excluded experiment history stays on node3 |
+| [reports/](reports/) | `index.html` compares model configurations; each model has its own page. `report.js` loads `benchmark-data.js` both on GitHub Pages and from disk; this generated copy comes from the canonical JSON using the README command and is regenerated during Pages builds. `strata.html` redirects old links |
 | [.github/workflows/deploy-reports.yml](.github/workflows/deploy-reports.yml) | GitHub Pages build for reports, evaluation data and profiles; deployment only from main |
 | [roles/](roles/) | Source of truth for task order, supported settings and verification |
 | [ansible.cfg](ansible.cfg) / [hosts.example.ini](hosts.example.ini) | Select ignored `./hosts` inventory / provide its public template |

@@ -12,10 +12,11 @@
 - Keep scratch scripts, build outputs and transient debug files outside the repository
 - Keep only clean, completed tests in the repository. Store their structured
   results in one dataset under `evaluation/`; keep web pages in `reports/`.
-  Keep raw inputs/outputs and evidence archives on the
-  benchmark host, outside the repository; record their location and checksums.
-  Keep failed attempts, diagnostics, scratch files and experimental product builds
-  outside the repository; never bulk-copy temporary directories
+  Keep complete clean source inputs, outputs and measurements for published
+  completed tests under `evaluation/`, with source paths and checksums.
+  `reports/` contains generated viewing data, never a second editable source.
+  Keep failed attempts, diagnostics, scratch files, experimental builds and
+  experiment history on the benchmark host; never bulk-copy temporary directories
 
 ## Third-party products
 
@@ -167,7 +168,7 @@ Apply these rules when changing reports:
 Read [MAINTAINERS.md](MAINTAINERS.md) before changing recipe structure or a report
 pipeline. Keep file ownership there, not in these rules.
 
-For benchmark imports, coverage reviews and report migrations, use
+For new-model result collection, benchmark imports, coverage reviews and report migrations, use
 [benchmark-report-review](.agents/skills/benchmark-report-review/SKILL.md).
 Routine text and CSS edits do not need the full workflow.
 

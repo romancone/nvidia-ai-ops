@@ -16,7 +16,7 @@ strata_cuda_home: '{{ cuda_toolkit_home | default("/usr/local/cuda") }}'
 strata_cuda_packages: []
 strata_setup_options: []
 # Stable ownership: omitting one of these flags removes its override from both lists.
-strata_managed_flags: [--ram-keep-gib, --conversation-cache-min-free-mib, --ple-io, --no-ple-prefetch, --no-prefill-borrow, --prefill]
+strata_managed_flags: [--ram-keep-gib, --conversation-cache-min-free-mib, --conversation-cache-min-tokens, --ple-io, --no-ple-prefetch, --no-prefill-borrow, --prefill]
 strata_user_args: []
 strata_conversation_cache_mib: 5120
 strata_environment: {}

@@ -25,7 +25,7 @@ Internal variables beginning with `_` are not operator settings.
 | `strata_cuda_home` | `'{{ cuda_toolkit_home &#124; default("/usr/local/cuda") }}'` | CUDA compiler directory |
 | `strata_cuda_packages` | `[]` | Additional CUDA development packages |
 | `strata_setup_options` | `[]` | Native setup arguments |
-| `strata_managed_flags` | `[--ram-keep-gib, --conversation-cache-min-free-mib, --ple-io, --no-ple-prefetch, --no-prefill-borrow, --prefill]` | Engine flags owned by the role; omitted overrides are removed from args and user_args |
+| `strata_managed_flags` | `[--ram-keep-gib, --conversation-cache-min-free-mib, --conversation-cache-min-tokens, --ple-io, --no-ple-prefetch, --no-prefill-borrow, --prefill]` | Engine flags owned by the role; omitted overrides are removed from args and user_args |
 | `strata_user_args` | `[]` | Native engine overrides restricted to managed flags |
 | `strata_conversation_cache_mib` | `5120` | Shared RAM history cache budget, not per-slot allocation |
 | `strata_environment` | `{}` | Service environment variables |
