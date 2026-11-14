@@ -1,0 +1,3 @@
+---
+strata_cleanup_extra_paths: [] # Previous installations outside the configured paths
+strata_cleanup_legacy_paths: [/opt/strata]

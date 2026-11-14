@@ -1,0 +1,3 @@
+---
+vllm_cleanup_extra_paths: [] # Previous installations outside the configured paths
+vllm_cleanup_model_root: /opt/models # Discover downloads by their completion marker

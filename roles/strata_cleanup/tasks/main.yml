@@ -1,0 +1,75 @@
+---
+- name: Validate cleanup settings
+  ansible.builtin.assert:
+    that:
+      - strata_cleanup_extra_paths is sequence and strata_cleanup_extra_paths is not string
+      - strata_cleanup_legacy_paths is sequence and strata_cleanup_legacy_paths is not string
+
+- name: Read installation defaults without running installation tasks
+  ansible.builtin.include_vars:
+    file: '{{ role_path }}/../strata/defaults/main.yml'
+    name: strata_cleanup_defaults
+
+- name: Select service and installation paths
+  ansible.builtin.set_fact:
+    strata_cleanup_service: strata
+    strata_cleanup_paths: >-
+      {{ [strata_source | default(strata_cleanup_defaults.strata_source),
+          strata_data | default(strata_cleanup_defaults.strata_data),
+          strata_home | default(strata_cleanup_defaults.strata_home)]
+          + strata_cleanup_legacy_paths + strata_cleanup_extra_paths }}
+
+- name: Validate deletion boundaries
+  ansible.builtin.assert:
+    that:
+      - item is match('^/(opt|var/lib|etc|home)/[A-Za-z0-9_.-]+(/[^/]+)*$')
+      - item == item | normpath
+      - item not in ['/opt/models', '/var/lib', '/etc/systemd', '/home', '/opt', '/etc', '/var']
+      - not item is match('^/home/[^/]+$')
+      - strata_cleanup_service is match('^[a-zA-Z0-9_-]+$')
+    fail_msg: 'Refusing an unsafe deletion path: {{ item }}'
+  loop: '{{ strata_cleanup_paths | unique }}'
+
+- name: Inspect services
+  ansible.builtin.service_facts:
+
+- name: Stop and disable the managed service
+  ansible.builtin.systemd_service:
+    name: '{{ strata_cleanup_service }}.service'
+    state: stopped
+    enabled: false
+  when: (strata_cleanup_service ~ '.service') in ansible_facts.services
+
+- name: Inspect remaining processes
+  ansible.builtin.command:
+    argv: [ps, -eo, args=]
+  register: strata_cleanup_processes
+  changed_when: false
+  check_mode: false
+
+- name: Require manually launched servers to be stopped before deletion
+  ansible.builtin.assert:
+    that:
+      - strata_cleanup_processes.stdout_lines | select('search', item | regex_escape) | list | length == 0
+    fail_msg: 'A process still references {{ item }}. Stop it before running cleanup.'
+  loop: '{{ strata_cleanup_paths | unique }}'
+  when: not ansible_check_mode
+
+- name: Remove installation, models, caches and configuration
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: absent
+  loop: '{{ strata_cleanup_paths | unique }}'
+  diff: false # Recursive directory listings can contain millions of model/cache files
+
+- name: Remove the service unit and overrides
+  ansible.builtin.file:
+    path: '/etc/systemd/system/{{ strata_cleanup_service }}.service{{ item }}'
+    state: absent
+  loop: ['', '.d']
+  register: strata_cleanup_units
+
+- name: Reload systemd after unit removal
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: strata_cleanup_units.changed and not ansible_check_mode

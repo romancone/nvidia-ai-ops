@@ -1,0 +1,6 @@
+---
+- name: Remove Strata installation and data
+  hosts: nvidia_hosts
+  become: true
+  roles:
+    - strata_cleanup

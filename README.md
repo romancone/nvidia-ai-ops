@@ -18,6 +18,8 @@ terminal copy/paste remains valid.
 | NVIDIA driver, CUDA toolkit, NVIDIA container toolkit | [`nvidia.md`](nvidia.md) | [`site.yml`](site.yml) |
 | vLLM native service | [`vllm.md`](vllm.md) | [`vllm.yml`](vllm.yml) |
 | Strata CUDA installation and profile ([benchmarks](reports/qwen38-flash-next.html)) | [`strata.md`](strata.md) / [`strata-plan.md`](strata-plan.md) | [`strata.yml`](strata.yml) |
+| Strata removal | [Role settings](roles/strata_cleanup/README.md) | [`strata-cleanup.yaml`](strata-cleanup.yaml) |
+| vLLM removal | [Role settings](roles/vllm_cleanup/README.md) | [`vllm-cleanup.yaml`](vllm-cleanup.yaml) |
 | API benchmark client and protocol | [`benchmark.md`](benchmark.md) | [`benchmark.yml`](benchmark.yml) |
 
 ## Ansible Quick Start

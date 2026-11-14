@@ -1,0 +1,108 @@
+---
+- name: Validate cleanup settings
+  ansible.builtin.assert:
+    that:
+      - vllm_cleanup_extra_paths is sequence and vllm_cleanup_extra_paths is not string
+      - vllm_cleanup_model_root is match('^/[^/]+/.+')
+
+- name: Read installation defaults without running installation tasks
+  ansible.builtin.include_vars:
+    file: '{{ role_path }}/../vllm/defaults/main.yml'
+    name: vllm_cleanup_defaults
+
+- name: Select service and installation paths
+  ansible.builtin.set_fact:
+    vllm_cleanup_service: '{{ vllm_service_name | default(vllm_cleanup_defaults.vllm_service_name) }}'
+    vllm_cleanup_paths: >-
+      {{ [vllm_venv | default(vllm_cleanup_defaults.vllm_venv),
+          vllm_state_dir | default(vllm_cleanup_defaults.vllm_state_dir),
+          vllm_config_dir | default(vllm_cleanup_defaults.vllm_config_dir),
+          vllm_hf_cache | default(vllm_cleanup_defaults.vllm_hf_cache)]
+          + ([vllm_model_dir] if vllm_model_dir is defined else [])
+          + vllm_cleanup_extra_paths }}
+
+- name: Discover completed vLLM model downloads
+  ansible.builtin.find:
+    paths: '{{ vllm_cleanup_model_root }}'
+    patterns: .ansible-vllm-model
+    hidden: true
+    recurse: true
+    file_type: file
+  register: vllm_cleanup_models
+
+- name: Include every discovered vLLM model
+  ansible.builtin.set_fact:
+    vllm_cleanup_paths: '{{ vllm_cleanup_paths + (vllm_cleanup_models.files | map(attribute="path") | map("dirname") | list) }}'
+
+- name: Validate deletion boundaries
+  ansible.builtin.assert:
+    that:
+      - item is match('^/(opt|var/lib|etc|home)/[A-Za-z0-9_.-]+(/[^/]+)*$')
+      - item == item | normpath
+      - item not in ['/opt/models', '/var/lib', '/etc/systemd', '/home', '/opt', '/etc', '/var']
+      - not item is match('^/home/[^/]+$')
+      - vllm_cleanup_service is match('^[a-zA-Z0-9_-]+$')
+    fail_msg: 'Refusing an unsafe deletion path: {{ item }}'
+  loop: '{{ vllm_cleanup_paths | unique }}'
+
+- name: Inspect services
+  ansible.builtin.service_facts:
+
+- name: Stop and disable the managed service
+  ansible.builtin.systemd_service:
+    name: '{{ vllm_cleanup_service }}.service'
+    state: stopped
+    enabled: false
+  when: (vllm_cleanup_service ~ '.service') in ansible_facts.services
+
+- name: Inspect remaining processes
+  ansible.builtin.command:
+    argv: [ps, -eo, args=]
+  register: vllm_cleanup_processes
+  changed_when: false
+  check_mode: false
+
+- name: Require manually launched servers to be stopped before deletion
+  ansible.builtin.assert:
+    that:
+      - vllm_cleanup_processes.stdout_lines | select('search', item | regex_escape) | list | length == 0
+    fail_msg: 'A process still references {{ item }}. Stop it before running cleanup.'
+  loop: '{{ vllm_cleanup_paths | unique }}'
+  when: not ansible_check_mode
+
+- name: Inspect shared command links
+  ansible.builtin.stat:
+    path: '/usr/local/bin/{{ item }}'
+    follow: false
+  loop: [vllm, hf]
+  register: vllm_cleanup_links
+
+- name: Remove only command links owned by this vLLM environment
+  ansible.builtin.file:
+    path: '{{ item.stat.path }}'
+    state: absent
+  loop: '{{ vllm_cleanup_links.results | default([]) }}'
+  loop_control:
+    label: '{{ item.item }}'
+  when:
+    - item.stat.islnk | default(false)
+    - (item.stat.lnk_source | default('')).startswith((vllm_venv | default(vllm_cleanup_defaults.vllm_venv)) ~ '/bin/')
+
+- name: Remove installation, models, caches and configuration
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: absent
+  loop: '{{ vllm_cleanup_paths | unique }}'
+  diff: false # Recursive directory listings can contain millions of model/cache files
+
+- name: Remove the service unit and overrides
+  ansible.builtin.file:
+    path: '/etc/systemd/system/{{ vllm_cleanup_service }}.service{{ item }}'
+    state: absent
+  loop: ['', '.d']
+  register: vllm_cleanup_units
+
+- name: Reload systemd after unit removal
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: vllm_cleanup_units.changed and not ansible_check_mode

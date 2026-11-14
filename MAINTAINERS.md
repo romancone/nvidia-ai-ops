@@ -15,6 +15,7 @@ formatting. This file owns the repository layout, role behavior and recipe mappi
 | [cleanup.md](cleanup.md) / [cleanup.yml](cleanup.yml) | Optional NVIDIA driver package cleanup |
 | [vllm.md](vllm.md) / [vllm.yml](vllm.yml) | Manual and Ansible paths for native vLLM serving and Hugging Face CLI |
 | [strata.md](strata.md) / [strata.yml](strata.yml) | Manual and Ansible paths for CUDA Strata preparation and opt-in serving |
+| [strata-cleanup.yaml](strata-cleanup.yaml) / [vllm-cleanup.yaml](vllm-cleanup.yaml) | Separate `strata_cleanup` and `vllm_cleanup` roles; independent of deployment profiles |
 | [strata-plan.md](strata-plan.md) | Final Strata profile and verification status |
 | [benchmark.md](benchmark.md) / [benchmark.yml](benchmark.yml) | API benchmark protocol and isolated llama-benchy installation |
 | [inference.yml](inference.yml) / [profiles/](profiles/) | Complete serving profiles and engine selection; planned profiles cannot deploy |

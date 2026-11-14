@@ -1,0 +1,6 @@
+---
+- name: Remove vLLM installation and data
+  hosts: nvidia_hosts
+  become: true
+  roles:
+    - vllm_cleanup
